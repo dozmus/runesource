@@ -1,4 +1,4 @@
-/*
+package com.rs;/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -18,33 +18,30 @@
 /**
  * An interface that allows users to create objects that run along side the main
  * execution of the server.
- * 
+ *
  * @author Blake Beaupain
  */
 public interface Plugin {
 
-	/**
-	 * Called every time the server performs a cycle.
-	 * 
-	 * @throws Exception
-	 *             If the plugin throws any form of exception
-	 */
-	public void cycle() throws Exception;
+    /**
+     * Called every time the server performs a cycle.
+     *
+     * @throws Exception If the plugin throws any form of exception
+     */
+    public void cycle() throws Exception;
 
-	/**
-	 * Called when the plugin is enabled.
-	 * 
-	 * @throws Exception
-	 *             If the plugin throws any form of exception
-	 */
-	public void onEnable() throws Exception;
+    /**
+     * Called when the plugin is enabled.
+     *
+     * @throws Exception If the plugin throws any form of exception
+     */
+    public void onEnable() throws Exception;
 
-	/**
-	 * Called when the plugin is disabled.
-	 * 
-	 * @throws Exception
-	 *             If the plugin is disabled
-	 */
-	public void onDisable() throws Exception;
+    /**
+     * Called when the plugin is disabled.
+     *
+     * @throws Exception If the plugin is disabled
+     */
+    public void onDisable() throws Exception;
 
 }
