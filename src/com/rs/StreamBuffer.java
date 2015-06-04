@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -20,7 +21,7 @@ import java.nio.ByteBuffer;
 /**
  * An abstract parent class for two buffer type objects, one for reading data
  * and one for writing data. Provides static factory methods for initializing
- * these child buffers.
+ * these child buffers and some basic data manipulation.
  *
  * @author blakeman8192
  */
@@ -30,6 +31,8 @@ public abstract class StreamBuffer {
      * Bit masks.
      */
     public static final int[] BIT_MASK = {0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff, 0x7fff, 0xffff, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};
+    private static char[] xlateTable = {' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[', ']'};
+    private static char[] decodeBuf = new char[4096];
     /**
      * The current AccessType of the buffer.
      */
@@ -57,6 +60,59 @@ public abstract class StreamBuffer {
      */
     public static final OutBuffer newOutBuffer(int size) {
         return new OutBuffer(size);
+    }
+
+    public static int hexToInt(byte[] data) {
+        int value = 0;
+        int n = 1000;
+        for (int i = 0; i < data.length; i++) {
+            int num = (data[i] & 0xFF) * n;
+            value += (int) num;
+            if (n > 1) {
+                n = n / 1000;
+            }
+        }
+        return value;
+    }
+
+    public static String textUnpack(byte packedData[], int size) {
+        int idx = 0, highNibble = -1;
+        for (int i = 0; i < size * 2; i++) {
+            int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
+            if (highNibble == -1) {
+                if (val < 13)
+                    decodeBuf[idx++] = xlateTable[val];
+                else
+                    highNibble = val;
+            } else {
+                decodeBuf[idx++] = xlateTable[((highNibble << 4) + val) - 195];
+                highNibble = -1;
+            }
+        }
+        return new String(decodeBuf, 0, idx);
+    }
+
+    /**
+     * Converts the username to a long value.
+     *
+     * @param s the username
+     * @return the long value
+     */
+    public static long nameToLong(String s) {
+        long l = 0L;
+        for (int i = 0; i < s.length() && i < 12; i++) {
+            char c = s.charAt(i);
+            l *= 37L;
+            if (c >= 'A' && c <= 'Z')
+                l += (1 + c) - 65;
+            else if (c >= 'a' && c <= 'z')
+                l += (1 + c) - 97;
+            else if (c >= '0' && c <= '9')
+                l += (27 + c) - 48;
+        }
+        while (l % 37L == 0L && l != 0L)
+            l /= 37L;
+        return l;
     }
 
     /**

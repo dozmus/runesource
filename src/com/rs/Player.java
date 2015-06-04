@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify

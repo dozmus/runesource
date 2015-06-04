@@ -77,7 +77,7 @@ public class NpcUpdating {
      */
     private static void addNpc(StreamBuffer.OutBuffer out, Player player, Npc npc) {
         out.writeBits(14, npc.getSlot());
-        Position delta = Misc.delta(player.getPosition(), npc.getPosition());
+        Position delta = Position.delta(player.getPosition(), npc.getPosition());
         out.writeBits(5, delta.getY());
         out.writeBits(5, delta.getX());
         out.writeBit(npc.isUpdateRequired());

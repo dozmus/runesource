@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -22,6 +23,14 @@ package com.rs;/*
  */
 public class Position {
 
+    /**
+     * Difference in X coordinates for directions array.
+     */
+    public static final byte[] DIRECTION_DELTA_X = new byte[]{-1, 0, 1, -1, 1, -1, 0, 1};
+    /**
+     * Difference in Y coordinates for directions array.
+     */
+    public static final byte[] DIRECTION_DELTA_Y = new byte[]{1, 1, 1, 0, 0, -1, -1, -1};
     private int x;
     private int y;
     private int z;
@@ -48,6 +57,54 @@ public class Position {
         this.setX(x);
         this.setY(y);
         this.setZ(z);
+    }
+
+    /**
+     * Returns the delta coordinates. Note that the returned Position is not an
+     * actual position, instead it's values represent the delta values between
+     * the two arguments.
+     *
+     * @param a the first position
+     * @param b the second position
+     * @return the delta coordinates contained within a position
+     */
+    public static Position delta(Position a, Position b) {
+        return new Position(b.getX() - a.getX(), b.getY() - a.getY());
+    }
+
+    /**
+     * Calculates the direction between the two coordinates.
+     *
+     * @param dx the first coordinate
+     * @param dy the second coordinate
+     * @return the direction
+     */
+    public static int direction(int dx, int dy) {
+        if (dx < 0) {
+            if (dy < 0) {
+                return 5;
+            } else if (dy > 0) {
+                return 0;
+            } else {
+                return 3;
+            }
+        } else if (dx > 0) {
+            if (dy < 0) {
+                return 7;
+            } else if (dy > 0) {
+                return 2;
+            } else {
+                return 4;
+            }
+        } else {
+            if (dy < 0) {
+                return 6;
+            } else if (dy > 0) {
+                return 1;
+            } else {
+                return -1;
+            }
+        }
     }
 
     @Override
@@ -205,7 +262,7 @@ public class Position {
      * @return true if it is viewable, false otherwise
      */
     public boolean isViewableFrom(Position other) {
-        Position p = Misc.delta(this, other);
+        Position p = delta(this, other);
         return p.x <= 14 && p.x >= -15 && p.y <= 14 && p.y >= -15;
     }
 

@@ -221,7 +221,7 @@ public final class PlayerUpdating {
         block.writeShort(0x336); // turn 90 ccw
         block.writeShort(0x338); // run
 
-        block.writeLong(Misc.nameToLong(player.getUsername()));
+        block.writeLong(StreamBuffer.nameToLong(player.getUsername()));
         block.writeByte(3); // Combat level.
         block.writeShort(0); // Total level.
 
@@ -243,7 +243,7 @@ public final class PlayerUpdating {
         out.writeBit(true); // Discard walking queue(?)
 
         // Write the relative position.
-        Position delta = Misc.delta(player.getPosition(), other.getPosition());
+        Position delta = Position.delta(player.getPosition(), other.getPosition());
         out.writeBits(5, delta.getY());
         out.writeBits(5, delta.getX());
     }

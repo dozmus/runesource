@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -29,6 +30,38 @@ import java.util.Arrays;
  */
 public abstract class Client {
 
+    /**
+     * Lengths for the various packets.
+     */
+    public static final int[] PACKET_LENGTHS = { //
+            //
+            0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
+            0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
+            0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
+            0, 0, 0, 0, 0, 8, 4, 0, 0, 2, // 30
+            2, 6, 0, 6, 0, -1, 0, 0, 0, 0, // 40
+            0, 0, 0, 12, 0, 0, 0, 0, 8, 0, // 50
+            0, 8, 0, 0, 0, 0, 0, 0, 0, 0, // 60
+            6, 0, 2, 2, 8, 6, 0, -1, 0, 6, // 70
+            0, 0, 0, 0, 0, 1, 4, 6, 0, 0, // 80
+            0, 0, 0, 0, 0, 3, 0, 0, -1, 0, // 90
+            0, 13, 0, -1, 0, 0, 0, 0, 0, 0,// 100
+            0, 0, 0, 0, 0, 0, 0, 6, 0, 0, // 110
+            1, 0, 6, 0, 0, 0, -1, 0, 2, 6, // 120
+            0, 4, 6, 8, 0, 6, 0, 0, 0, 2, // 130
+            0, 0, 0, 0, 0, 6, 0, 0, 0, 0, // 140
+            0, 0, 1, 2, 0, 2, 6, 0, 0, 0, // 150
+            0, 0, 0, 0, -1, -1, 0, 0, 0, 0,// 160
+            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 170
+            0, 8, 0, 3, 0, 2, 0, 0, 8, 1, // 180
+            0, 0, 12, 0, 0, 0, 0, 0, 0, 0, // 190
+            2, 0, 0, 0, 0, 0, 0, 0, 4, 0, // 200
+            4, 0, 0, 0, 7, 8, 0, 0, 10, 0, // 210
+            0, 0, 0, 0, 0, 0, -1, 0, 6, 0, // 220
+            1, 0, 0, 0, 6, 0, 6, 8, 1, 0, // 230
+            0, 4, 0, 0, 0, 0, -1, 0, -1, 4,// 240
+            0, 0, 6, 6, 0, 0, 0 // 250
+    };
     private final SelectionKey key;
     private final ByteBuffer inData;
     private final Player player = (Player) this;
@@ -263,7 +296,7 @@ public abstract class Client {
                     player.equip(slot);
                     break;
                 case 185: // Button clicking.
-                    handleButton(Misc.hexToInt(in.readBytes(2)));
+                    handleButton(StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
@@ -349,7 +382,7 @@ public abstract class Client {
 
                 // Decode the packet length.
                 if (packetLength == -1) {
-                    packetLength = Misc.packetLengths[packetOpcode];
+                    packetLength = PACKET_LENGTHS[packetOpcode];
                     if (packetLength == -1) {
                         if (!inData.hasRemaining()) {
                             inData.flip();

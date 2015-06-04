@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -49,11 +50,11 @@ public class MovementHandler {
             runPoint = waypoints.poll();
         }
         if (walkPoint != null && walkPoint.getDirection() != -1) {
-            player.getPosition().move(Misc.DIRECTION_DELTA_X[walkPoint.getDirection()], Misc.DIRECTION_DELTA_Y[walkPoint.getDirection()]);
+            player.getPosition().move(Position.DIRECTION_DELTA_X[walkPoint.getDirection()], Position.DIRECTION_DELTA_Y[walkPoint.getDirection()]);
             player.setPrimaryDirection(walkPoint.getDirection());
         }
         if (runPoint != null && runPoint.getDirection() != -1) {
-            player.getPosition().move(Misc.DIRECTION_DELTA_X[runPoint.getDirection()], Misc.DIRECTION_DELTA_Y[runPoint.getDirection()]);
+            player.getPosition().move(Position.DIRECTION_DELTA_X[runPoint.getDirection()], Position.DIRECTION_DELTA_Y[runPoint.getDirection()]);
             player.setSecondaryDirection(runPoint.getDirection());
         }
 
@@ -127,7 +128,7 @@ public class MovementHandler {
         Point last = waypoints.peekLast();
         int deltaX = x - last.getX();
         int deltaY = y - last.getY();
-        int direction = Misc.direction(deltaX, deltaY);
+        int direction = Position.direction(deltaX, deltaY);
         if (direction > -1) {
             waypoints.add(new Point(x, y, direction));
         }

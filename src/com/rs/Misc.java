@@ -1,4 +1,5 @@
-package com.rs;/*
+package com.rs;
+/*
  * This file is part of RuneSource.
  *
  * RuneSource is free software: you can redistribute it and/or modify
@@ -27,16 +28,6 @@ import java.util.Date;
  * @author blakeman8192
  */
 public class Misc {
-
-    /**
-     * Difference in X coordinates for directions array.
-     */
-    public static final byte[] DIRECTION_DELTA_X = new byte[]{-1, 0, 1, -1, 1, -1, 0, 1};
-
-    /**
-     * Difference in Y coordinates for directions array.
-     */
-    public static final byte[] DIRECTION_DELTA_Y = new byte[]{1, 1, 1, 0, 0, -1, -1, -1};
 
     public static final int LOGIN_RESPONSE_OK = 2;
     public static final int LOGIN_RESPONSE_INVALID_CREDENTIALS = 3;
@@ -76,38 +67,6 @@ public class Misc {
 
     public static final int GENDER_MALE = 0;
     public static final int GENDER_FEMALE = 1;
-    /**
-     * Lengths for the various packets.
-     */
-    public static final int packetLengths[] = { //
-            //
-            0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
-            0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
-            0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
-            0, 0, 0, 0, 0, 8, 4, 0, 0, 2, // 30
-            2, 6, 0, 6, 0, -1, 0, 0, 0, 0, // 40
-            0, 0, 0, 12, 0, 0, 0, 0, 8, 0, // 50
-            0, 8, 0, 0, 0, 0, 0, 0, 0, 0, // 60
-            6, 0, 2, 2, 8, 6, 0, -1, 0, 6, // 70
-            0, 0, 0, 0, 0, 1, 4, 6, 0, 0, // 80
-            0, 0, 0, 0, 0, 3, 0, 0, -1, 0, // 90
-            0, 13, 0, -1, 0, 0, 0, 0, 0, 0,// 100
-            0, 0, 0, 0, 0, 0, 0, 6, 0, 0, // 110
-            1, 0, 6, 0, 0, 0, -1, 0, 2, 6, // 120
-            0, 4, 6, 8, 0, 6, 0, 0, 0, 2, // 130
-            0, 0, 0, 0, 0, 6, 0, 0, 0, 0, // 140
-            0, 0, 1, 2, 0, 2, 6, 0, 0, 0, // 150
-            0, 0, 0, 0, -1, -1, 0, 0, 0, 0,// 160
-            0, 0, 0, 0, 0, 0, 0, 0, 0, 0, // 170
-            0, 8, 0, 3, 0, 2, 0, 0, 8, 1, // 180
-            0, 0, 12, 0, 0, 0, 0, 0, 0, 0, // 190
-            2, 0, 0, 0, 0, 0, 0, 0, 4, 0, // 200
-            4, 0, 0, 0, 7, 8, 0, 0, 10, 0, // 210
-            0, 0, 0, 0, 0, 0, -1, 0, 6, 0, // 220
-            1, 0, 0, 0, 6, 0, 6, 8, 1, 0, // 230
-            0, 4, 0, 0, 0, 0, -1, 0, -1, 4,// 240
-            0, 0, 6, 6, 0, 0, 0 // 250
-    };
     public static int capes[] = {1007, 1019, 1021, 1023, 1027, 1029, 1031, 1052, 2412, 2413, 2414, 4304, 4315, 4317, 4319, 4321, 4323, 4325, 4327, 4329, 4331, 4333, 4335, 4337, 4339, 4341, 4343, 4345, 4347, 4349, 4351, 4353, 4355, 4357, 4359, 4361, 4363, 4365, 4367, 4369, 4371, 4373, 4375, 4377, 4379, 4381, 4383, 4385, 4387, 4389, 4391, 4393, 4395, 4397, 4399, 4401, 4403, 4405, 4407, 4409, 4411, 4413, 4514, 4516, 6070};
     public static int boots[] = {88, 89, 626, 628, 630, 632, 634, 1061, 1837, 1846, 2577, 2579, 2894, 2904, 2914, 2924, 2934, 3061, 3105, 3107, 3791, 4097, 4107, 4117, 4119, 4121, 4123, 4125, 4127, 4129, 4131, 4310, 5062, 5063, 5064, 5345, 5557, 6069, 6106, 6143, 6145, 6147, 6328};
     public static int gloves[] = {1059, 1063, 1065, 1580, 2487, 2489, 2491, 2902, 2912, 2922, 2932, 2942, 3060, 3799, 4095, 4105, 4115, 4308, 5556, 6068, 6110, 6149, 6151, 6153};
@@ -122,8 +81,6 @@ public class Misc {
     public static int platebody[] = {3140, 1115, 1117, 1119, 1121, 1123, 1125, 1127, 2583, 2591, 2599, 2607, 2615, 2623, 2653, 2669, 3481, 4720, 4728, 4749};
     public static int fullHelm[] = {1153, 1155, 1157, 1159, 1161, 1163, 1165, 2587, 2595, 2605, 2613, 2619, 2627, 2657, 2673, 3486};
     public static int fullMask[] = {1053, 1055, 1057};
-    private static char xlateTable[] = {' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[', ']'};
-    private static char decodeBuf[] = new char[4096];
     private static boolean[] stackableItems = new boolean[7000];
 
     public static boolean isFullHelm(int itemID) {
@@ -207,11 +164,9 @@ public class Misc {
             int c;
             int counter = 0;
             FileInputStream dataIn = new FileInputStream(new File(directory));
+
             while ((c = dataIn.read()) != -1) {
-                if (c == 0)
-                    stackableItems[counter] = false;
-                else
-                    stackableItems[counter] = true;
+                stackableItems[counter] = c == 1;
                 counter++;
             }
             dataIn.close();
@@ -222,108 +177,6 @@ public class Misc {
 
     public static boolean isStackable(int itemID) {
         return stackableItems[itemID];
-    }
-
-    public static int hexToInt(byte[] data) {
-        int value = 0;
-        int n = 1000;
-        for (int i = 0; i < data.length; i++) {
-            int num = (data[i] & 0xFF) * n;
-            value += (int) num;
-            if (n > 1) {
-                n = n / 1000;
-            }
-        }
-        return value;
-    }
-
-    public static String textUnpack(byte packedData[], int size) {
-        int idx = 0, highNibble = -1;
-        for (int i = 0; i < size * 2; i++) {
-            int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
-            if (highNibble == -1) {
-                if (val < 13)
-                    decodeBuf[idx++] = xlateTable[val];
-                else
-                    highNibble = val;
-            } else {
-                decodeBuf[idx++] = xlateTable[((highNibble << 4) + val) - 195];
-                highNibble = -1;
-            }
-        }
-
-        return new String(decodeBuf, 0, idx);
-    }
-
-    /**
-     * Converts the username to a long value.
-     *
-     * @param s the username
-     * @return the long value
-     */
-    public static long nameToLong(String s) {
-        long l = 0L;
-        for (int i = 0; i < s.length() && i < 12; i++) {
-            char c = s.charAt(i);
-            l *= 37L;
-            if (c >= 'A' && c <= 'Z')
-                l += (1 + c) - 65;
-            else if (c >= 'a' && c <= 'z')
-                l += (1 + c) - 97;
-            else if (c >= '0' && c <= '9')
-                l += (27 + c) - 48;
-        }
-        while (l % 37L == 0L && l != 0L)
-            l /= 37L;
-        return l;
-    }
-
-    /**
-     * Returns the delta coordinates. Note that the returned Position is not an
-     * actual position, instead it's values represent the delta values between
-     * the two arguments.
-     *
-     * @param a the first position
-     * @param b the second position
-     * @return the delta coordinates contained within a position
-     */
-    public static Position delta(Position a, Position b) {
-        return new Position(b.getX() - a.getX(), b.getY() - a.getY());
-    }
-
-    /**
-     * Calculates the direction between the two coordinates.
-     *
-     * @param dx the first coordinate
-     * @param dy the second coordinate
-     * @return the direction
-     */
-    public static int direction(int dx, int dy) {
-        if (dx < 0) {
-            if (dy < 0) {
-                return 5;
-            } else if (dy > 0) {
-                return 0;
-            } else {
-                return 3;
-            }
-        } else if (dx > 0) {
-            if (dy < 0) {
-                return 7;
-            } else if (dy > 0) {
-                return 2;
-            } else {
-                return 4;
-            }
-        } else {
-            if (dy < 0) {
-                return 6;
-            } else if (dy > 0) {
-                return 1;
-            } else {
-                return -1;
-            }
-        }
     }
 
     /**
