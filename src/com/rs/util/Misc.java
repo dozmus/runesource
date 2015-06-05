@@ -17,6 +17,8 @@ package com.rs.util;
  */
 
 import java.io.*;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Arrays;
@@ -214,6 +216,32 @@ public class Misc {
             }
         }
         return false;
+    }
+
+    /**
+     * Generates the SHA256 hash for the given input.
+     *
+     * @param input input
+     * @return hash of input (or null if an exception occurred)
+     */
+    public static String hashSha256(String input) {
+        try {
+            // Hashing input
+            MessageDigest md = MessageDigest.getInstance("SHA-256");
+            md.update(input.getBytes("UTF-8"));
+            byte[] digest = md.digest();
+
+            // Constructing output
+            StringBuffer builder = new StringBuffer();
+
+            for (int i = 0; i < digest.length; i++) {
+                builder.append(Integer.toString((digest[i] & 0xff) + 0x100, 16).substring(1));
+            }
+            return builder.toString();
+        } catch (NoSuchAlgorithmException e) {
+        } catch (UnsupportedEncodingException e) {
+        }
+        return null;
     }
 
     public static boolean isStackable(int itemID) {

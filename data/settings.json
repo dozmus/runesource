@@ -6,5 +6,6 @@
     "y":3222,
     "z":0
   },
-  "maxConsPerHost": 2
+  "maxConsPerHost": 2,
+  "hashPasswords": true
 }

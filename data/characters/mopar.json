@@ -1,15 +1,15 @@
 {
   "@type":"com.rs.entity.player.PlayerAttributes",
   "username":"mopar",
-  "password":"test",
+  "password":"9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
   "position":{
-    "x":3220,
-    "y":3212,
+    "x":3222,
+    "y":3222,
     "z":0
   },
   "staffRights":0,
   "gender":0,
-  "runEnergy":14.000003,
+  "runEnergy":100.0,
   "appearance":[
     18,
     26,

@@ -19,8 +19,8 @@ Rs2-Server (owned by Scar)
 RuneLocus (owned by Ikiliki)
 
 ### Copyright
-Copyright (c) 2010 [Blake Beaupain](https://github.com/blakeman8192)
-Copyright (c) 2015 [PureCS](https://github.com/purecs)
+Copyright (c) 2010  [Blake Beaupain](https://github.com/blakeman8192)
+Copyright (c) 2015  [PureCS](https://github.com/purecs) (aka [Pure_](https://www.moparscape.org/smf/index.php?action=profile;u=350406))
 RuneScape is copyright and a registered trademark of Jagex Ltd.  
 RuneSource and its authors are in no way affiliated with Jagex or RuneScape.  
 RuneSource exists solely for educational purposes, and is licensed via GPLv3.

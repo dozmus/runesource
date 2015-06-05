@@ -112,14 +112,16 @@ public class Player extends Client {
         int response = Misc.LOGIN_RESPONSE_OK;
 
         // Updating credentials
+        String rawPassword = password;
         getAttributes().setUsername(username);
-        getAttributes().setPassword(password);
+        getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
 
         // Check if the player is already logged in.
         for (Player player : PlayerHandler.getPlayers()) {
             if (player == null) {
                 continue;
             }
+
             if (player.getAttributes().getUsername().equals(getAttributes().getUsername())) {
                 response = Misc.LOGIN_RESPONSE_ACCOUNT_ONLINE;
             }
@@ -127,10 +129,11 @@ public class Player extends Client {
 
         // Load the player and send the login response.
         PlayerFileHandler.LoadResponse status = Server.getInstance().getPlayerFileHandler().load(this);
-        boolean validCredentials = Misc.validatePassword(getAttributes().getPassword()) && Misc.validateUsername(getAttributes().getUsername());
+        boolean validCredentials = Misc.validatePassword(rawPassword) && Misc.validateUsername(getAttributes().getUsername());
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
-        if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials) || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
+        if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials)
+                || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
         }
 

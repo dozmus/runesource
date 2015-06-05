@@ -2,6 +2,7 @@ package com.rs.io;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
+import com.rs.Server;
 import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerAttributes;
 
@@ -16,7 +17,7 @@ import java.util.Map;
  *
  * @author Pure_
  */
-public class JsonFileHandler implements PlayerFileHandler {
+public final class JsonFileHandler implements PlayerFileHandler {
 
     @Override
     public void save(Player player) throws Exception {
