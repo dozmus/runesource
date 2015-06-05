@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.net;
 /*
  * This file is part of RuneSource.
  *
@@ -22,7 +22,6 @@ package com.rs;
  * href="http://en.wikipedia.org/wiki/ISAAC_(cipher)">
  * http://en.wikipedia.org/wiki/ISAAC_(cipher)</a> for more information.
  * </p>
- * <p/>
  * <p>
  * This implementation is based on the one written by Bob Jenkins, which is
  * available at <a href="http://www.burtleburtle.net/bob/java/rand/Rand.java">
@@ -49,7 +48,7 @@ public class ISAACCipher {
     public static final int SIZE = 1 << SIZE_LOG;
 
     /**
-     * For pseudorandom lookup.
+     * For pseudo-random lookup.
      */
     public static final int MASK = (SIZE - 1) << 2;
 

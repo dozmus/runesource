@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.entity;
 /*
  * This file is part of RuneSource.
  *

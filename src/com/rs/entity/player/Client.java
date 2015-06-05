@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.entity.player;
 /*
  * This file is part of RuneSource.
  *
@@ -15,6 +15,13 @@ package com.rs;
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.rs.HostGateway;
+import com.rs.Server;
+import com.rs.entity.Position;
+import com.rs.net.ISAACCipher;
+import com.rs.net.StreamBuffer;
+import com.rs.util.Misc;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -237,7 +244,7 @@ public abstract class Client {
             ex.printStackTrace();
         } finally {
             HostGateway.exit(getSocketChannel().socket().getInetAddress().getHostAddress());
-            Server.getSingleton().getClientMap().remove(key);
+            Server.getInstance().getClientMap().remove(key);
             key.cancel();
         }
     }
@@ -289,14 +296,14 @@ public abstract class Client {
                     int slot = in.readShort(StreamBuffer.ValueType.A);
                     in.readShort(StreamBuffer.ValueType.A); // Item ID.
                     if (interfaceID == 1688) {
-                        player.unequip(slot);
+                        player.attributes.unequip(slot, player);
                     }
                     break;
                 case 41: // Equip item.
                     in.readShort(); // Item ID.
                     slot = in.readShort(StreamBuffer.ValueType.A);
                     in.readShort(); // Interface ID.
-                    player.equip(slot);
+                    player.attributes.equip(slot, player);
                     break;
                 case 185: // Button clicking.
                     handleButton(StreamBuffer.hexToInt(in.readBytes(2)));
@@ -370,8 +377,8 @@ public abstract class Client {
 
             // Handle the received data.
             inData.flip();
-            while (inData.hasRemaining()) {
 
+            while (inData.hasRemaining()) {
                 // Handle login if we need to.
                 if (getStage() != Stage.LOGGED_IN) {
                     handleLogin();
@@ -423,7 +430,7 @@ public abstract class Client {
      * Sends the buffer to the socket.
      *
      * @param buffer the buffer
-     * @throws IOException
+     * @throws java.io.IOException
      */
     public void send(ByteBuffer buffer) {
         // Prepare the buffer for writing.

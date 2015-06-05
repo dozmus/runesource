@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.entity.player;
 /*
  * This file is part of RuneSource.
  *
@@ -16,6 +16,14 @@ package com.rs;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.Server;
+import com.rs.entity.MovementHandler;
+import com.rs.entity.Position;
+import com.rs.entity.npc.Npc;
+import com.rs.io.PlayerFileHandler;
+import com.rs.net.StreamBuffer;
+import com.rs.util.Misc;
+
 import java.nio.channels.SelectionKey;
 import java.util.LinkedList;
 import java.util.List;
@@ -30,7 +38,7 @@ public class Player extends Client {
 
     private final List<Player> players = new LinkedList<Player>();
     private final List<Npc> npcs = new LinkedList<Npc>();
-    private PlayerAttributes attributes = new PlayerAttributes();
+    PlayerAttributes attributes = new PlayerAttributes();
     private MovementHandler movementHandler = new MovementHandler(this);
     private Position currentRegion = new Position(0, 0, 0);
     private int primaryDirection = -1;
@@ -74,39 +82,6 @@ public class Player extends Client {
     }
 
     /**
-     * Sets the skill level.
-     *
-     * @param skillID the skill ID
-     * @param level   the level
-     */
-    public void setSkill(int skillID, int level) {
-        attributes.getSkills()[skillID] = level;
-        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
-    }
-
-    /**
-     * Adds skill experience.
-     *
-     * @param skillID the skill ID
-     * @param exp     the experience to add
-     */
-    public void addSkillExp(int skillID, int exp) {
-        attributes.getExperience()[skillID] += exp;
-        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
-    }
-
-    /**
-     * Removes skill experience.
-     *
-     * @param skillID the skill ID
-     * @param exp     the experience to add
-     */
-    public void removeSkillExp(int skillID, int exp) {
-        attributes.getExperience()[skillID] -= exp;
-        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
-    }
-
-    /**
      * Handles a player command.
      *
      * @param keyword the command keyword
@@ -128,7 +103,7 @@ public class Player extends Client {
             sendSkills();
         }
         if (keyword.equals("empty")) {
-            emptyInventory();
+            attributes.emptyInventory(this);
         }
         if (keyword.equals("pickup")) {
             int id = Integer.parseInt(args[0]);
@@ -136,7 +111,7 @@ public class Player extends Client {
             if (args.length > 1) {
                 amount = Integer.parseInt(args[1]);
             }
-            addInventoryItem(id, amount);
+            attributes.addInventoryItem(id, amount, this);
             sendInventory();
         }
         if (keyword.equals("tele")) {
@@ -147,205 +122,6 @@ public class Player extends Client {
         if (keyword.equals("mypos")) {
             sendMessage("You are at: " + getPosition());
         }
-    }
-
-    /**
-     * Equips an item.
-     *
-     * @param slot the inventory slot
-     */
-    public void equip(int slot) {
-        int id = attributes.getInventory()[slot];
-        int amount = attributes.getInventoryN()[slot];
-        if (amount > 1) {
-            // More than one? Equip the stack.
-            if (Misc.isStackable(id)) {
-                // Empty the inventory slot first, to make room.
-                attributes.getInventory()[slot] = -1;
-                attributes.getInventoryN()[slot] = 0;
-
-                // Unequip the equipment slot if need be.
-                int eSlot = Misc.getEquipmentSlot(id);
-                if (attributes.getEquipment()[eSlot] != -1) {
-                    unequip(eSlot); // Will add the item to the inventory.
-                }
-
-                // And equip the new item stack.
-                attributes.getEquipment()[eSlot] = id;
-                attributes.getEquipmentN()[eSlot] = amount;
-                sendEquipment(eSlot, id, amount);
-                sendInventory();
-                setAppearanceUpdateRequired(true);
-            }
-        } else {
-            // Empty the inventory slot first, to make room.
-            attributes.getInventory()[slot] = -1;
-            attributes.getInventoryN()[slot] = 0;
-
-            // Unequip the equipment slot if need be.
-            int eSlot = Misc.getEquipmentSlot(id);
-            if (attributes.getEquipment()[eSlot] != -1) {
-                unequip(eSlot); // Will add the item to the inventory.
-            }
-
-            // And equip the new item.
-            attributes.getEquipment()[eSlot] = id;
-            attributes.getEquipmentN()[eSlot] = amount;
-            sendEquipment(eSlot, id, amount);
-            sendInventory();
-            setAppearanceUpdateRequired(true);
-        }
-    }
-
-    /**
-     * Unequips an item.
-     *
-     * @param slot the equipment slot.
-     */
-    public void unequip(int slot) {
-        int id = attributes.getEquipment()[slot];
-        int amount = attributes.getEquipmentN()[slot];
-
-		/*
-         * It's safe to assume that upon returning true, the transaction is
-		 * completed in its entirety because it's impossible to equip multiple
-		 * non-stackable items.
-		 */
-        if (addInventoryItem(id, amount)) {
-            attributes.getEquipment()[slot] = -1;
-            attributes.getEquipmentN()[slot] = 0;
-            sendEquipment(slot, -1, 0);
-            sendInventory();
-            setAppearanceUpdateRequired(true);
-        }
-    }
-
-    /**
-     * Empties the entire inventory.
-     */
-    public void emptyInventory() {
-        for (int i = 0; i < attributes.getInventory().length; i++) {
-            attributes.getInventory()[i] = -1;
-            attributes.getInventoryN()[i] = 0;
-        }
-        sendInventory();
-    }
-
-    /**
-     * Attempts to add the item (and amount) to the inventory. This method will
-     * add as many of the desired item to the inventory as possible, even if not
-     * all can be added.
-     *
-     * @param id     the item ID
-     * @param amount the amount of the item
-     * @return whether or not the amount of the item could be added to the
-     * inventory
-     */
-    public boolean addInventoryItem(int id, int amount) {
-        if (Misc.isStackable(id)) {
-            // Add the item to an existing stack if there is one.
-            boolean found = false;
-            for (int i = 0; i < attributes.getInventory().length; i++) {
-                if (attributes.getInventory()[i] == id) {
-                    attributes.getInventoryN()[i] += amount;
-                    found = true;
-                    return true;
-                }
-            }
-            if (!found) {
-                // No stack, try to add the item stack to an empty slot.
-                boolean added = false;
-                for (int i = 0; i < attributes.getInventory().length; i++) {
-                    if (attributes.getInventory()[i] == -1) {
-                        attributes.getInventory()[i] = id;
-                        attributes.getInventoryN()[i] = amount;
-                        added = true;
-                        return true;
-                    }
-                }
-                if (!added) {
-                    // No empty slot.
-                    sendMessage("You do not have enough inventory space.");
-                }
-            }
-        } else {
-            // Try to add the amount of items to empty slots.
-            int amountAdded = 0;
-            for (int i = 0; i < attributes.getInventory().length && amountAdded < amount; i++) {
-                if (attributes.getInventory()[i] == -1) {
-                    attributes.getInventory()[i] = id;
-                    attributes.getInventoryN()[i] = 1;
-                    amountAdded++;
-                }
-            }
-            if (amountAdded != amount) {
-                // We couldn't add all of them.
-                sendMessage("You do not have enough inventory space.");
-            } else {
-                // We added the amount that we wanted.
-                return true;
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Removes the desired amount of the specified item from the inventory.
-     *
-     * @param id     the item ID
-     * @param amount the desired amount
-     */
-    public void removeInventoryItem(int id, int amount) {
-        if (Misc.isStackable(id)) {
-            // Find the existing stack (if there is one).
-            for (int i = 0; i < attributes.getInventory().length; i++) {
-                if (attributes.getInventory()[i] == id) {
-                    attributes.getInventoryN()[i] -= amount;
-                    if (attributes.getInventoryN()[i] < 0) {
-                        attributes.getInventoryN()[i] = 0;
-                    }
-                }
-            }
-        } else {
-            // Remove the desired amount.
-            int amountRemoved = 0;
-            for (int i = 0; i < attributes.getInventory().length && amountRemoved < amount; i++) {
-                if (attributes.getInventory()[i] == id) {
-                    attributes.getInventory()[i] = -1;
-                    attributes.getInventoryN()[i] = 0;
-                    amountRemoved++;
-                }
-            }
-        }
-    }
-
-    /**
-     * Checks if the desired amount of the item is in the inventory.
-     *
-     * @param id     the item ID
-     * @param amount the item amount
-     * @return whether or not the player has the desired amount of the item in
-     * the inventory
-     */
-    public boolean hasInventoryItem(int id, int amount) {
-        if (Misc.isStackable(id)) {
-            // Check if an existing stack has the amount of item.
-            for (int i = 0; i < attributes.getInventory().length; i++) {
-                if (attributes.getInventory()[i] == id) {
-                    return attributes.getInventoryN()[i] >= amount;
-                }
-            }
-        } else {
-            // Check if there are the amount of items.
-            int amountFound = 0;
-            for (int i = 0; i < attributes.getInventory().length; i++) {
-                if (attributes.getInventory()[i] == id) {
-                    amountFound++;
-                }
-            }
-            return amountFound >= amount;
-        }
-        return false;
     }
 
     /**
@@ -393,11 +169,11 @@ public class Player extends Client {
         }
 
         // Load the player and send the login response.
-        int status = PlayerAttributes.load(this);
+        PlayerFileHandler.LoadResponse status = Server.getInstance().getPlayerFileHandler().load(this);
         boolean validCredentials = Misc.validatePassword(getAttributes().getPassword()) && Misc.validateUsername(getAttributes().getUsername());
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
-        if ((status != 0 && !validCredentials) || status == 2) {
+        if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials) || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
         }
 
@@ -445,7 +221,7 @@ public class Player extends Client {
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {
-            PlayerAttributes.save(this);
+            Server.getInstance().getPlayerFileHandler().save(this);
         }
     }
 

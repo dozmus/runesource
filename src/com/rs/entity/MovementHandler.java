@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.entity;
 /*
  * This file is part of RuneSource.
  *
@@ -15,6 +15,9 @@ package com.rs;
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.rs.entity.npc.Npc;
+import com.rs.entity.player.Player;
 
 import java.util.Deque;
 import java.util.LinkedList;

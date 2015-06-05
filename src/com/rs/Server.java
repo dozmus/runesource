@@ -16,6 +16,13 @@ package com.rs;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.entity.player.Client;
+import com.rs.entity.player.Player;
+import com.rs.entity.player.PlayerHandler;
+import com.rs.io.JsonFileHandler;
+import com.rs.io.PlayerFileHandler;
+import com.rs.util.Misc;
+
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
@@ -32,11 +39,12 @@ import java.util.Map;
  */
 public class Server implements Runnable {
 
-    private static Server singleton;
+    private static Server instance;
     private final String host;
     private final int port;
     private final int cycleRate;
 
+    private PlayerFileHandler playerFileHandler;
     private Selector selector;
     private InetSocketAddress address;
     private ServerSocketChannel serverChannel;
@@ -71,29 +79,29 @@ public class Server implements Runnable {
         int port = Integer.parseInt(args[1]);
         int cycleRate = Integer.parseInt(args[2]);
 
-        setSingleton(new Server(host, port, cycleRate));
-        new Thread(getSingleton()).start();
+        setInstance(new Server(host, port, cycleRate));
+        new Thread(getInstance()).start();
     }
 
     /**
-     * Gets the server singleton object.
+     * Gets the server instance object.
      *
-     * @return the singleton
+     * @return the instance
      */
-    public static Server getSingleton() {
-        return singleton;
+    public static Server getInstance() {
+        return instance;
     }
 
     /**
-     * Sets the server singleton object.
+     * Sets the server instance object.
      *
-     * @param singleton the singleton
+     * @param instance the instance
      */
-    public static void setSingleton(Server singleton) {
-        if (Server.singleton != null) {
+    public static void setInstance(Server instance) {
+        if (Server.instance != null) {
             throw new IllegalStateException("Singleton already set!");
         }
-        Server.singleton = singleton;
+        Server.instance = instance;
     }
 
     @Override
@@ -109,10 +117,12 @@ public class Server implements Runnable {
             // PluginHandler.loadPlugins();
             Misc.sortEquipmentSlotDefinitions();
             Misc.loadStackableItems("./data/stackable.dat");
+            playerFileHandler = new JsonFileHandler();
 
-            // Start up and get a'rollin!
+            // Start up
             startup();
-            System.out.println("Online!");
+            System.out.println("Started.");
+
             while (true) {
                 cycle();
                 sleep();
@@ -231,4 +241,7 @@ public class Server implements Runnable {
         return clientMap;
     }
 
+    public PlayerFileHandler getPlayerFileHandler() {
+        return playerFileHandler;
+    }
 }

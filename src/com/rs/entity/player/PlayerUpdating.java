@@ -1,6 +1,4 @@
-package com.rs;
-
-import java.util.Iterator;
+package com.rs.entity.player;
 
 /*
  * This file is part of RuneSource.
@@ -18,6 +16,12 @@ import java.util.Iterator;
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.rs.entity.Position;
+import com.rs.net.StreamBuffer;
+import com.rs.util.Misc;
+
+import java.util.Iterator;
 
 /**
  * Provides static utility methods for updating players.

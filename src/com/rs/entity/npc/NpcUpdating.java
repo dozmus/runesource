@@ -1,4 +1,9 @@
-package com.rs;
+package com.rs.entity.npc;
+
+import com.rs.entity.player.Player;
+import com.rs.entity.player.PlayerHandler;
+import com.rs.net.StreamBuffer;
+import com.rs.entity.Position;
 
 import java.util.Iterator;
 

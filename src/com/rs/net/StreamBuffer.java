@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.net;
 /*
  * This file is part of RuneSource.
  *
