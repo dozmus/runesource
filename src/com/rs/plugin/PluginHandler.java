@@ -16,12 +16,14 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import groovy.lang.GroovyClassLoader;
+import groovy.lang.GroovyObject;
+import org.codehaus.groovy.tools.GroovyClass;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+import java.util.*;
 
 /**
  * A simple class that provides methods to register, unregister, and run
@@ -31,26 +33,42 @@ import java.util.List;
  */
 public class PluginHandler {
 
+    private static final String PLUGIN_DIRECTORY = "./plugins/";
+
     /**
      * All registered plugins.
      */
-    private static List<Plugin> plugins = new ArrayList<Plugin>();
+    private static HashMap<String, Plugin> plugins = new HashMap<String, Plugin>();
+    private static final GroovyClassLoader classLoader = new GroovyClassLoader();
 
     /**
      * Processes execution for all registered plugins.
      */
-    public static void process() {
+    public static void cycle() throws Exception {
         synchronized (plugins) {
-            Iterator<Plugin> iter = plugins.iterator();
-            while (iter.hasNext()) {
-                try {
-                    iter.next().cycle();
-                } catch (Exception ex) {
-                    ex.printStackTrace();
-                    iter.remove();
-                }
+            for (Plugin plugin : plugins.values()) {
+                plugin.cycle();
             }
         }
+    }
+
+    /**
+     * Invokes a method from the given plugin.
+     *
+     * @param pluginName plugin name
+     * @param method method name
+     * @param args arguments
+     */
+    public static void invokeMethod(String pluginName, String method, Object... args) {
+        // Attempting to fetch the plugin
+        Plugin plugin = plugins.get(pluginName);
+
+        if (plugin == null) {
+            return;
+        }
+
+        // Invoking the method
+        plugin.getInstance().invokeMethod(method, args);
     }
 
     /**
@@ -62,23 +80,28 @@ public class PluginHandler {
         File file = new File("./plugins.ini");
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String pluginName;
+
         while ((pluginName = reader.readLine()) != null) {
-            @SuppressWarnings("unchecked")
-            Class<Plugin> clazz = (Class<Plugin>) Class.forName(pluginName);
-            register(clazz.newInstance());
+            Class cls = classLoader.parseClass(new File(PLUGIN_DIRECTORY + pluginName + ".groovy"));
+            GroovyObject obj = (GroovyObject) cls.newInstance();
+            Plugin plugin = (Plugin) obj;
+            plugin.setInstance(obj);
+            register(pluginName, plugin);
         }
     }
 
     /**
      * Registers a plugin and calls the plugin's onEnable method.
      *
+     * @param name The plugin name
      * @param plugin The plugin to register
      */
-    public static void register(Plugin plugin) {
+    public static void register(String name, Plugin plugin) {
         try {
             plugin.onEnable();
+
             synchronized (plugins) {
-                plugins.add(plugin);
+                plugins.put(name, plugin);
             }
         } catch (Exception ex) {
             ex.printStackTrace();
@@ -91,10 +114,24 @@ public class PluginHandler {
      * @param plugin The plugin to unregister
      */
     public static void unregister(Plugin plugin) {
+        for (Map.Entry<String, Plugin> entry : plugins.entrySet()) {
+            if (entry.getValue().equals(plugin)) {
+                unregister(entry.getKey());
+            }
+        }
+    }
+
+    /**
+     * Unregisters a plugin and calls the plugin's onDisable method.
+     *
+     * @param name The plugin name to unregister
+     */
+    public static void unregister(String name) {
         try {
-            plugin.onDisable();
+            plugins.get(name).onDisable();
+
             synchronized (plugins) {
-                plugins.remove(plugin);
+                plugins.remove(name);
             }
         } catch (Exception ex) {
             ex.printStackTrace();

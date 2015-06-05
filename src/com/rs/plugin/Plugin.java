@@ -16,33 +16,64 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import groovy.lang.GroovyObject;
+
 /**
  * An interface that allows users to create objects that run along side the main
  * execution of the server.
  *
- * @author Blake Beaupain
+ * @author Pure_
+ * @author blakeman8192
  */
-public interface Plugin {
+public abstract class Plugin {
+
+    private GroovyObject instance;
 
     /**
      * Called every time the server performs a cycle.
      *
      * @throws Exception If the plugin throws any form of exception
      */
-    public void cycle() throws Exception;
+    public abstract void cycle() throws Exception;
 
     /**
      * Called when the plugin is enabled.
      *
      * @throws Exception If the plugin throws any form of exception
      */
-    public void onEnable() throws Exception;
+    public abstract void onEnable() throws Exception;
 
     /**
      * Called when the plugin is disabled.
      *
      * @throws Exception If the plugin is disabled
      */
-    public void onDisable() throws Exception;
+    public abstract void onDisable() throws Exception;
 
+    /**
+     * Gets the plugins name.
+     *
+     * @return
+     */
+    public abstract String getName();
+
+    /**
+     * Get the groovy object instance of the plugin.
+     *
+     * @return
+     */
+    public GroovyObject getInstance() {
+        return instance;
+    }
+
+    /**
+     * Set the groovy object instance of this plugin
+     * @param instance
+     */
+    public void setInstance(GroovyObject instance) {
+        if (this.instance != null) {
+            throw new IllegalStateException("Plugin already loaded.");
+        }
+        this.instance = instance;
+    }
 }

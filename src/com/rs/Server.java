@@ -21,6 +21,7 @@ import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerHandler;
 import com.rs.io.JsonFileHandler;
 import com.rs.io.PlayerFileHandler;
+import com.rs.plugin.PluginHandler;
 import com.rs.util.Misc;
 
 import java.io.IOException;
@@ -113,11 +114,17 @@ public class Server implements Runnable {
             address = new InetSocketAddress(host, port);
             System.out.println("Starting RuneSource on " + address + "...");
 
-            // Load configuration.
-            // PluginHandler.loadPlugins();
+            // Loading configuration
+            Misc.Stopwatch timer = new Misc.Stopwatch();
             Misc.sortEquipmentSlotDefinitions();
             Misc.loadStackableItems("./data/stackable.dat");
             playerFileHandler = new JsonFileHandler();
+            System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
+
+            // Loading plugins
+            timer.reset();
+            PluginHandler.loadPlugins();
+            System.out.println("Loaded all plugins in " + timer.elapsed() + "ms");
 
             // Start up
             startup();
@@ -168,6 +175,7 @@ public class Server implements Runnable {
 		 */
         for (int i = 0; i < 10; i++) {
             socket = serverChannel.accept();
+
             if (socket == null) {
                 // No more connections to accept (as this one was invalid).
                 break;
