@@ -33,8 +33,7 @@ public abstract class Client {
     /**
      * Lengths for the various packets.
      */
-    public static final int[] PACKET_LENGTHS = { //
-            //
+    public static final int[] PACKET_LENGTHS = {
             0, 0, 0, 1, -1, 0, 0, 0, 0, 0, // 0
             0, 0, 0, 0, 8, 0, 6, 2, 2, 0, // 10
             0, 2, 0, 6, 0, 12, 0, 0, 0, 0, // 20
@@ -85,6 +84,7 @@ public abstract class Client {
         this.key = key;
         setStage(Stage.CONNECTED);
         inData = ByteBuffer.allocateDirect(512);
+
         if (key != null) {
             socketChannel = (SocketChannel) key.channel();
         }
@@ -114,6 +114,15 @@ public abstract class Client {
     }
 
     /**
+     * Sends all equipment.
+     */
+    public void sendEquipment() {
+        for (int i = 0; i < player.getEquipment().length; i++) {
+            sendEquipment(i, player.getEquipment()[i], player.getEquipmentN()[i]);
+        }
+    }
+
+    /**
      * Sends the skill to the client.
      *
      * @param skillID the skill ID
@@ -121,21 +130,12 @@ public abstract class Client {
      * @param exp     the skill experience
      */
     public void sendSkill(int skillID, int level, int exp) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(8);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1 + 1 + 4 + 1);
         out.writeHeader(getEncryptor(), 134);
         out.writeByte(skillID);
         out.writeInt(exp, StreamBuffer.ByteOrder.MIDDLE);
         out.writeByte(level);
         send(out.getBuffer());
-    }
-
-    /**
-     * Sends all equipment.
-     */
-    public void sendEquipment() {
-        for (int i = 0; i < player.getEquipment().length; i++) {
-            sendEquipment(i, player.getEquipment()[i], player.getEquipmentN()[i]);
-        }
     }
 
     /**
@@ -146,11 +146,12 @@ public abstract class Client {
      * @param itemAmount the item amount
      */
     public void sendEquipment(int slot, int itemID, int itemAmount) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(32);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1 + 2 + 2 + 1 + 2 + 3 + 2);
         out.writeVariableShortPacketHeader(getEncryptor(), 34);
         out.writeShort(1688);
         out.writeByte(slot);
         out.writeShort(itemID + 1);
+
         if (itemAmount > 254) {
             out.writeByte(255);
             out.writeShort(itemAmount);
@@ -165,10 +166,11 @@ public abstract class Client {
      * Sends the current full inventory.
      */
     public void sendInventory() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(256);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + (player.getInventory().length * 7) + 2);
         out.writeVariableShortPacketHeader(getEncryptor(), 53);
         out.writeShort(3214);
         out.writeShort(player.getInventory().length);
+
         for (int i = 0; i < player.getInventory().length; i++) {
             if (player.getInventoryN()[i] > 254) {
                 out.writeByte(255);
@@ -227,6 +229,7 @@ public abstract class Client {
      */
     public void disconnect() {
         System.out.println(this + " disconnecting.");
+
         try {
             logout();
             getSocketChannel().close();
@@ -347,6 +350,7 @@ public abstract class Client {
         } finally {
             // Make sure we have finished reading all of this packet.
             int read = inData.position() - positionBefore;
+
             for (int i = read; i < packetLength; i++) {
                 inData.get();
             }

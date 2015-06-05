@@ -70,7 +70,7 @@ public class PlayerHandler {
         }
 
         // Process all plugins.
-        PluginHandler.process();
+        // PluginHandler.process();
 
         // Update all players.
         for (int i = 0; i < players.length; i++) {

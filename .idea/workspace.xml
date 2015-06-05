@@ -2,22 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="2fc7c759-5669-4e06-9306-f52dcabf554a" name="Default" comment="Refactored the Misc class.">
+      <change type="DELETED" beforePath="D:\Documents\Programming\Projects\Java\runesource\data\characters\mopar.txt" afterPath="" />
+      <change type="DELETED" beforePath="D:\Documents\Programming\Projects\Java\runesource\data\characters\moparh.txt" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Client.java" afterPath="$PROJECT_DIR$/src/com/rs/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/HostGateway.java" afterPath="$PROJECT_DIR$/src/com/rs/HostGateway.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/ISAACCipher.java" afterPath="$PROJECT_DIR$/src/com/rs/ISAACCipher.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Misc.java" afterPath="$PROJECT_DIR$/src/com/rs/Misc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/MovementHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/MovementHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Npc.java" afterPath="$PROJECT_DIR$/src/com/rs/Npc.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/NpcUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/NpcUpdating.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Player.java" afterPath="$PROJECT_DIR$/src/com/rs/Player.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/PlayerHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/PlayerHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/PlayerSave.java" afterPath="$PROJECT_DIR$/src/com/rs/PlayerSave.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/PlayerUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/PlayerUpdating.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Plugin.java" afterPath="$PROJECT_DIR$/src/com/rs/Plugin.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/PluginHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/PluginHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Position.java" afterPath="$PROJECT_DIR$/src/com/rs/Position.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Server.java" afterPath="$PROJECT_DIR$/src/com/rs/Server.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/StreamBuffer.java" afterPath="$PROJECT_DIR$/src/com/rs/StreamBuffer.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="runesource.iws" />
@@ -43,7 +34,28 @@
     <favorites_list name="runesource" />
   </component>
   <component name="FileEditorManager">
-    <leaf />
+    <leaf>
+      <file leaf-file-name="Client.java" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/com/rs/Client.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10846">
+              <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="PlayerHandler.java" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/com/rs/PlayerHandler.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.5168919" vertical-offset="816" max-vertical-offset="3825">
+              <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+    </leaf>
   </component>
   <component name="Git.Settings">
     <option name="PREVIOUS_COMMIT_AUTHORS">
@@ -64,16 +76,18 @@
         <option value="$PROJECT_DIR$/src/com/rs/PluginHandler.java" />
         <option value="$PROJECT_DIR$/src/com/rs/Plugin.java" />
         <option value="$PROJECT_DIR$/src/com/rs/PlayerSave.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/Player.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/PlayerHandler.java" />
         <option value="$PROJECT_DIR$/src/com/rs/Npc.java" />
         <option value="$PROJECT_DIR$/src/com/rs/MovementHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/Client.java" />
         <option value="$PROJECT_DIR$/src/com/rs/HostGateway.java" />
         <option value="$PROJECT_DIR$/src/com/rs/ISAACCipher.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/Server.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/Misc.java" />
         <option value="$PROJECT_DIR$/src/com/rs/StreamBuffer.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/Server.java" />
+        <option value="$PROJECT_DIR$/data/characters/12345678900.txt" />
+        <option value="$PROJECT_DIR$/src/com/rs/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/Misc.java" />
+        <option value="$PROJECT_DIR$/data/characters/mopar.txt" />
+        <option value="$PROJECT_DIR$/src/com/rs/Client.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/PlayerHandler.java" />
       </list>
     </option>
   </component>
@@ -484,7 +498,7 @@
       <created>1433459698686</created>
       <option name="number" value="Default" />
       <updated>1433459698686</updated>
-      <workItem from="1433459700440" duration="1667000" />
+      <workItem from="1433459700440" duration="3598000" />
     </task>
     <task id="LOCAL-00001" summary="Formatted all code.">
       <created>1433460603992</created>
@@ -492,11 +506,17 @@
       <option name="project" value="LOCAL" />
       <updated>1433460603992</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Refactored the Misc class.">
+      <created>1433461395986</created>
+      <option name="number" value="00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1433461395986</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1667000" />
+    <option name="totallyTimeSpent" value="3598000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -533,10 +553,10 @@
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.32900432" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="-1" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -567,7 +587,8 @@
       <TodoPanelSettings />
     </option>
     <MESSAGE value="Formatted all code." />
-    <option name="LAST_COMMIT_MESSAGE" value="Formatted all code." />
+    <MESSAGE value="Refactored the Misc class." />
+    <option name="LAST_COMMIT_MESSAGE" value="Refactored the Misc class." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -629,38 +650,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.018973215" vertical-offset="0" max-vertical-offset="11220">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/PlayerSave.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.018973215" vertical-offset="0" max-vertical-offset="3485">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/PluginHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.018973215" vertical-offset="0" max-vertical-offset="1785">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.018973215" vertical-offset="0" max-vertical-offset="3893">
-          <caret line="1" column="0" selection-start-line="1" selection-start-column="0" selection-end-line="1" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/rs/ISAACCipher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.018973215" vertical-offset="0" max-vertical-offset="5117">
@@ -701,12 +690,95 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/PlayerHandler.java">
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Position.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5743243" vertical-offset="0" max-vertical-offset="3825">
-          <caret line="20" column="2" selection-start-line="20" selection-start-column="2" selection-end-line="20" selection-end-column="2" />
+        <state vertical-scroll-proportion="0.36049107" vertical-offset="0" max-vertical-offset="4199">
+          <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
           <folding />
         </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/MovementHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-1.032366" vertical-offset="1350" max-vertical-offset="3451">
+          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/err.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="896">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/logs/out.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="935">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/PluginHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.008928572" vertical-offset="450" max-vertical-offset="1785">
+          <caret line="31" column="13" selection-start-line="31" selection-start-column="13" selection-end-line="31" selection-end-column="13" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="3.2364864" vertical-offset="651" max-vertical-offset="3893">
+          <caret line="160" column="8" selection-start-line="160" selection-start-column="8" selection-end-line="160" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/PlayerSave.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.33277026" vertical-offset="1809" max-vertical-offset="3485">
+          <caret line="119" column="22" selection-start-line="119" selection-start-column="22" selection-end-line="119" selection-end-column="22" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/stackable.dat">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="579">
+          <caret line="0" column="42" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="55" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Player.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.015202703" vertical-offset="7352" max-vertical-offset="11305">
+          <caret line="435" column="42" selection-start-line="435" selection-start-column="42" selection-end-line="435" selection-end-column="42" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Misc.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.88255614" vertical-offset="2702" max-vertical-offset="4964">
+          <caret line="197" column="37" selection-start-line="197" selection-start-column="37" selection-end-line="197" selection-end-column="37" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/characters/mopar.txt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.93950176" vertical-offset="934" max-vertical-offset="1666">
+          <caret line="86" column="4" selection-start-line="86" selection-start-column="4" selection-end-line="86" selection-end-column="4" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="com.intellij.database.editor.CsvTableFileEditorProvider">
+        <state />
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/com/rs/NpcUpdating.java">
@@ -717,42 +789,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-0.9594595" vertical-offset="993" max-vertical-offset="10778">
-          <caret line="30" column="22" selection-start-line="30" selection-start-column="22" selection-end-line="30" selection-end-column="22" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/MovementHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="228" max-vertical-offset="3451">
-          <caret line="26" column="13" selection-start-line="26" selection-start-column="13" selection-end-line="26" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Misc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1099" max-vertical-offset="4267">
-          <caret line="83" column="4" selection-start-line="83" selection-start-column="4" selection-end-line="83" selection-end-column="4" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/rs/StreamBuffer.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.09626274" vertical-offset="306" max-vertical-offset="16507">
-          <caret line="23" column="56" selection-start-line="23" selection-start-column="56" selection-end-line="23" selection-end-column="56" />
+        <state vertical-scroll-proportion="0.33333334" vertical-offset="11078" max-vertical-offset="16507">
+          <caret line="723" column="20" selection-start-line="723" selection-start-column="20" selection-end-line="723" selection-end-column="20" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Position.java">
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Client.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.36049107" vertical-offset="0" max-vertical-offset="4199">
-          <caret line="19" column="46" selection-start-line="19" selection-start-column="46" selection-end-line="19" selection-end-column="46" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="10846">
+          <caret line="61" column="38" selection-start-line="61" selection-start-column="38" selection-end-line="61" selection-end-column="38" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/PlayerHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5168919" vertical-offset="816" max-vertical-offset="3825">
+          <caret line="66" column="27" selection-start-line="66" selection-start-column="27" selection-end-line="66" selection-end-column="27" />
           <folding />
         </state>
       </provider>

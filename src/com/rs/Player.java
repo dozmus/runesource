@@ -430,20 +430,26 @@ public class Player extends Client {
 
         // Load the player and send the login response.
         int status = PlayerSave.load(this);
-        if (status == 2) { // Invalid username/password.
+        boolean validCredentials = Misc.validatePassword(getPassword()) && Misc.validateUsername(getUsername());
+
+        // Invalid username/password - we skip the check if the account is found because the validation may have changed since
+        if ((status != 0 && !validCredentials) || status == 2) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
         }
 
+        // Sending response
         StreamBuffer.OutBuffer resp = StreamBuffer.newOutBuffer(3);
         resp.writeByte(response);
         resp.writeByte(getStaffRights());
         resp.writeByte(0);
         send(resp.getBuffer());
+
         if (response != 2) {
             disconnect();
             return;
         }
 
+        // Initialising player session
         PlayerHandler.register(this);
         sendMapRegion();
         sendInventory();
@@ -465,7 +471,6 @@ public class Player extends Client {
         sendSidebarInterface(13, 6299);
         sendSidebarInterface(0, 2423);
         sendMessage("Welcome to RuneSource!");
-
         System.out.println(this + " has logged in.");
     }
 
@@ -473,8 +478,8 @@ public class Player extends Client {
     public void logout() throws Exception {
         PlayerHandler.unregister(this);
         setStage(Client.Stage.LOGGED_OUT);
-
         System.out.println(this + " has logged out.");
+
         if (getSlot() != -1) {
             PlayerSave.save(this);
         }
@@ -482,7 +487,7 @@ public class Player extends Client {
 
     @Override
     public String toString() {
-        return getUsername() == null ? "Client(" + getHost() + ")" : "Player(" + getUsername() + ":" + getPassword() + " - " + getHost() + ")";
+        return getUsername() == null ? "Client(" + getHost() + ")" : "Player(" + getUsername() + "@" + getHost() + ")";
     }
 
     /**

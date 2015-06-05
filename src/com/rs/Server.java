@@ -106,7 +106,7 @@ public class Server implements Runnable {
             System.out.println("Starting RuneSource on " + address + "...");
 
             // Load configuration.
-            PluginHandler.loadPlugins();
+            // PluginHandler.loadPlugins();
             Misc.sortEquipmentSlotDefinitions();
             Misc.loadStackableItems("./data/stackable.dat");
 

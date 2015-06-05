@@ -1,7 +1,7 @@
 [username]: mopar
-[password]: bob
-[staffRights]: 2
-[position]: 3224 3218 0
+[password]: test
+[staffRights]: 0
+[position]: 3222 3220 0
 [gender]: 0
 
 [appearance]:
@@ -45,7 +45,7 @@
 1,0
 
 [inventory]:
-995,10011000
+995,1100
 -1,0
 -1,0
 -1,0
@@ -78,7 +78,7 @@
 -1,0
 -1,0
 -1,0
--1,0
+4151,1
 -1,0
 -1,0
 -1,0

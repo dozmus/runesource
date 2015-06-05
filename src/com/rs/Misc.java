@@ -175,6 +175,48 @@ public class Misc {
         }
     }
 
+    private static char[] VALID_PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ".toCharArray();
+    private static char[] VALID_USERNAME_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789! ".toCharArray();
+
+    public static boolean validatePassword(String password) {
+        // Length check
+        if (password.length() < 4 || password.length() > 16) {
+            return false;
+        }
+
+        // Checking each character
+        for (int i = 0; i < password.length(); i++) {
+            if (!checkArrayContains(VALID_PASSWORD_CHARACTERS, password.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static boolean validateUsername(String username) {
+        // Length check
+        if (username.length() == 0 || username.length() > 12) {
+            return false;
+        }
+
+        // Checking each character
+        for (int i = 0; i < username.length(); i++) {
+            if (!checkArrayContains(VALID_USERNAME_CHARACTERS, username.charAt(i))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private static boolean checkArrayContains(char[] src, char c) {
+        for (int i = 0; i < src.length; i++) {
+            if (src[i] == c) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public static boolean isStackable(int itemID) {
         return stackableItems[itemID];
     }
