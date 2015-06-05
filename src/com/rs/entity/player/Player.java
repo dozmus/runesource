@@ -167,6 +167,8 @@ public class Player extends Client {
         sendSidebarInterface(12, 147);
         sendSidebarInterface(13, 6299);
         sendSidebarInterface(0, 2423);
+        sendRunEnergy();
+        sendResetAllButtonStates();
         sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");
         System.out.println(this + " has logged in.");
     }
@@ -393,6 +395,14 @@ public class Player extends Client {
 
     public void setAttributes(PlayerAttributes attributes) {
         this.attributes = attributes;
+    }
+
+    public float getRunEnergyIncrement() {
+        return 0.6f;
+    }
+
+    public float getRunEnergyDecrement() {
+        return 0.6f;
     }
 
 }

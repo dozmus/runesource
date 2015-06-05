@@ -9,6 +9,11 @@ class CommandHandler extends Plugin {
     void handle(Player player, String keyword, String[] args) {
         PlayerAttributes attributes = player.getAttributes();
 
+        if (keyword.equals("energy")) {
+            player.getAttributes().setRunEnergy(Integer.parseInt(args[0]));
+            player.sendRunEnergy();
+        }
+
         if (keyword.equals("master")) {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 99;

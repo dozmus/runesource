@@ -50,18 +50,38 @@ public class MovementHandler {
         // Handle the movement.
         walkPoint = waypoints.poll();
 
+        // Handling run energy
         if (isRunToggled() || isRunPath()) {
-            runPoint = waypoints.poll();
+            if (player.getAttributes().hasRunEnergy()) {
+                runPoint = waypoints.poll();
+            } else { // Player is out of energy
+                player.sendClientSetting(173, 0);
+                setRunToggled(false);
+                setRunPath(false);
+                runPoint = null;
+            }
         }
 
+        // Walking
         if (walkPoint != null && walkPoint.getDirection() != -1) {
             player.getPosition().move(Position.DIRECTION_DELTA_X[walkPoint.getDirection()], Position.DIRECTION_DELTA_Y[walkPoint.getDirection()]);
             player.setPrimaryDirection(walkPoint.getDirection());
         }
 
+        // Running
         if (runPoint != null && runPoint.getDirection() != -1) {
             player.getPosition().move(Position.DIRECTION_DELTA_X[runPoint.getDirection()], Position.DIRECTION_DELTA_Y[runPoint.getDirection()]);
             player.setSecondaryDirection(runPoint.getDirection());
+
+            // Reducing energy
+            player.getAttributes().decreaseRunEnergy(player.getRunEnergyDecrement());
+            player.sendRunEnergy();
+        } else {
+            // Restoring run energy
+            if (player.getAttributes().getRunEnergy() != 100) {
+                player.getAttributes().increaseRunEnergy(player.getRunEnergyIncrement(), 100);
+                player.sendRunEnergy();
+            }
         }
 
         // Check for region changes.

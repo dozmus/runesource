@@ -3,12 +3,13 @@
   "username":"mopar",
   "password":"test",
   "position":{
-    "x":3223,
-    "y":3219,
+    "x":3220,
+    "y":3212,
     "z":0
   },
   "staffRights":0,
   "gender":0,
+  "runEnergy":14.000003,
   "appearance":[
     18,
     26,

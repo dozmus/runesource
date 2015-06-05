@@ -32,6 +32,7 @@ public class PlayerAttributes {
     private Position position = new Position(0, 0);
     private int staffRights = 0;
     private int gender = Misc.GENDER_MALE;
+    private float runEnergy = 100;
     private final int[] appearance = new int[7];
     private final int[] colors = new int[5];
     private final int[] skills = new int[22];
@@ -391,5 +392,31 @@ public class PlayerAttributes {
             getInventoryN()[i] = 0;
         }
         player.sendInventory();
+    }
+
+    public float getRunEnergy() {
+        return runEnergy;
+    }
+
+    public void setRunEnergy(float runEnergy) {
+        this.runEnergy = runEnergy;
+    }
+
+    public boolean hasRunEnergy() {
+        return (int)runEnergy > 0;
+    }
+
+    public void decreaseRunEnergy(float amount) {
+        runEnergy -= amount;
+
+        if (runEnergy < 0) {
+            runEnergy = 0;
+        }
+    }
+
+    public void increaseRunEnergy(float amount, float limit) {
+        if (runEnergy < limit) {
+            runEnergy += amount;
+        }
     }
 }

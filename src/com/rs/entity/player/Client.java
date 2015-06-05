@@ -234,6 +234,48 @@ public abstract class Client {
     }
 
     /**
+     * Sends your run energy to the client.
+     */
+    public void sendRunEnergy() {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2);
+        out.writeHeader(getEncryptor(), 110);
+        out.writeByte((int)player.getAttributes().getRunEnergy());
+        send(out.getBuffer());
+    }
+
+    /**
+     * Sends a packet that tells the client to forcibly modify the value of a setting.
+     *
+     * @param settingId
+     * @param value
+     */
+    public void sendClientSetting(int settingId, int value) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4);
+        out.writeHeader(getEncryptor(), 36);
+        out.writeShort(settingId, StreamBuffer.ByteOrder.LITTLE);
+        out.writeByte(value);
+        send(out.getBuffer());
+    }
+
+    /**
+     * Sends a packet that tells the client to log out.
+     */
+    public void sendLogout() {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        out.writeHeader(getEncryptor(), 109);
+        send(out.getBuffer());
+    }
+
+    /**
+     * Sends a packet that tells the client to reset all button states.
+     */
+    public void sendResetAllButtonStates() {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        out.writeHeader(getEncryptor(), 68);
+        send(out.getBuffer());
+    }
+
+    /**
      * Disconnects the client.
      */
     public void disconnect() {
@@ -250,15 +292,6 @@ public abstract class Client {
             Server.getInstance().getClientMap().remove(key);
             key.cancel();
         }
-    }
-
-    /**
-     * Sends a packet that tells the client to log out.
-     */
-    public void sendLogout() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
-        out.writeHeader(getEncryptor(), 109);
-        send(out.getBuffer());
     }
 
     /**
