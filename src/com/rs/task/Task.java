@@ -4,6 +4,7 @@ import com.rs.entity.player.Player;
 
 /**
  * A simple task base class.
+ *
  * @author Pure_
  */
 public abstract class Task {
@@ -29,10 +30,10 @@ public abstract class Task {
     /**
      * Creates a new task instance.
      *
-     * @param delay the delay (in server ticks) until the task is to be executed
+     * @param delay   the delay (in server ticks) until the task is to be executed
      * @param runOnce if the task should only be executed once
-     * @param player the player this task is bound to
-     * @param args the args to provide to the instance
+     * @param player  the player this task is bound to
+     * @param args    the args to provide to the instance
      */
     public Task(int delay, boolean runOnce, Player player, Object... args) {
         this.delay = delay;
@@ -65,6 +66,7 @@ public abstract class Task {
 
     /**
      * Whether or not the task should be removed.
+     *
      * @return
      */
     public boolean isRunning() {
@@ -73,6 +75,7 @@ public abstract class Task {
 
     /**
      * Sets if the task should be removed next cycle.
+     *
      * @param
      */
     public void setRunning(boolean running) {
@@ -81,6 +84,7 @@ public abstract class Task {
 
     /**
      * Gets the array of arguments passed to the task upon creation.
+     *
      * @return
      */
     public Object[] getArgs() {
@@ -89,6 +93,7 @@ public abstract class Task {
 
     /**
      * The player this task is bound to.
+     *
      * @return
      */
     public Player getPlayer() {
@@ -97,6 +102,7 @@ public abstract class Task {
 
     /**
      * The amount of times this task has been executed.
+     *
      * @return
      */
     public int getTicks() {

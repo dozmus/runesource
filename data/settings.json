@@ -1,0 +1,9 @@
+{
+  "@type":"com.rs.Settings",
+  "serverName":"RuneSource",
+  "startPosition":{
+    "x":3222,
+    "y":3222,
+    "z":0
+  }
+}

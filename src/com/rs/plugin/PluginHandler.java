@@ -18,12 +18,12 @@ package com.rs.plugin;
 
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
-import org.codehaus.groovy.tools.GroovyClass;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * A simple class that provides methods to register, unregister, and run
@@ -34,12 +34,11 @@ import java.util.*;
 public final class PluginHandler {
 
     private static final String PLUGIN_DIRECTORY = "./plugins/";
-
+    private static final GroovyClassLoader classLoader = new GroovyClassLoader();
     /**
      * All registered plugins.
      */
     private static HashMap<String, Plugin> plugins = new HashMap<String, Plugin>();
-    private static final GroovyClassLoader classLoader = new GroovyClassLoader();
 
     /**
      * Processes execution for all registered plugins.
@@ -56,8 +55,8 @@ public final class PluginHandler {
      * Invokes a method from the given plugin.
      *
      * @param pluginName plugin name
-     * @param method method name
-     * @param args arguments
+     * @param method     method name
+     * @param args       arguments
      */
     public static void invokeMethod(String pluginName, String method, Object... args) {
         // Attempting to fetch the plugin
@@ -74,10 +73,11 @@ public final class PluginHandler {
     /**
      * Loads all plugins.
      *
+     * @param pluginsFile a text file containing a list of plugins to load
      * @throws Exception
      */
-    public static void loadPlugins() throws Exception {
-        File file = new File("./plugins.ini");
+    public static void loadPlugins(String pluginsFile) throws Exception {
+        File file = new File(pluginsFile);
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String pluginName;
 
@@ -97,7 +97,7 @@ public final class PluginHandler {
     /**
      * Registers a plugin and calls the plugin's onEnable method.
      *
-     * @param name The plugin name
+     * @param name   The plugin name
      * @param plugin The plugin to register
      */
     public static void register(String name, Plugin plugin) {

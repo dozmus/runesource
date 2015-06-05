@@ -167,7 +167,7 @@ public class Player extends Client {
         sendSidebarInterface(12, 147);
         sendSidebarInterface(13, 6299);
         sendSidebarInterface(0, 2423);
-        sendMessage("Welcome to RuneSource!");
+        sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");
         System.out.println(this + " has logged in.");
     }
 

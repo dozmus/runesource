@@ -45,6 +45,7 @@ public class Server implements Runnable {
     private final int port;
     private final int cycleRate;
 
+    private Settings settings;
     private PlayerFileHandler playerFileHandler;
     private Selector selector;
     private InetSocketAddress address;
@@ -108,14 +109,15 @@ public class Server implements Runnable {
     @Override
     public void run() {
         try {
-            System.setOut(new Misc.TimestampLogger(System.out, "./logs/out.log"));
-            System.setErr(new Misc.TimestampLogger(System.err, "./logs/err.log"));
+            System.setOut(new Misc.TimestampLogger(System.out, "./data/logs/out.log"));
+            System.setErr(new Misc.TimestampLogger(System.err, "./data/logs/err.log"));
 
             address = new InetSocketAddress(host, port);
             System.out.println("Starting RuneSource on " + address + "...");
 
             // Loading configuration
             Misc.Stopwatch timer = new Misc.Stopwatch();
+            settings = Settings.load("./data/settings.json");
             Misc.sortEquipmentSlotDefinitions();
             Misc.loadStackableItems("./data/stackable.dat");
             playerFileHandler = new JsonFileHandler();
@@ -123,12 +125,12 @@ public class Server implements Runnable {
 
             // Loading plugins
             timer.reset();
-            PluginHandler.loadPlugins();
+            PluginHandler.loadPlugins("./data/plugins.ini");
             System.out.println("Loaded all plugins in " + timer.elapsed() + "ms");
 
-            // Start up
-            startup();
-            System.out.println("Started.");
+            // Starting the server
+            init();
+            System.out.println("Started as " + settings.getServerName());
 
             while (true) {
                 cycle();
@@ -140,11 +142,11 @@ public class Server implements Runnable {
     }
 
     /**
-     * Starts the server up.
+     * Initialises the server.
      *
      * @throws IOException
      */
-    private void startup() throws IOException {
+    private void init() throws IOException {
         // Initialize the networking objects.
         selector = Selector.open();
         serverChannel = ServerSocketChannel.open();
@@ -253,5 +255,9 @@ public class Server implements Runnable {
 
     public PlayerFileHandler getPlayerFileHandler() {
         return playerFileHandler;
+    }
+
+    public Settings getSettings() {
+        return settings;
     }
 }

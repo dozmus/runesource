@@ -68,6 +68,7 @@ public abstract class Plugin {
 
     /**
      * Set the groovy object instance of this plugin
+     *
      * @param instance
      */
     public void setInstance(GroovyObject instance) {

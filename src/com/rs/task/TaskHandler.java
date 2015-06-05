@@ -7,6 +7,7 @@ import java.util.Iterator;
 
 /**
  * A simple handler to manage tasks.
+ *
  * @author Pure_
  */
 public final class TaskHandler {
@@ -20,7 +21,7 @@ public final class TaskHandler {
      * Performs a processing task on all active tasks.
      */
     public static void tick() {
-        for (Iterator<Task> itr = tasks.iterator(); itr.hasNext();) {
+        for (Iterator<Task> itr = tasks.iterator(); itr.hasNext(); ) {
             Task task = itr.next();
 
             // Removing completed tasks
@@ -36,6 +37,7 @@ public final class TaskHandler {
 
     /**
      * Deactivates all tasks which belong to the given player.
+     *
      * @param player
      */
     public static void removeTasks(Player player) {
@@ -48,6 +50,7 @@ public final class TaskHandler {
 
     /**
      * Adds a task to the execution list.
+     *
      * @param task
      */
     public static void submit(Task task) {

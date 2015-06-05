@@ -16,6 +16,7 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.util.Misc;
 
@@ -28,7 +29,7 @@ public class PlayerAttributes {
 
     private String username;
     private String password;
-    private Position position = new Position(3222, 3222);
+    private Position position = new Position(0, 0);
     private int staffRights = 0;
     private int gender = Misc.GENDER_MALE;
     private final int[] appearance = new int[7];
@@ -73,6 +74,9 @@ public class PlayerAttributes {
     }
 
     public void reset() {
+        // Setting the default position
+        position.setAs(Server.getInstance().getSettings().getStartPosition());
+
         // Set the default appearance.
         appearance[Misc.APPEARANCE_SLOT_CHEST] = 18;
         appearance[Misc.APPEARANCE_SLOT_ARMS] = 26;
@@ -151,6 +155,7 @@ public class PlayerAttributes {
 
     /**
      * Sets the skill level.
+     *
      * @param skillId the skill ID
      * @param level   the level
      * @param player
@@ -162,6 +167,7 @@ public class PlayerAttributes {
 
     /**
      * Adds skill experience.
+     *
      * @param skillid the skill ID
      * @param exp     the experience to add
      * @param player
@@ -173,6 +179,7 @@ public class PlayerAttributes {
 
     /**
      * Removes skill experience.
+     *
      * @param skillid the skill ID
      * @param exp     the experience to add
      * @param player
@@ -213,7 +220,8 @@ public class PlayerAttributes {
 
     /**
      * Removes the desired amount of the specified item from the inventory.
-     *  @param id     the item ID
+     *
+     * @param id     the item ID
      * @param amount the desired amount
      */
     public void removeInventoryItem(int id, int amount) {
@@ -302,7 +310,7 @@ public class PlayerAttributes {
     /**
      * Unequips an item.
      *
-     * @param slot the equipment slot.
+     * @param slot   the equipment slot.
      * @param player
      */
     public void unequip(int slot, Player player) {
@@ -326,7 +334,7 @@ public class PlayerAttributes {
     /**
      * Equips an item.
      *
-     * @param slot the inventory slot
+     * @param slot   the inventory slot
      * @param player
      */
     public void equip(int slot, Player player) {
@@ -374,6 +382,7 @@ public class PlayerAttributes {
 
     /**
      * Empties the entire inventory.
+     *
      * @param player
      */
     public void emptyInventory(Player player) {

@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="2fc7c759-5669-4e06-9306-f52dcabf554a" name="Default" comment="Added a plugin bridge and exported command handling to a script">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/plugins/bindings/CommandHandler.groovy" />
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/rs/plugin/PluginBridge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/Client.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/MovementHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/MovementHandler.java" />
+    <list default="true" id="2fc7c759-5669-4e06-9306-f52dcabf554a" name="Default" comment="">
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/src/com/rs/Settings.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/plugins.ini" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/data/settings.json" />
+      <change type="DELETED" beforePath="D:\Documents\Programming\Projects\Java\runesource\plugins.ini" afterPath="" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/util/Misc.java" afterPath="$PROJECT_DIR$/src/com/rs/util/Misc.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/npc/NpcUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/npc/NpcUpdating.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerUpdating.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/plugin/Plugin.java" afterPath="$PROJECT_DIR$/src/com/rs/plugin/Plugin.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/plugin/PluginHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/plugin/PluginHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins.ini" afterPath="$PROJECT_DIR$/plugins.ini" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Server.java" afterPath="$PROJECT_DIR$/src/com/rs/Server.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/task/Task.java" afterPath="$PROJECT_DIR$/src/com/rs/task/Task.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/task/TaskHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/task/TaskHandler.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MOVED" beforePath="D:\Documents\Programming\Projects\Java\runesource\plugins\SamplePlugin.groovy" afterPath="$PROJECT_DIR$/plugins/scripts/SamplePlugin.groovy" />
     </list>
     <ignored path="runesource.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -48,7 +55,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/LICENSE" />
         <option value="$PROJECT_DIR$/src/PlayerSave.java" />
         <option value="$PROJECT_DIR$/src/com/rs/Position.java" />
@@ -76,22 +82,27 @@
         <option value="$PROJECT_DIR$/src/com/rs/entity/npc/Npc.java" />
         <option value="$PROJECT_DIR$/src/com/rs/io/PlayerFileHandler.java" />
         <option value="$PROJECT_DIR$/src/com/rs/entity/npc/NpcUpdating.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" />
         <option value="$PROJECT_DIR$/plugins/SamplePlugin.groovy" />
         <option value="$PROJECT_DIR$/src/com/rs/plugin/Plugin.java" />
         <option value="$PROJECT_DIR$/plugins/SamplePlugin3.groovy" />
-        <option value="$PROJECT_DIR$/src/com/rs/Server.java" />
         <option value="$PROJECT_DIR$/src/com/rs/entity/player/PlayerHandler.java" />
         <option value="$PROJECT_DIR$/src/com/rs/task/TaskHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/task/Task.java" />
         <option value="$PROJECT_DIR$/src/com/rs/entity/MovementHandler.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" />
         <option value="$PROJECT_DIR$/src/com/rs/entity/player/Client.java" />
         <option value="$PROJECT_DIR$/plugins/bindings/CommandHandler.groovy" />
         <option value="$PROJECT_DIR$/src/com/rs/plugin/PluginBridge.java" />
         <option value="$PROJECT_DIR$/src/com/rs/entity/player/PlayerUpdating.java" />
-        <option value="$PROJECT_DIR$/src/com/rs/plugin/PluginHandler.java" />
         <option value="$PROJECT_DIR$/plugins.ini" />
+        <option value="$PROJECT_DIR$/README.md" />
+        <option value="$PROJECT_DIR$/src/com/rs/plugin/PluginHandler.java" />
+        <option value="$PROJECT_DIR$/src/Settings.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/Settings.java" />
+        <option value="$PROJECT_DIR$/data/settings.json" />
+        <option value="$PROJECT_DIR$/src/com/rs/task/Task.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" />
+        <option value="$PROJECT_DIR$/src/com/rs/Server.java" />
+        <option value="$PROJECT_DIR$/data/logs/out.log" />
       </list>
     </option>
   </component>
@@ -151,46 +162,6 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="runesource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="runesource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="runesource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="runesource" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="src" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="rs" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="plugin" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
-          </PATH>
         </subPane>
       </pane>
       <pane id="PackagesPane" />
@@ -235,6 +206,8 @@
       <recent name="D:\Documents\Programming\Projects\Java\runesource" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="D:\Documents\Programming\Projects\Java\runesource\data" />
+      <recent name="D:\Documents\Programming\Projects\Java\runesource\plugins\script" />
       <recent name="D:\Documents\Programming\Projects\Java\runesource" />
       <recent name="D:\Documents\Programming\Projects\Java\runesource\src" />
     </key>
@@ -538,7 +511,7 @@
       <option name="number" value="Default" />
       <updated>1433459698686</updated>
       <workItem from="1433459700440" duration="12814000" />
-      <workItem from="1433501771798" duration="2939000" />
+      <workItem from="1433501771798" duration="4347000" />
     </task>
     <task id="LOCAL-00001" summary="Formatted all code.">
       <created>1433460603992</created>
@@ -588,11 +561,17 @@
       <option name="project" value="LOCAL" />
       <updated>1433504008391</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added a plugin bridge and exported command handling to a script">
+      <created>1433504716655</created>
+      <option name="number" value="00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1433504716655</updated>
+    </task>
+    <option name="localTasksCounter" value="10" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="15753000" />
+    <option name="totallyTimeSpent" value="17161000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -635,7 +614,7 @@
       <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.25" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="IDEtalk Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32864866" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
+      <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32792208" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="UI Designer" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
@@ -671,7 +650,8 @@
     <MESSAGE value="Packaged classes and cleaned up player file saving" />
     <MESSAGE value="Added groovy scripting" />
     <MESSAGE value="Added a task system" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added a task system" />
+    <MESSAGE value="Added a plugin bridge and exported command handling to a script" />
+    <option name="LAST_COMMIT_MESSAGE" value="Added a plugin bridge and exported command handling to a script" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -684,16 +664,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.41852286" vertical-offset="0" max-vertical-offset="853">
-          <caret line="21" column="70" selection-start-line="21" selection-start-column="70" selection-end-line="21" selection-end-column="70" />
-        </state>
-      </provider>
-      <provider editor-type-id="MarkdownPreviewEditor">
-        <state />
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/net/URLClassLoader.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="2.4864864" vertical-offset="4070" max-vertical-offset="12784">
@@ -736,6 +706,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="592">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -743,6 +714,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="592">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -771,20 +743,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/logs/out.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="935">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/logs/err.log">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="896">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/rs/net/ISAACCipher.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-6.1503377" vertical-offset="4508" max-vertical-offset="5100">
@@ -805,16 +763,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.05743243" vertical-offset="0" max-vertical-offset="799">
           <caret line="2" column="35" selection-start-line="2" selection-start-column="35" selection-end-line="2" selection-end-column="35" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/io/JsonFileHandler.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.5168919" vertical-offset="0" max-vertical-offset="1258">
-          <caret line="18" column="42" selection-start-line="18" selection-start-column="42" selection-end-line="18" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+          <folding />
         </state>
       </provider>
     </entry>
@@ -822,24 +771,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="579">
           <caret line="0" column="42" selection-start-line="0" selection-start-column="28" selection-end-line="0" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/data/characters/mopar.json">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="2941">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="-5.1165543" vertical-offset="5460" max-vertical-offset="6052">
-          <caret line="179" column="42" selection-start-line="179" selection-start-column="42" selection-end-line="179" selection-end-column="42" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -850,6 +782,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="-28.733334" vertical-offset="4901" max-vertical-offset="5865">
           <caret line="339" column="0" selection-start-line="339" selection-start-column="0" selection-end-line="339" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -871,16 +804,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/Server.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33277026" vertical-offset="3543" max-vertical-offset="4369">
-          <caret line="222" column="0" selection-start-line="222" selection-start-column="0" selection-end-line="222" selection-end-column="0" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_40/src.zip!/java/util/ArrayList.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33277026" vertical-offset="14338" max-vertical-offset="23715">
@@ -895,16 +818,8 @@
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
-            <element signature="e#313#319#0" expanded="true" />
+            <element signature="e#316#322#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/task/Task.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="1.3733108" vertical-offset="139" max-vertical-offset="1683">
-          <caret line="58" column="0" selection-start-line="58" selection-start-column="0" selection-end-line="58" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -926,22 +841,11 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins/SamplePlugin.groovy">
+    <entry file="file://$PROJECT_DIR$/plugins/scripts/SamplePlugin.groovy">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.15178572" vertical-offset="0" max-vertical-offset="896">
           <caret line="8" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="23" selection-end-column="1" />
           <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/com/rs/entity/player/Player.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3325893" vertical-offset="1079" max-vertical-offset="5848">
-          <caret line="81" column="5" selection-start-line="81" selection-start-column="5" selection-end-line="81" selection-end-column="5" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#1203#1211#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -970,7 +874,7 @@
         <state vertical-scroll-proportion="0.25844595" vertical-offset="0" max-vertical-offset="1224">
           <caret line="9" column="0" selection-start-line="9" selection-start-column="0" selection-end-line="9" selection-end-column="0" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -980,7 +884,7 @@
         <state vertical-scroll-proportion="-0.8733108" vertical-offset="755" max-vertical-offset="2414">
           <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
           <folding>
-            <element signature="imports" expanded="true" />
+            <element signature="imports" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -995,20 +899,118 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/data/plugins.ini">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="567">
+          <caret line="0" column="8" selection-start-line="0" selection-start-column="8" selection-end-line="0" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6812386" vertical-offset="0" max-vertical-offset="549">
+          <caret line="22" column="54" selection-start-line="22" selection-start-column="54" selection-end-line="22" selection-end-column="54" />
+          <folding />
+        </state>
+      </provider>
+      <provider editor-type-id="MarkdownPreviewEditor">
+        <state />
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/com/rs/plugin/PluginHandler.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6266892" vertical-offset="921" max-vertical-offset="2448">
-          <caret line="83" column="58" selection-start-line="83" selection-start-column="58" selection-end-line="83" selection-end-column="58" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="1091" max-vertical-offset="2465">
+          <caret line="76" column="74" selection-start-line="76" selection-start-column="74" selection-end-line="76" selection-end-column="74" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/io/JsonFileHandler.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.11486486" vertical-offset="663" max-vertical-offset="1258">
+          <caret line="43" column="13" selection-start-line="43" selection-start-column="13" selection-end-line="63" selection-end-column="5" />
           <folding>
-            <element signature="e#1292#1308#0" expanded="true" />
+            <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/plugins.ini">
+    <entry file="file://$PROJECT_DIR$/src/com/rs/entity/player/Player.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.029982364" vertical-offset="0" max-vertical-offset="567">
-          <caret line="1" column="23" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        <state vertical-scroll-proportion="0.7060811" vertical-offset="2625" max-vertical-offset="5848">
+          <caret line="179" column="30" selection-start-line="179" selection-start-column="30" selection-end-line="179" selection-end-column="30" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#1203#1211#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/task/Task.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.5692568" vertical-offset="547" max-vertical-offset="1683">
+          <caret line="54" column="19" selection-start-line="54" selection-start-column="12" selection-end-line="54" selection-end-column="19" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/characters/mopar.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.09010601" vertical-offset="0" max-vertical-offset="2941">
+          <caret line="3" column="12" selection-start-line="3" selection-start-column="12" selection-end-line="3" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.39695945" vertical-offset="326" max-vertical-offset="6205">
+          <caret line="33" column="42" selection-start-line="33" selection-start-column="42" selection-end-line="33" selection-end-column="42" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/settings.json">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.15017667" vertical-offset="0" max-vertical-offset="566">
+          <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Settings.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4881757" vertical-offset="0" max-vertical-offset="612">
+          <caret line="22" column="29" selection-start-line="22" selection-start-column="29" selection-end-line="22" selection-end-column="29" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/com/rs/Server.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.3108108" vertical-offset="1669" max-vertical-offset="4437">
+          <caret line="111" column="70" selection-start-line="111" selection-start-column="70" selection-end-line="111" selection-end-column="70" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/logs/out.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="592">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/data/logs/err.log">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="896">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>

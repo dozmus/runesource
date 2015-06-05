@@ -82,6 +82,8 @@ public class Misc {
     public static int fullHelm[] = {1153, 1155, 1157, 1159, 1161, 1163, 1165, 2587, 2595, 2605, 2613, 2619, 2627, 2657, 2673, 3486};
     public static int fullMask[] = {1053, 1055, 1057};
     private static boolean[] stackableItems = new boolean[7000];
+    private static char[] VALID_PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ".toCharArray();
+    private static char[] VALID_USERNAME_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789! ".toCharArray();
 
     public static boolean isFullHelm(int itemID) {
         return Arrays.binarySearch(fullHelm, itemID) > 0;
@@ -174,9 +176,6 @@ public class Misc {
             ex.printStackTrace();
         }
     }
-
-    private static char[] VALID_PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ".toCharArray();
-    private static char[] VALID_USERNAME_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789! ".toCharArray();
 
     public static boolean validatePassword(String password) {
         // Length check
