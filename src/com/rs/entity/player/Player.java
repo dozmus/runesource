@@ -72,56 +72,13 @@ public class Player extends Client {
      * @throws Exception
      */
     public void process() throws Exception {
-        // If no packet for more than 5 seconds, disconnect.
+        // If no is received packet for more than 5 seconds, disconnect.
         if (getTimeoutStopwatch().elapsed() > 5000) {
             System.out.println(this + " timed out.");
             disconnect();
             return;
         }
         movementHandler.process();
-    }
-
-    /**
-     * Handles a player command.
-     *
-     * @param keyword the command keyword
-     * @param args    the arguments (separated by spaces)
-     */
-    public void handleCommand(String keyword, String[] args) {
-        if (keyword.equals("master")) {
-            for (int i = 0; i < attributes.getSkills().length; i++) {
-                attributes.getSkills()[i] = 99;
-                attributes.getExperience()[i] = 200000000;
-            }
-            sendSkills();
-        }
-        if (keyword.equals("noob")) {
-            for (int i = 0; i < attributes.getSkills().length; i++) {
-                attributes.getSkills()[i] = 1;
-                attributes.getExperience()[i] = 0;
-            }
-            sendSkills();
-        }
-        if (keyword.equals("empty")) {
-            attributes.emptyInventory(this);
-        }
-        if (keyword.equals("pickup")) {
-            int id = Integer.parseInt(args[0]);
-            int amount = 1;
-            if (args.length > 1) {
-                amount = Integer.parseInt(args[1]);
-            }
-            attributes.addInventoryItem(id, amount, this);
-            sendInventory();
-        }
-        if (keyword.equals("tele")) {
-            int x = Integer.parseInt(args[0]);
-            int y = Integer.parseInt(args[1]);
-            teleport(new Position(x, y, getPosition().getZ()));
-        }
-        if (keyword.equals("mypos")) {
-            sendMessage("You are at: " + getPosition());
-        }
     }
 
     /**

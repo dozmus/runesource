@@ -21,6 +21,7 @@ import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
+import com.rs.plugin.PluginBridge;
 import com.rs.task.TaskHandler;
 import com.rs.util.Misc;
 
@@ -323,7 +324,7 @@ public abstract class Client {
                 case 103: // Player command.
                     String command = in.readString();
                     String[] split = command.split(" ");
-                    player.handleCommand(split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
+                    PluginBridge.handleCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
                     break;
                 case 248: // Movement.
                 case 164: // ^

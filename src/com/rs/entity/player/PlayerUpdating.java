@@ -323,9 +323,9 @@ public final class PlayerUpdating {
      * @param block  the block
      */
     public static void updateState(Player player, StreamBuffer.OutBuffer block, boolean forceAppearance, boolean noChat) {
-
         // First we must prepare the mask.
         int mask = 0x0;
+
         if (player.isChatUpdateRequired() && !noChat) {
             mask |= 0x80;
         }

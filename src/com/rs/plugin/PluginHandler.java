@@ -82,11 +82,15 @@ public final class PluginHandler {
         String pluginName;
 
         while ((pluginName = reader.readLine()) != null) {
+            if (pluginName.trim().length() == 0)
+                continue;
+
+            // Loading the plugin instance
             Class cls = classLoader.parseClass(new File(PLUGIN_DIRECTORY + pluginName + ".groovy"));
             GroovyObject obj = (GroovyObject) cls.newInstance();
             Plugin plugin = (Plugin) obj;
             plugin.setInstance(obj);
-            register(pluginName, plugin);
+            register(pluginName.replace('/', '.'), plugin);
         }
     }
 
