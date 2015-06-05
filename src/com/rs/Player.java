@@ -24,30 +24,21 @@ import java.util.List;
  * Represents a logged-in player.
  *
  * @author blakeman8192
+ * @author Pure_
  */
 public class Player extends Client {
 
     private final List<Player> players = new LinkedList<Player>();
     private final List<Npc> npcs = new LinkedList<Npc>();
-    private final int[] appearance = new int[7];
-    private final int[] colors = new int[5];
-    private final int[] inventory = new int[28];
-    private final int[] inventoryN = new int[28];
-    private final int[] skills = new int[22];
-    private final int[] experience = new int[22];
-    private final int[] equipment = new int[14];
-    private final int[] equipmentN = new int[14];
-    private Position position = new Position(3222, 3222);
+    private PlayerAttributes attributes = new PlayerAttributes();
     private MovementHandler movementHandler = new MovementHandler(this);
     private Position currentRegion = new Position(0, 0, 0);
     private int primaryDirection = -1;
     private int secondaryDirection = -1;
     private int slot = -1;
-    private int staffRights = 0;
     private int chatColor;
     private int chatEffects;
     private byte[] chatText;
-    private int gender = Misc.GENDER_MALE;
     // Various player update flags.
     private boolean updateRequired = false;
     private boolean appearanceUpdateRequired = false;
@@ -63,39 +54,8 @@ public class Player extends Client {
     public Player(SelectionKey key) {
         super(key);
 
-        // Set the default appearance.
-        getAppearance()[Misc.APPEARANCE_SLOT_CHEST] = 18;
-        getAppearance()[Misc.APPEARANCE_SLOT_ARMS] = 26;
-        getAppearance()[Misc.APPEARANCE_SLOT_LEGS] = 36;
-        getAppearance()[Misc.APPEARANCE_SLOT_HEAD] = 0;
-        getAppearance()[Misc.APPEARANCE_SLOT_HANDS] = 33;
-        getAppearance()[Misc.APPEARANCE_SLOT_FEET] = 42;
-        getAppearance()[Misc.APPEARANCE_SLOT_BEARD] = 10;
-
-        // Set the default colors.
-        getColors()[0] = 7;
-        getColors()[1] = 8;
-        getColors()[2] = 9;
-        getColors()[3] = 5;
-        getColors()[4] = 0;
-
-        // Set the inventory to empty.
-        for (int i = 0; i < inventory.length; i++) {
-            inventory[i] = -1;
-        }
-        // Set all skills to 1.
-        for (int i = 0; i < skills.length; i++) {
-            if (i == 3) { // Hitpoints.
-                skills[i] = 10;
-                experience[i] = 1154;
-            } else {
-                skills[i] = 1;
-            }
-        }
-        // Set all equipment to empty.
-        for (int i = 0; i < equipment.length; i++) {
-            equipment[i] = -1;
-        }
+        // Resetting attributes
+        attributes.reset();
     }
 
     /**
@@ -120,8 +80,8 @@ public class Player extends Client {
      * @param level   the level
      */
     public void setSkill(int skillID, int level) {
-        skills[skillID] = level;
-        sendSkill(skillID, skills[skillID], experience[skillID]);
+        attributes.getSkills()[skillID] = level;
+        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
     }
 
     /**
@@ -131,8 +91,8 @@ public class Player extends Client {
      * @param exp     the experience to add
      */
     public void addSkillExp(int skillID, int exp) {
-        experience[skillID] += exp;
-        sendSkill(skillID, skills[skillID], experience[skillID]);
+        attributes.getExperience()[skillID] += exp;
+        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
     }
 
     /**
@@ -142,8 +102,8 @@ public class Player extends Client {
      * @param exp     the experience to add
      */
     public void removeSkillExp(int skillID, int exp) {
-        experience[skillID] -= exp;
-        sendSkill(skillID, skills[skillID], experience[skillID]);
+        attributes.getExperience()[skillID] -= exp;
+        sendSkill(skillID, attributes.getSkills()[skillID], attributes.getExperience()[skillID]);
     }
 
     /**
@@ -154,16 +114,16 @@ public class Player extends Client {
      */
     public void handleCommand(String keyword, String[] args) {
         if (keyword.equals("master")) {
-            for (int i = 0; i < skills.length; i++) {
-                skills[i] = 99;
-                experience[i] = 200000000;
+            for (int i = 0; i < attributes.getSkills().length; i++) {
+                attributes.getSkills()[i] = 99;
+                attributes.getExperience()[i] = 200000000;
             }
             sendSkills();
         }
         if (keyword.equals("noob")) {
-            for (int i = 0; i < skills.length; i++) {
-                skills[i] = 1;
-                experience[i] = 0;
+            for (int i = 0; i < attributes.getSkills().length; i++) {
+                attributes.getSkills()[i] = 1;
+                attributes.getExperience()[i] = 0;
             }
             sendSkills();
         }
@@ -195,42 +155,42 @@ public class Player extends Client {
      * @param slot the inventory slot
      */
     public void equip(int slot) {
-        int id = inventory[slot];
-        int amount = inventoryN[slot];
+        int id = attributes.getInventory()[slot];
+        int amount = attributes.getInventoryN()[slot];
         if (amount > 1) {
             // More than one? Equip the stack.
             if (Misc.isStackable(id)) {
                 // Empty the inventory slot first, to make room.
-                inventory[slot] = -1;
-                inventoryN[slot] = 0;
+                attributes.getInventory()[slot] = -1;
+                attributes.getInventoryN()[slot] = 0;
 
                 // Unequip the equipment slot if need be.
                 int eSlot = Misc.getEquipmentSlot(id);
-                if (equipment[eSlot] != -1) {
+                if (attributes.getEquipment()[eSlot] != -1) {
                     unequip(eSlot); // Will add the item to the inventory.
                 }
 
                 // And equip the new item stack.
-                equipment[eSlot] = id;
-                equipmentN[eSlot] = amount;
+                attributes.getEquipment()[eSlot] = id;
+                attributes.getEquipmentN()[eSlot] = amount;
                 sendEquipment(eSlot, id, amount);
                 sendInventory();
                 setAppearanceUpdateRequired(true);
             }
         } else {
             // Empty the inventory slot first, to make room.
-            inventory[slot] = -1;
-            inventoryN[slot] = 0;
+            attributes.getInventory()[slot] = -1;
+            attributes.getInventoryN()[slot] = 0;
 
             // Unequip the equipment slot if need be.
             int eSlot = Misc.getEquipmentSlot(id);
-            if (equipment[eSlot] != -1) {
+            if (attributes.getEquipment()[eSlot] != -1) {
                 unequip(eSlot); // Will add the item to the inventory.
             }
 
             // And equip the new item.
-            equipment[eSlot] = id;
-            equipmentN[eSlot] = amount;
+            attributes.getEquipment()[eSlot] = id;
+            attributes.getEquipmentN()[eSlot] = amount;
             sendEquipment(eSlot, id, amount);
             sendInventory();
             setAppearanceUpdateRequired(true);
@@ -243,8 +203,8 @@ public class Player extends Client {
      * @param slot the equipment slot.
      */
     public void unequip(int slot) {
-        int id = equipment[slot];
-        int amount = equipmentN[slot];
+        int id = attributes.getEquipment()[slot];
+        int amount = attributes.getEquipmentN()[slot];
 
 		/*
          * It's safe to assume that upon returning true, the transaction is
@@ -252,8 +212,8 @@ public class Player extends Client {
 		 * non-stackable items.
 		 */
         if (addInventoryItem(id, amount)) {
-            equipment[slot] = -1;
-            equipmentN[slot] = 0;
+            attributes.getEquipment()[slot] = -1;
+            attributes.getEquipmentN()[slot] = 0;
             sendEquipment(slot, -1, 0);
             sendInventory();
             setAppearanceUpdateRequired(true);
@@ -264,9 +224,9 @@ public class Player extends Client {
      * Empties the entire inventory.
      */
     public void emptyInventory() {
-        for (int i = 0; i < inventory.length; i++) {
-            inventory[i] = -1;
-            inventoryN[i] = 0;
+        for (int i = 0; i < attributes.getInventory().length; i++) {
+            attributes.getInventory()[i] = -1;
+            attributes.getInventoryN()[i] = 0;
         }
         sendInventory();
     }
@@ -285,9 +245,9 @@ public class Player extends Client {
         if (Misc.isStackable(id)) {
             // Add the item to an existing stack if there is one.
             boolean found = false;
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] == id) {
-                    inventoryN[i] += amount;
+            for (int i = 0; i < attributes.getInventory().length; i++) {
+                if (attributes.getInventory()[i] == id) {
+                    attributes.getInventoryN()[i] += amount;
                     found = true;
                     return true;
                 }
@@ -295,10 +255,10 @@ public class Player extends Client {
             if (!found) {
                 // No stack, try to add the item stack to an empty slot.
                 boolean added = false;
-                for (int i = 0; i < inventory.length; i++) {
-                    if (inventory[i] == -1) {
-                        inventory[i] = id;
-                        inventoryN[i] = amount;
+                for (int i = 0; i < attributes.getInventory().length; i++) {
+                    if (attributes.getInventory()[i] == -1) {
+                        attributes.getInventory()[i] = id;
+                        attributes.getInventoryN()[i] = amount;
                         added = true;
                         return true;
                     }
@@ -311,10 +271,10 @@ public class Player extends Client {
         } else {
             // Try to add the amount of items to empty slots.
             int amountAdded = 0;
-            for (int i = 0; i < inventory.length && amountAdded < amount; i++) {
-                if (inventory[i] == -1) {
-                    inventory[i] = id;
-                    inventoryN[i] = 1;
+            for (int i = 0; i < attributes.getInventory().length && amountAdded < amount; i++) {
+                if (attributes.getInventory()[i] == -1) {
+                    attributes.getInventory()[i] = id;
+                    attributes.getInventoryN()[i] = 1;
                     amountAdded++;
                 }
             }
@@ -338,21 +298,21 @@ public class Player extends Client {
     public void removeInventoryItem(int id, int amount) {
         if (Misc.isStackable(id)) {
             // Find the existing stack (if there is one).
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] == id) {
-                    inventoryN[i] -= amount;
-                    if (inventoryN[i] < 0) {
-                        inventoryN[i] = 0;
+            for (int i = 0; i < attributes.getInventory().length; i++) {
+                if (attributes.getInventory()[i] == id) {
+                    attributes.getInventoryN()[i] -= amount;
+                    if (attributes.getInventoryN()[i] < 0) {
+                        attributes.getInventoryN()[i] = 0;
                     }
                 }
             }
         } else {
             // Remove the desired amount.
             int amountRemoved = 0;
-            for (int i = 0; i < inventory.length && amountRemoved < amount; i++) {
-                if (inventory[i] == id) {
-                    inventory[i] = -1;
-                    inventoryN[i] = 0;
+            for (int i = 0; i < attributes.getInventory().length && amountRemoved < amount; i++) {
+                if (attributes.getInventory()[i] == id) {
+                    attributes.getInventory()[i] = -1;
+                    attributes.getInventoryN()[i] = 0;
                     amountRemoved++;
                 }
             }
@@ -370,16 +330,16 @@ public class Player extends Client {
     public boolean hasInventoryItem(int id, int amount) {
         if (Misc.isStackable(id)) {
             // Check if an existing stack has the amount of item.
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] == id) {
-                    return inventoryN[i] >= amount;
+            for (int i = 0; i < attributes.getInventory().length; i++) {
+                if (attributes.getInventory()[i] == id) {
+                    return attributes.getInventoryN()[i] >= amount;
                 }
             }
         } else {
             // Check if there are the amount of items.
             int amountFound = 0;
-            for (int i = 0; i < inventory.length; i++) {
-                if (inventory[i] == id) {
+            for (int i = 0; i < attributes.getInventory().length; i++) {
+                if (attributes.getInventory()[i] == id) {
                     amountFound++;
                 }
             }
@@ -415,22 +375,26 @@ public class Player extends Client {
     }
 
     @Override
-    public void login() throws Exception {
+    public void login(String username, String password) throws Exception {
         int response = Misc.LOGIN_RESPONSE_OK;
+
+        // Updating credentials
+        getAttributes().setUsername(username);
+        getAttributes().setPassword(password);
 
         // Check if the player is already logged in.
         for (Player player : PlayerHandler.getPlayers()) {
             if (player == null) {
                 continue;
             }
-            if (player.getUsername().equals(getUsername())) {
+            if (player.getAttributes().getUsername().equals(getAttributes().getUsername())) {
                 response = Misc.LOGIN_RESPONSE_ACCOUNT_ONLINE;
             }
         }
 
         // Load the player and send the login response.
-        int status = PlayerSave.load(this);
-        boolean validCredentials = Misc.validatePassword(getPassword()) && Misc.validateUsername(getUsername());
+        int status = PlayerAttributes.load(this);
+        boolean validCredentials = Misc.validatePassword(getAttributes().getPassword()) && Misc.validateUsername(getAttributes().getUsername());
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
         if ((status != 0 && !validCredentials) || status == 2) {
@@ -440,7 +404,7 @@ public class Player extends Client {
         // Sending response
         StreamBuffer.OutBuffer resp = StreamBuffer.newOutBuffer(3);
         resp.writeByte(response);
-        resp.writeByte(getStaffRights());
+        resp.writeByte(getAttributes().getStaffRights());
         resp.writeByte(0);
         send(resp.getBuffer());
 
@@ -481,13 +445,13 @@ public class Player extends Client {
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {
-            PlayerSave.save(this);
+            PlayerAttributes.save(this);
         }
     }
 
     @Override
     public String toString() {
-        return getUsername() == null ? "Client(" + getHost() + ")" : "Player(" + getUsername() + "@" + getHost() + ")";
+        return getAttributes().getUsername() == null ? "Client(" + getHost() + ")" : "Player(" + getAttributes().getUsername() + "@" + getHost() + ")";
     }
 
     /**
@@ -496,7 +460,7 @@ public class Player extends Client {
      * @return the position
      */
     public Position getPosition() {
-        return position;
+        return getAttributes().getPosition();
     }
 
     /**
@@ -509,7 +473,7 @@ public class Player extends Client {
      * @param position the new Position
      */
     public void setPosition(Position position) {
-        this.position = position;
+        getAttributes().setPosition(position);
     }
 
     /**
@@ -639,14 +603,6 @@ public class Player extends Client {
         this.appearanceUpdateRequired = appearanceUpdateRequired;
     }
 
-    public int getStaffRights() {
-        return staffRights;
-    }
-
-    public void setStaffRights(int staffRights) {
-        this.staffRights = staffRights;
-    }
-
     public boolean isResetMovementQueue() {
         return resetMovementQueue;
     }
@@ -690,52 +646,20 @@ public class Player extends Client {
         this.chatUpdateRequired = chatUpdateRequired;
     }
 
-    public int[] getInventory() {
-        return inventory;
-    }
-
-    public int[] getInventoryN() {
-        return inventoryN;
-    }
-
-    public int[] getSkills() {
-        return skills;
-    }
-
-    public int[] getExperience() {
-        return experience;
-    }
-
-    public int[] getEquipment() {
-        return equipment;
-    }
-
-    public int[] getEquipmentN() {
-        return equipmentN;
-    }
-
-    public int[] getAppearance() {
-        return appearance;
-    }
-
-    public int[] getColors() {
-        return colors;
-    }
-
-    public int getGender() {
-        return gender;
-    }
-
-    public void setGender(int gender) {
-        this.gender = gender;
-    }
-
     public List<Player> getPlayers() {
         return players;
     }
 
     public List<Npc> getNpcs() {
         return npcs;
+    }
+
+    public PlayerAttributes getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(PlayerAttributes attributes) {
+        this.attributes = attributes;
     }
 
 }

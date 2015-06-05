@@ -101,7 +101,7 @@ public final class PlayerUpdating {
      */
     public static void appendChat(Player player, StreamBuffer.OutBuffer out) {
         out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
-        out.writeByte(player.getStaffRights());
+        out.writeByte(player.getAttributes().getStaffRights());
         out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
         out.writeBytesReverse(player.getChatText());
     }
@@ -115,11 +115,11 @@ public final class PlayerUpdating {
     public static void appendAppearance(Player player, StreamBuffer.OutBuffer out) {
         StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(128);
 
-        block.writeByte(0); // Gender
+        block.writeByte(player.getAttributes().getGender()); // Gender
         block.writeByte(0); // Skull icon
 
         // Player models
-        int[] e = player.getEquipment();
+        int[] e = player.getAttributes().getEquipment();
 
         // Hat.
         if (e[Misc.EQUIPMENT_SLOT_HEAD] > 1) {
@@ -153,7 +153,7 @@ public final class PlayerUpdating {
         if (e[Misc.EQUIPMENT_SLOT_CHEST] > 1) {
             block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_CHEST]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_CHEST]);
         }
 
         // Shield.
@@ -167,50 +167,48 @@ public final class PlayerUpdating {
         if (e[Misc.EQUIPMENT_SLOT_CHEST] > 1) {
             block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_ARMS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_ARMS]);
         }
 
         // Legs.
         if (e[Misc.EQUIPMENT_SLOT_LEGS] > 1) {
             block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_LEGS]);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_LEGS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_LEGS]);
         }
 
         // Head (with a hat already on).
         if (Misc.isFullHelm(e[Misc.EQUIPMENT_SLOT_HEAD]) || Misc.isFullMask(Misc.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_HEAD]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_HEAD]);
         }
 
         // Hands.
         if (e[Misc.EQUIPMENT_SLOT_HANDS] > 1) {
             block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_HANDS]);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_HANDS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_HANDS]);
         }
 
         // Feet.
         if (e[Misc.EQUIPMENT_SLOT_FEET] > 1) {
             block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_FEET]);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_FEET]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_FEET]);
         }
 
         // Beard.
         if (Misc.isFullHelm(e[Misc.EQUIPMENT_SLOT_HEAD]) || Misc.isFullMask(Misc.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + player.getAppearance()[Misc.APPEARANCE_SLOT_BEARD]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_BEARD]);
         }
 
         // Player colors
-        block.writeByte(player.getColors()[0]);
-        block.writeByte(player.getColors()[1]);
-        block.writeByte(player.getColors()[2]);
-        block.writeByte(player.getColors()[3]);
-        block.writeByte(player.getColors()[4]);
+        for (int i = 0; i < player.getAttributes().getColors().length; i++) {
+            block.writeByte(player.getAttributes().getColors()[i]);
+        }
 
         // Movement animations
         block.writeShort(0x328); // stand
@@ -221,7 +219,7 @@ public final class PlayerUpdating {
         block.writeShort(0x336); // turn 90 ccw
         block.writeShort(0x338); // run
 
-        block.writeLong(StreamBuffer.nameToLong(player.getUsername()));
+        block.writeLong(StreamBuffer.nameToLong(player.getAttributes().getUsername()));
         block.writeByte(3); // Combat level.
         block.writeShort(0); // Total level.
 

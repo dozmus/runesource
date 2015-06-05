@@ -70,8 +70,6 @@ public abstract class Client {
     private Stage stage;
     private int packetOpcode = -1;
     private int packetLength = -1;
-    private String username;
-    private String password;
     private ISAACCipher encryptor;
     private ISAACCipher decryptor;
 
@@ -93,9 +91,11 @@ public abstract class Client {
     /**
      * Called after the player finishes logging in.
      *
+     * @param username
+     * @param password
      * @throws Exception
      */
-    public abstract void login() throws Exception;
+    public abstract void login(String username, String password) throws Exception;
 
     /**
      * Called before the player disconnects.
@@ -108,8 +108,8 @@ public abstract class Client {
      * Sends all skills to the client.
      */
     public void sendSkills() {
-        for (int i = 0; i < player.getSkills().length; i++) {
-            sendSkill(i, player.getSkills()[i], player.getExperience()[i]);
+        for (int i = 0; i < player.getAttributes().getSkills().length; i++) {
+            sendSkill(i, player.getAttributes().getSkills()[i], player.getAttributes().getExperience()[i]);
         }
     }
 
@@ -117,8 +117,8 @@ public abstract class Client {
      * Sends all equipment.
      */
     public void sendEquipment() {
-        for (int i = 0; i < player.getEquipment().length; i++) {
-            sendEquipment(i, player.getEquipment()[i], player.getEquipmentN()[i]);
+        for (int i = 0; i < player.getAttributes().getEquipment().length; i++) {
+            sendEquipment(i, player.getAttributes().getEquipment()[i], player.getAttributes().getEquipmentN()[i]);
         }
     }
 
@@ -166,19 +166,19 @@ public abstract class Client {
      * Sends the current full inventory.
      */
     public void sendInventory() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + (player.getInventory().length * 7) + 2);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + (player.getAttributes().getInventory().length * 7) + 2);
         out.writeVariableShortPacketHeader(getEncryptor(), 53);
         out.writeShort(3214);
-        out.writeShort(player.getInventory().length);
+        out.writeShort(player.getAttributes().getInventory().length);
 
-        for (int i = 0; i < player.getInventory().length; i++) {
-            if (player.getInventoryN()[i] > 254) {
+        for (int i = 0; i < player.getAttributes().getInventory().length; i++) {
+            if (player.getAttributes().getInventoryN()[i] > 254) {
                 out.writeByte(255);
-                out.writeInt(player.getInventoryN()[i], StreamBuffer.ByteOrder.INVERSE_MIDDLE);
+                out.writeInt(player.getAttributes().getInventoryN()[i], StreamBuffer.ByteOrder.INVERSE_MIDDLE);
             } else {
-                out.writeByte(player.getInventoryN()[i]);
+                out.writeByte(player.getAttributes().getInventoryN()[i]);
             }
-            out.writeShort(player.getInventory()[i] + 1, StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+            out.writeShort(player.getAttributes().getInventory()[i] + 1, StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
         }
         out.finishVariableShortPacketHeader();
         send(out.getBuffer());
@@ -524,6 +524,7 @@ public abstract class Client {
                 long serverHalf = in.readLong();
                 int[] isaacSeed = {(int) (clientHalf >> 32), (int) clientHalf, (int) (serverHalf >> 32), (int) serverHalf};
                 setDecryptor(new ISAACCipher(isaacSeed));
+
                 for (int i = 0; i < isaacSeed.length; i++) {
                     isaacSeed[i] += 50;
                 }
@@ -533,10 +534,9 @@ public abstract class Client {
                 in.readInt(); // Skip the user ID.
                 String username = in.readString();
                 String password = in.readString();
-                setUsername(username);
-                setPassword(password);
 
-                login();
+                // Attempting to log in
+                login(username, password);
                 setStage(Stage.LOGGED_IN);
                 break;
         }
@@ -549,42 +549,6 @@ public abstract class Client {
      */
     public String getHost() {
         return getSocketChannel().socket().getInetAddress().getHostAddress();
-    }
-
-    /**
-     * Gets the username.
-     *
-     * @return the username
-     */
-    public String getUsername() {
-        return username;
-    }
-
-    /**
-     * Sets the username.
-     *
-     * @param username the username
-     */
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    /**
-     * Gets the password.
-     *
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * Sets the password.
-     *
-     * @param password the password
-     */
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     /**
