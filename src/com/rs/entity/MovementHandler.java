@@ -108,6 +108,7 @@ public class MovementHandler {
         int deltaY = position.getY() - last.getY();
 
         int max = Math.max(Math.abs(deltaX), Math.abs(deltaY));
+
         for (int i = 0; i < max; i++) {
             if (deltaX < 0) {
                 deltaX++;

@@ -2,6 +2,7 @@ import com.rs.entity.Position
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 import com.rs.plugin.Plugin
+import com.rs.plugin.PluginBridge
 
 class CommandHandler extends Plugin {
 
@@ -53,15 +54,11 @@ class CommandHandler extends Plugin {
     }
 
     @Override
-    void onEnable() throws Exception {
+    void onEnable(String pluginName) throws Exception {
+        PluginBridge.registerBinding(PluginBridge.COMMAND_HANDLER_BINDING_KEY, pluginName);
     }
 
     @Override
     void onDisable() throws Exception {
-    }
-
-    @Override
-    String getName() {
-        return "CommandHandler";
     }
 }

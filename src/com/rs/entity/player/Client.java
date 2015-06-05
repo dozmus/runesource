@@ -253,28 +253,6 @@ public abstract class Client {
     }
 
     /**
-     * Handles a clicked button.
-     *
-     * @param buttonId the button ID
-     */
-    private void handleButton(int buttonId) {
-        switch (buttonId) {
-            case 9154:
-                sendLogout();
-                break;
-            case 153:
-                player.getMovementHandler().setRunToggled(true);
-                break;
-            case 152:
-                player.getMovementHandler().setRunToggled(false);
-                break;
-            default:
-                System.out.println("Unhandled button: " + buttonId);
-                break;
-        }
-    }
-
-    /**
      * Sends a packet that tells the client to log out.
      */
     public void sendLogout() {
@@ -309,7 +287,7 @@ public abstract class Client {
                     player.attributes.equip(slot, player);
                     break;
                 case 185: // Button clicking.
-                    handleButton(StreamBuffer.hexToInt(in.readBytes(2)));
+                    PluginBridge.handleActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
@@ -443,7 +421,7 @@ public abstract class Client {
             // ...and write it!
             getSocketChannel().write(buffer);
         } catch (IOException ex) {
-            ex.printStackTrace();
+            // ex.printStackTrace();
             disconnect();
         }
     }

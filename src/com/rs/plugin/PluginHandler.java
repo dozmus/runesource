@@ -33,6 +33,9 @@ import java.util.Map;
  */
 public final class PluginHandler {
 
+    /**
+     * The base directory of all plugins.
+     */
     private static final String PLUGIN_DIRECTORY = "./plugins/";
     private static final GroovyClassLoader classLoader = new GroovyClassLoader();
     /**
@@ -102,7 +105,7 @@ public final class PluginHandler {
      */
     public static void register(String name, Plugin plugin) {
         try {
-            plugin.onEnable();
+            plugin.onEnable(name);
 
             synchronized (plugins) {
                 plugins.put(name, plugin);

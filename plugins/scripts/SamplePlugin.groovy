@@ -8,17 +8,12 @@ class SamplePlugin extends Plugin {
     }
 
     @Override
-    void onEnable() throws Exception {
+    void onEnable(String pluginName) throws Exception {
         // Code to execute when plugin is enabled
     }
 
     @Override
     void onDisable() throws Exception {
         // Code to execute when plugin is disabled
-    }
-
-    @Override
-    String getName() {
-        return "SamplePlugin";
     }
 }

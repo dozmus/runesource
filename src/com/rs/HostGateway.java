@@ -27,11 +27,6 @@ import java.util.concurrent.ConcurrentHashMap;
 public class HostGateway {
 
     /**
-     * The maximum amount of connections per host.
-     */
-    public static final int MAX_CONNECTIONS_PER_HOST = 5;
-
-    /**
      * Used to keep track of hosts and their amount of connections.
      */
     private static ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
@@ -52,7 +47,7 @@ public class HostGateway {
         }
 
         // If they've reached the connection limit, return false.
-        if (amount == MAX_CONNECTIONS_PER_HOST) {
+        if (amount == Server.getInstance().getSettings().getMaxConsPerHost()) {
             return false;
         }
 

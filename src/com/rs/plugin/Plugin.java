@@ -39,9 +39,10 @@ public abstract class Plugin {
     /**
      * Called when the plugin is enabled.
      *
+     * @param pluginName The name of this plugin from the plugins list file
      * @throws Exception If the plugin throws any form of exception
      */
-    public abstract void onEnable() throws Exception;
+    public abstract void onEnable(String pluginName) throws Exception;
 
     /**
      * Called when the plugin is disabled.
@@ -49,13 +50,6 @@ public abstract class Plugin {
      * @throws Exception If the plugin is disabled
      */
     public abstract void onDisable() throws Exception;
-
-    /**
-     * Gets the plugins name.
-     *
-     * @return
-     */
-    public abstract String getName();
 
     /**
      * Get the groovy object instance of the plugin.

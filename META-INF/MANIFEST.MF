@@ -1,0 +1,4 @@
+Manifest-Version: 1.0
+Class-Path: lib/groovy-2.4.3.jar lib/json-io-3.3.1.jar
+Main-Class: com.rs.Server
+

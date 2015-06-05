@@ -24,7 +24,7 @@ public abstract class Task {
      * @param player
      */
     public Task(int delay, Player player) {
-        this(delay, true, player, null);
+        this(delay, true, player);
     }
 
     /**

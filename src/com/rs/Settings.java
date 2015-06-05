@@ -14,6 +14,7 @@ public class Settings {
 
     public String serverName;
     public Position startPosition;
+    public int maxConsPerHost;
 
     public static Settings load(String fileName) throws Exception {
         // Checking if file exists
@@ -36,5 +37,9 @@ public class Settings {
 
     public Position getStartPosition() {
         return startPosition;
+    }
+
+    public int getMaxConsPerHost() {
+        return maxConsPerHost;
     }
 }
