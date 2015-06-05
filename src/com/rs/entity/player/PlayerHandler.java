@@ -19,6 +19,7 @@ package com.rs.entity.player;
 import com.rs.entity.npc.Npc;
 import com.rs.entity.npc.NpcUpdating;
 import com.rs.plugin.PluginHandler;
+import com.rs.task.TaskHandler;
 
 /**
  * Handles all logged in players.
@@ -74,7 +75,10 @@ public class PlayerHandler {
         }
 
         // Process all plugins.
-        PluginHandler.cycle();
+        PluginHandler.tick();
+
+        // Process all tasks
+        TaskHandler.tick();
 
         // Update all players.
         for (int i = 0; i < players.length; i++) {

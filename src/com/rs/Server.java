@@ -203,10 +203,12 @@ public class Server implements Runnable {
         // First, handle all network events.
         try {
             selector.selectNow();
+
             for (SelectionKey selectionKey : selector.selectedKeys()) {
                 if (selectionKey.isAcceptable()) {
                     accept(); // Accept a new connection.
                 }
+
                 if (selectionKey.isReadable()) {
                     // Tell the client to handle the packet.
                     getClientMap().get(selectionKey).handleIncomingData();

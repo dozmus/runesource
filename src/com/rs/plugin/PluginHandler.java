@@ -31,7 +31,7 @@ import java.util.*;
  *
  * @author Blake Beaupain
  */
-public class PluginHandler {
+public final class PluginHandler {
 
     private static final String PLUGIN_DIRECTORY = "./plugins/";
 
@@ -44,7 +44,7 @@ public class PluginHandler {
     /**
      * Processes execution for all registered plugins.
      */
-    public static void cycle() throws Exception {
+    public static void tick() throws Exception {
         synchronized (plugins) {
             for (Plugin plugin : plugins.values()) {
                 plugin.cycle();

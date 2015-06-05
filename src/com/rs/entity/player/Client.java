@@ -21,6 +21,7 @@ import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
+import com.rs.task.TaskHandler;
 import com.rs.util.Misc;
 
 import java.io.IOException;
@@ -238,6 +239,7 @@ public abstract class Client {
         System.out.println(this + " disconnecting.");
 
         try {
+            TaskHandler.removeTasks(player);
             logout();
             getSocketChannel().close();
         } catch (Exception ex) {
