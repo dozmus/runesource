@@ -1,4 +1,4 @@
-package com.rs.entity.player;
+package com.rs;
 /*
  * This file is part of RuneSource.
  *
@@ -18,6 +18,8 @@ package com.rs.entity.player;
 
 import com.rs.entity.npc.Npc;
 import com.rs.entity.npc.NpcUpdating;
+import com.rs.entity.player.Player;
+import com.rs.entity.player.PlayerUpdating;
 import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
 
@@ -26,7 +28,7 @@ import com.rs.task.TaskHandler;
  *
  * @author blakeman8192
  */
-public class PlayerHandler {
+public class WorldHandler {
 
     /**
      * All registered players.

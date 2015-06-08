@@ -17,6 +17,7 @@ package com.rs.entity.player;
  */
 
 import com.rs.Server;
+import com.rs.WorldHandler;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
@@ -128,7 +129,7 @@ public class Player extends Client {
         getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
 
         // Check if the player is already logged in.
-        for (Player player : PlayerHandler.getPlayers()) {
+        for (Player player : WorldHandler.getPlayers()) {
             if (player == null) {
                 continue;
             }
@@ -161,7 +162,7 @@ public class Player extends Client {
         }
 
         // Initialising player session
-        PlayerHandler.register(this);
+        WorldHandler.register(this);
         sendMapRegion();
         sendInventory();
         sendSkills();
@@ -189,7 +190,7 @@ public class Player extends Client {
 
     @Override
     public void logout() throws Exception {
-        PlayerHandler.unregister(this);
+        WorldHandler.unregister(this);
         setStage(Client.Stage.LOGGED_OUT);
         System.out.println(this + " has logged out.");
 

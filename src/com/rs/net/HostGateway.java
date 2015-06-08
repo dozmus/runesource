@@ -1,4 +1,4 @@
-package com.rs;
+package com.rs.net;
 /*
  * This file is part of RuneSource.
  *
@@ -15,6 +15,8 @@ package com.rs;
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.rs.Server;
 
 import java.util.concurrent.ConcurrentHashMap;
 

@@ -16,7 +16,7 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.HostGateway;
+import com.rs.net.HostGateway;
 import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.net.ISAACCipher;

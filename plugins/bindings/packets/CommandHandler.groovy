@@ -11,17 +11,6 @@ class CommandHandler extends Plugin {
     void handle(Player player, String keyword, String[] args) {
         PlayerAttributes attributes = player.getAttributes();
 
-        if (keyword.equals("fpos")) {
-            if (args.length < 2)
-                return;
-            int x = args[0].toInteger();
-            int y = args[1].toInteger();
-            int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ();
-            player.setFacingCoords new Position(x, y, z);
-            player.setFacingCoordsUpdateRequired true;
-            player.setUpdateRequired true;
-        }
-
         if (keyword.equals("fchat")) {
             player.setForceChatText args[0];
             player.setForceChatUpdateRequired true;

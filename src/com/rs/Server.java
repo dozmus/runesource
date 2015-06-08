@@ -18,9 +18,9 @@ package com.rs;
 
 import com.rs.entity.player.Client;
 import com.rs.entity.player.Player;
-import com.rs.entity.player.PlayerHandler;
 import com.rs.io.JsonFileHandler;
 import com.rs.io.PlayerFileHandler;
+import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
 import com.rs.util.Misc;
 
@@ -222,7 +222,7 @@ public class Server implements Runnable {
 
         // Next, perform game processing.
         try {
-            PlayerHandler.process();
+            WorldHandler.process();
         } catch (Exception ex) {
             ex.printStackTrace();
         }

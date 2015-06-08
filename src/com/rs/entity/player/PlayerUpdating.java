@@ -17,6 +17,7 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.net.StreamBuffer;
 import com.rs.util.Misc;
@@ -67,12 +68,12 @@ public final class PlayerUpdating {
         }
 
         // Update the local player list.
-        for (int i = 0; i < PlayerHandler.getPlayers().length; i++) {
+        for (int i = 0; i < WorldHandler.getPlayers().length; i++) {
             if (player.getPlayers().size() >= 255) {
                 // Player limit has been reached.
                 break;
             }
-            Player other = PlayerHandler.getPlayers()[i];
+            Player other = WorldHandler.getPlayers()[i];
             if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
                 continue;
             }

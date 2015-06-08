@@ -2,7 +2,7 @@ package com.rs.entity.npc;
 
 import com.rs.entity.Position;
 import com.rs.entity.player.Player;
-import com.rs.entity.player.PlayerHandler;
+import com.rs.WorldHandler;
 import com.rs.net.StreamBuffer;
 
 import java.util.Iterator;
@@ -46,8 +46,8 @@ public class NpcUpdating {
         }
 
         // Update the local NPC list itself.
-        for (int i = 0; i < PlayerHandler.getNpcs().length; i++) {
-            Npc npc = PlayerHandler.getNpcs()[i];
+        for (int i = 0; i < WorldHandler.getNpcs().length; i++) {
+            Npc npc = WorldHandler.getNpcs()[i];
             if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()) {
                 continue;
             }
