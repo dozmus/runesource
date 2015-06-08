@@ -58,7 +58,7 @@ public class Server implements Runnable {
      *
      * @param host      the host
      * @param port      the port
-     * @param cycleRate the cycle rate
+     * @param cycleRate the tick rate
      */
     private Server(String host, int port, int cycleRate) {
         this.host = host;
@@ -171,8 +171,8 @@ public class Server implements Runnable {
 
 		/*
          * Here we use a for loop so that we can accept multiple clients per
-		 * cycle for lower latency. We limit the amount of clients that we
-		 * accept per cycle to better combat potential denial of service type
+		 * tick for lower latency. We limit the amount of clients that we
+		 * accept per tick to better combat potential denial of service type
 		 * attacks.
 		 */
         for (int i = 0; i < 10; i++) {
@@ -199,7 +199,7 @@ public class Server implements Runnable {
     }
 
     /**
-     * Performs a server cycle.
+     * Performs a server tick.
      */
     private void cycle() {
         // First, handle all network events.
@@ -229,7 +229,7 @@ public class Server implements Runnable {
     }
 
     /**
-     * Sleeps for the cycle delay.
+     * Sleeps for the tick delay.
      *
      * @throws InterruptedException
      */

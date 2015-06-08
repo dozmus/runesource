@@ -3,8 +3,8 @@ import com.rs.plugin.Plugin
 class SamplePlugin extends Plugin {
 
     @Override
-    void cycle() throws Exception {
-        // Code to execute on cycle
+    void tick() throws Exception {
+        // Code to execute on tick
     }
 
     @Override

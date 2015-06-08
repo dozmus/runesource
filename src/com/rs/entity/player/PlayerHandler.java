@@ -95,7 +95,7 @@ public class PlayerHandler {
             }
         }
 
-        // Reset all players after cycle.
+        // Reset all players after tick.
         for (int i = 0; i < players.length; i++) {
             Player player = players[i];
             if (player == null) {
@@ -109,7 +109,7 @@ public class PlayerHandler {
             }
         }
 
-        // Reset all NPCs after cycle.
+        // Reset all NPCs after tick.
         for (int i = 0; i < npcs.length; i++) {
             Npc npc = npcs[i];
             if (npc == null) {

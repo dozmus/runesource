@@ -1,6 +1,8 @@
 import com.rs.entity.Position
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
+import com.rs.entity.player.obj.Animation
+import com.rs.entity.player.obj.Graphic
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginBridge
 
@@ -9,15 +11,48 @@ class CommandHandler extends Plugin {
     void handle(Player player, String keyword, String[] args) {
         PlayerAttributes attributes = player.getAttributes();
 
+        if (keyword.equals("fpos")) {
+            if (args.length < 2)
+                return;
+            int x = args[0].toInteger();
+            int y = args[1].toInteger();
+            int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ();
+            player.setFacingCoords new Position(x, y, z);
+            player.setFacingCoordsUpdateRequired true;
+            player.setUpdateRequired true;
+        }
+
+        if (keyword.equals("fchat")) {
+            player.setForceChatText args[0];
+            player.setForceChatUpdateRequired true;
+            player.setUpdateRequired true;
+        }
+
+        if (keyword.equals("gfx")) {
+            if (args.length < 2)
+                return;
+            player.setGraphic new Graphic(args[0].toInteger(), args[1].toInteger());
+            player.setGraphicUpdateRequired true;
+            player.setUpdateRequired true;
+        }
+
+        if (keyword.equals("anim")) {
+            if (args.length < 2)
+                return;
+            player.setAnimation new Animation(args[0].toInteger(), args[1].toInteger());
+            player.setAnimationUpdateRequired true;
+            player.setUpdateRequired true;
+        }
+
         if (keyword.equals("energy")) {
-            player.getAttributes().setRunEnergy(Integer.parseInt(args[0]));
+            player.getAttributes().setRunEnergy args[0].toInteger();
             player.sendRunEnergy();
         }
 
         if (keyword.equals("master")) {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 99;
-                attributes.getExperience()[i] = 200000000;
+                attributes.getExperience()[i] = 14000000;
             }
             player.sendSkills();
         }
@@ -29,33 +64,34 @@ class CommandHandler extends Plugin {
             }
             player.sendSkills();
         }
+
         if (keyword.equals("empty")) {
-            attributes.emptyInventory(this);
+            attributes.emptyInventory this;
         }
 
         if (keyword.equals("pickup")) {
-            int id = Integer.parseInt(args[0]);
-            int amount = 1;
-            if (args.length > 1) {
-                amount = Integer.parseInt(args[1]);
-            }
-            attributes.addInventoryItem(id, amount, this);
+            int id = args[0].toInteger();
+            int amount = args.length > 1 ? args[1].toInteger() : 1;
+            attributes.addInventoryItem id, amount, this;
             player.sendInventory();
         }
 
         if (keyword.equals("tele")) {
-            int x = Integer.parseInt(args[0]);
-            int y = Integer.parseInt(args[1]);
-            player.teleport(new Position(x, y, player.getPosition().getZ()));
+            if (args.length < 2)
+                return;
+            int x = args[0].toInteger();
+            int y = args[1].toInteger();
+            int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ();
+            player.teleport new Position(x, y, z);
         }
 
         if (keyword.equals("mypos")) {
-            player.sendMessage("You are at: " + player.getPosition());
+            player.sendMessage "You are at: " + player.getPosition();
         }
     }
 
     @Override
-    void cycle() throws Exception {
+    void tick() throws Exception {
     }
 
     @Override

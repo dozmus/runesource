@@ -30,11 +30,11 @@ public abstract class Plugin {
     private GroovyObject instance;
 
     /**
-     * Called every time the server performs a cycle.
+     * Called every time the server performs a tick.
      *
      * @throws Exception If the plugin throws any form of exception
      */
-    public abstract void cycle() throws Exception;
+    public abstract void tick() throws Exception;
 
     /**
      * Called when the plugin is enabled.
@@ -54,7 +54,7 @@ public abstract class Plugin {
     /**
      * Get the groovy object instance of the plugin.
      *
-     * @return
+     * @return Groovy instance of plugin instance
      */
     public GroovyObject getInstance() {
         return instance;
@@ -63,7 +63,7 @@ public abstract class Plugin {
     /**
      * Set the groovy object instance of this plugin
      *
-     * @param instance
+     * @param instance Groovy instance of plugin instance
      */
     public void setInstance(GroovyObject instance) {
         if (this.instance != null) {

@@ -20,6 +20,8 @@ import com.rs.Server;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
+import com.rs.entity.player.obj.Animation;
+import com.rs.entity.player.obj.Graphic;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.StreamBuffer;
 import com.rs.util.Misc;
@@ -51,8 +53,14 @@ public class Player extends Client {
     private boolean updateRequired = false;
     private boolean appearanceUpdateRequired = false;
     private boolean chatUpdateRequired = false;
+    private boolean animationUpdateRequired = false;
+    private boolean graphicUpdateRequired = false;
+    private boolean forceChatUpdateRequired = false;
+    private String forceChatText;
     private boolean needsPlacement = false;
     private boolean resetMovementQueue = false;
+    private Animation animation = new Animation();
+    private Graphic graphic = new Graphic();
 
     /**
      * Creates a new Player.
@@ -102,6 +110,9 @@ public class Player extends Client {
         setSecondaryDirection(-1);
         setUpdateRequired(false);
         setAppearanceUpdateRequired(false);
+        setAnimationUpdateRequired(false);
+        setGraphicUpdateRequired(false);
+        setForceChatUpdateRequired(false);
         setChatUpdateRequired(false);
         setResetMovementQueue(false);
         setNeedsPlacement(false);
@@ -406,6 +417,54 @@ public class Player extends Client {
 
     public float getRunEnergyDecrement() {
         return 0.6f;
+    }
+
+    public Graphic getGraphic() {
+        return graphic;
+    }
+
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
+    public void setGraphic(Graphic graphic) {
+        this.graphic = graphic;
+    }
+
+    public boolean isAnimationUpdateRequired() {
+        return animationUpdateRequired;
+    }
+
+    public void setAnimationUpdateRequired(boolean animationUpdateRequired) {
+        this.animationUpdateRequired = animationUpdateRequired;
+    }
+
+    public boolean isGraphicUpdateRequired() {
+        return graphicUpdateRequired;
+    }
+
+    public void setGraphicUpdateRequired(boolean graphicUpdateRequired) {
+        this.graphicUpdateRequired = graphicUpdateRequired;
+    }
+
+    public boolean isForceChatUpdateRequired() {
+        return forceChatUpdateRequired;
+    }
+
+    public void setForceChatUpdateRequired(boolean forceChatUpdateRequired) {
+        this.forceChatUpdateRequired = forceChatUpdateRequired;
+    }
+
+    public String getForceChatText() {
+        return forceChatText;
+    }
+
+    public void setForceChatText(String forceChatText) {
+        this.forceChatText = forceChatText;
     }
 
 }

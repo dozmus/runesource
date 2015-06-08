@@ -98,19 +98,6 @@ public final class PlayerUpdating {
     }
 
     /**
-     * Appends the state of a player's chat to a buffer.
-     *
-     * @param player the player
-     * @param out    the buffer
-     */
-    public static void appendChat(Player player, StreamBuffer.OutBuffer out) {
-        out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
-        out.writeByte(player.getAttributes().getStaffRights());
-        out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
-        out.writeBytesReverse(player.getChatText());
-    }
-
-    /**
      * Appends the state of a player's appearance to a buffer.
      *
      * @param player the player
@@ -326,6 +313,15 @@ public final class PlayerUpdating {
         // First we must prepare the mask.
         int mask = 0x0;
 
+        if (player.isGraphicUpdateRequired()) {
+            mask |= 0x100;
+        }
+        if (player.isAnimationUpdateRequired()) {
+            mask |= 0x8;
+        }
+        if (player.isForceChatUpdateRequired()) {
+            mask |= 0x4;
+        }
         if (player.isChatUpdateRequired() && !noChat) {
             mask |= 0x80;
         }
@@ -333,7 +329,7 @@ public final class PlayerUpdating {
             mask |= 0x10;
         }
 
-        // Now, we write the actual mask.
+        // writing the actual mask.
         if (mask >= 0x100) {
             mask |= 0x40;
             block.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
@@ -342,13 +338,24 @@ public final class PlayerUpdating {
         }
 
         // Finally, we append the attributes blocks.
+        // Async. walking
         // Graphics
+        if (player.isGraphicUpdateRequired()) {
+            appendGraphic(player, block);
+        }
         // Animation
+        if (player.isAnimationUpdateRequired()) {
+            appendAnimation(player, block);
+        }
         // Forced chat
+        if (player.isForceChatUpdateRequired()) {
+            appendForceChat(player, block);
+        }
+        // Chat
         if (player.isChatUpdateRequired() && !noChat) {
             appendChat(player, block);
         }
-        // Face entity
+        // Interacting with entity
         // Appearance
         if (player.isAppearanceUpdateRequired() || forceAppearance) {
             appendAppearance(player, block);
@@ -356,6 +363,51 @@ public final class PlayerUpdating {
         // Face coordinates
         // Primary hit
         // Secondary hit
+    }
+
+    /**
+     * Appends the state of a player's force chat to a buffer.
+     *
+     * @param player the player
+     * @param out    the buffer
+     */
+    public static void appendForceChat(Player player, StreamBuffer.OutBuffer out) {
+        out.writeString(player.getForceChatText());
+    }
+
+    /**
+     * Appends the state of a player's chat to a buffer.
+     *
+     * @param player the player
+     * @param out    the buffer
+     */
+    public static void appendChat(Player player, StreamBuffer.OutBuffer out) {
+        out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
+        out.writeByte(player.getAttributes().getStaffRights());
+        out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
+        out.writeBytesReverse(player.getChatText());
+    }
+
+    /**
+     * Appends the state of a player's attached graphics to a buffer.
+     *
+     * @param player the player
+     * @param out    the buffer
+     */
+    public static void appendGraphic(Player player, StreamBuffer.OutBuffer out) {
+        out.writeShort(player.getGraphic().getId(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeInt(player.getGraphic().getDelay());
+    }
+
+    /**
+     * Appends the state of a player's animation to a buffer.
+     *
+     * @param player the player
+     * @param out    the buffer
+     */
+    public static void appendAnimation(Player player, StreamBuffer.OutBuffer out) {
+        out.writeShort(player.getAnimation().getId(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeByte(player.getAnimation().getDelay(), StreamBuffer.ValueType.C);
     }
 
     /**

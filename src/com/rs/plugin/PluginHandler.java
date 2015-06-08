@@ -38,6 +38,7 @@ public final class PluginHandler {
      */
     private static final String PLUGIN_DIRECTORY = "./plugins/";
     private static final GroovyClassLoader classLoader = new GroovyClassLoader();
+
     /**
      * All registered plugins.
      */
@@ -49,7 +50,7 @@ public final class PluginHandler {
     public static void tick() throws Exception {
         synchronized (plugins) {
             for (Plugin plugin : plugins.values()) {
-                plugin.cycle();
+                plugin.tick();
             }
         }
     }

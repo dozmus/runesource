@@ -74,7 +74,7 @@ public abstract class Task {
     }
 
     /**
-     * Sets if the task should be removed next cycle.
+     * Sets if the task should be removed next tick.
      *
      * @param
      */

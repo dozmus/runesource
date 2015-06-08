@@ -91,7 +91,7 @@ public class NpcUpdating {
     }
 
     /**
-     * Updates the movement of a NPC for this cycle.
+     * Updates the movement of a NPC for this tick.
      *
      * @param out The buffer to write to
      * @param npc The NPC to update
