@@ -12,9 +12,10 @@ import java.io.FileNotFoundException;
  */
 public class Settings {
 
-    public String serverName;
-    public Position startPosition;
-    public int maxConsPerHost;
+    private String serverName;
+    private int worldId;
+    private Position startPosition;
+    private int maxConsPerHost;
     private boolean hashPasswords;
 
     public static Settings load(String fileName) throws Exception {
@@ -46,6 +47,10 @@ public class Settings {
 
     public boolean isHashingPasswords() {
         return hashPasswords;
+    }
+
+    public int getWorldId() {
+        return worldId;
     }
 
 }

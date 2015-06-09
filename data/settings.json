@@ -1,6 +1,7 @@
 {
   "@type":"com.rs.Settings",
   "serverName":"RuneSource",
+  "worldId":10,
   "startPosition":{
     "x":3222,
     "y":3222,

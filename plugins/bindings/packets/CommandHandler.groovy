@@ -20,17 +20,13 @@ class CommandHandler extends Plugin {
         if (keyword.equals("gfx")) {
             if (args.length < 2)
                 return;
-            player.setGraphic new Graphic(args[0].toInteger(), args[1].toInteger());
-            player.setGraphicUpdateRequired true;
-            player.setUpdateRequired true;
+            player.startGraphic new Graphic(args[0].toInteger(), args[1].toInteger());
         }
 
         if (keyword.equals("anim")) {
             if (args.length < 2)
                 return;
-            player.setAnimation new Animation(args[0].toInteger(), args[1].toInteger());
-            player.setAnimationUpdateRequired true;
-            player.setUpdateRequired true;
+            player.startAnimation new Animation(args[0].toInteger(), args[1].toInteger());
         }
 
         if (keyword.equals("energy")) {

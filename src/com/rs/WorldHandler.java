@@ -22,6 +22,7 @@ import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerUpdating;
 import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
+import com.rs.util.Misc;
 
 /**
  * Handles all logged in players.
@@ -198,7 +199,7 @@ public class WorldHandler {
     }
 
     /**
-     * Gets the amoutn of NPCs that are online.
+     * Gets the amount of NPCs that are online.
      *
      * @return the amount of online NPCs
      */
@@ -210,6 +211,18 @@ public class WorldHandler {
             }
         }
         return amount;
+    }
+
+    public static boolean isPlayerOnline(String username) {
+        for (Player player : WorldHandler.getPlayers()) {
+            if (player == null)
+                continue;
+
+            if (player.getAttributes().getUsername().equals(username)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

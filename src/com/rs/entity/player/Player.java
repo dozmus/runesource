@@ -30,6 +30,7 @@ import com.rs.util.Misc;
 import java.nio.channels.SelectionKey;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Represents a logged-in player.
@@ -49,6 +50,7 @@ public class Player extends Client {
     private int slot = -1;
     private int chatColor;
     private int chatEffects;
+    private long usernameLong;
     private byte[] chatText;
     // Various player update flags.
     private boolean updateRequired = false;
@@ -127,16 +129,11 @@ public class Player extends Client {
         String rawPassword = password;
         getAttributes().setUsername(username);
         getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
+        usernameLong = StreamBuffer.nameToLong(username);
 
         // Check if the player is already logged in.
-        for (Player player : WorldHandler.getPlayers()) {
-            if (player == null) {
-                continue;
-            }
-
-            if (player.getAttributes().getUsername().equals(getAttributes().getUsername())) {
-                response = Misc.LOGIN_RESPONSE_ACCOUNT_ONLINE;
-            }
+        if (WorldHandler.isPlayerOnline(username)) {
+            response = Misc.LOGIN_RESPONSE_ACCOUNT_ONLINE;
         }
 
         // Load the player and send the login response.
@@ -468,4 +465,31 @@ public class Player extends Client {
         this.forceChatText = forceChatText;
     }
 
+    public void startAnimation(Animation animation) {
+        setAnimation(animation);
+        setAnimationUpdateRequired(true);
+        setUpdateRequired(true);
+    }
+
+    public void startAnimation(int animationId, int delay) {
+        startAnimation(new Animation(animationId, delay));
+    }
+
+    public void startAnimation(int animationId) {
+        startAnimation(animationId, 0);
+    }
+
+    public void startGraphic(Graphic graphic) {
+        setGraphic(graphic);
+        setGraphicUpdateRequired(true);
+        setUpdateRequired(true);
+    }
+
+    public void startGraphic(int graphicId, int delay) {
+        startGraphic(new Graphic(graphicId, delay));
+    }
+
+    public void startGraphic(int graphicId) {
+        startGraphic(graphicId, 0);
+    }
 }
