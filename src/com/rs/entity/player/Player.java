@@ -30,7 +30,6 @@ import com.rs.util.Misc;
 import java.nio.channels.SelectionKey;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * Represents a logged-in player.
@@ -50,7 +49,6 @@ public class Player extends Client {
     private int slot = -1;
     private int chatColor;
     private int chatEffects;
-    private long usernameLong;
     private byte[] chatText;
     // Various player update flags.
     private boolean updateRequired = false;
@@ -129,7 +127,6 @@ public class Player extends Client {
         String rawPassword = password;
         getAttributes().setUsername(username);
         getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
-        usernameLong = StreamBuffer.nameToLong(username);
 
         // Check if the player is already logged in.
         if (WorldHandler.isPlayerOnline(username)) {
@@ -153,7 +150,7 @@ public class Player extends Client {
         resp.writeByte(0);
         send(resp.getBuffer());
 
-        if (response != 2) {
+        if (response != Misc.LOGIN_RESPONSE_OK) {
             disconnect();
             return;
         }

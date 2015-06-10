@@ -175,7 +175,7 @@ public abstract class Client {
      * Sends the current full inventory.
      */
     public void sendInventory() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + (player.getAttributes().getInventory().length * 7) + 2);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + 2 + (player.getAttributes().getInventory().length * 7) );
         out.writeVariableShortPacketHeader(getEncryptor(), 53);
         out.writeShort(3214);
         out.writeShort(player.getAttributes().getInventory().length);

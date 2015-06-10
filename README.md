@@ -2,21 +2,41 @@ RuneSource
 =======================
 
 ### What is RuneSource?
-Hey there, thanks for checking out RuneSource. RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](runescape.com), written in the Java programming language. It is important to note that RuneSource is in no way endorsed or affiliated with RuneScape or its creator company, Jagex. Use of RuneSource is also against the RuneScape Terms of Service (which you may or may not be bound by). RuneSource is licensed via the GNU General Public License Version 3.
+Hey there, thanks for checking out RuneSource. RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](runescape.com), written in the Java programming language. It is important to note that RuneSource is in no way endorsed or affiliated with RuneScape or its creator company, Jagex. Use of RuneSource is also against the RuneScape Terms of Service (which you may or may not be bound by). RuneSource is licensed via the GNU General Public License Version 3. Please note that this server is not ready for production - it has minimal content implemented.
 
 ### Why was RuneSource made?
 RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the general RuneScape emulation community, which is spread across many internet forums and IRC channels. The purpose of RuneSource is to provide a stable, high-performance, and simple RuneScape server emulator for people to use. At the current time of release (late 2010), all existing RuneScape server emulators are either very unstable and slow, or very complicated and hard to work with. RuneSource aims to solve these problems by being a stable and efficient server, and above all, by being simple and easy to use.
 
-### Special Thanks
-The author of RuneSource would like to personally thank the following individuals (in no specific order) for their countless contributions to RuneScape emulation, or just because they're awesome: Graham, Taharok, Moparisthebest, super_, Stork, Miss Silabsoft, Sir Sean, samuraiblood2, Scar, Nour, Arkadian, Vastico, Method, PeeHPee, Peterbjornx, Boomer, DHAReauxK, Clienthax, Impulser, Zachera, Whitefang, Varek, Celkyborg, Palidino76, Xerozcheez, Galkon, Lmctruck, Purechaos, Gnarly, Ikiliki, Winten, wL, Daiki, and Wolf.  
-These people, among others, are members of the first generation of RuneScape hackers. Without these people, I believe that RuneScape private servers would not be anywhere near as developed as they are at the moment. My gratitude goes out to all of you guys. Thanks.
+### New Features
+* Improved plugin system
+* Task system
+* More player updating
+* JSON saving/loading of data
+* Lots of misc. stuff
 
-### RuneScape Server Communities
-These are some of the best RuneScape private server communities.  
-MoparScape (owned by Moparisthebest)  
-Rune-Server (owned by Kevin)  
-Rs2-Server (owned by Scar)  
-RuneLocus (owned by Ikiliki)
+### Planned Features
+* Finish player appearance updating (i.e. send combat level, whether or not the player is wearing a platebody, etc)
+* Add all NPC/Player mask handling
+* Item equip - don't default to weapon equip
+* Add friends/ignore lists and private messaging
+* Buffer caching
+
+### How To
+#### Change server name/starting position/maximum connections per host/whether or not to hash password
+Edit the server config file in /data/settings.json.
+Note: If you change the hash passwords variable any existing accounts will be rendering inaccessible, unless if you change it back.
+
+#### Save a new variable in a player file
+Add a new variable into the PlayerAttributes class (under com.rs.entity.player), the order of variables in that file
+dictates the order of the corresponding JSON output. The order should not matter when being parsed though.
+So if you change the format the next time a player logs in and out it should be updated with no problems!
+
+#### Add a new command
+Add any commands into the Groovy script in the CommandHandler class (under /plugins/bindings/packets/).
+
+### Dependencies
+* Groovy (v2.4.3)
+* JSON-IO (v3.3.1)
 
 ### Copyright
 Copyright (c) 2010  [Blake Beaupain](https://github.com/blakeman8192)

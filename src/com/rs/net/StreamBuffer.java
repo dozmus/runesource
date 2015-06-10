@@ -65,9 +65,11 @@ public abstract class StreamBuffer {
     public static int hexToInt(byte[] data) {
         int value = 0;
         int n = 1000;
+
         for (int i = 0; i < data.length; i++) {
             int num = (data[i] & 0xFF) * n;
             value += (int) num;
+
             if (n > 1) {
                 n = n / 1000;
             }
@@ -90,29 +92,6 @@ public abstract class StreamBuffer {
             }
         }
         return new String(decodeBuf, 0, idx);
-    }
-
-    /**
-     * Converts the username to a long value.
-     *
-     * @param s the username
-     * @return the long value
-     */
-    public static long nameToLong(String s) {
-        long l = 0L;
-        for (int i = 0; i < s.length() && i < 12; i++) {
-            char c = s.charAt(i);
-            l *= 37L;
-            if (c >= 'A' && c <= 'Z')
-                l += (1 + c) - 65;
-            else if (c >= 'a' && c <= 'z')
-                l += (1 + c) - 97;
-            else if (c >= '0' && c <= '9')
-                l += (27 + c) - 48;
-        }
-        while (l % 37L == 0L && l != 0L)
-            l /= 37L;
-        return l;
     }
 
     /**

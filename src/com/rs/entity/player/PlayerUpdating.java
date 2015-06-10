@@ -211,7 +211,7 @@ public final class PlayerUpdating {
         block.writeShort(0x336); // turn 90 ccw
         block.writeShort(0x338); // run
 
-        block.writeLong(StreamBuffer.nameToLong(player.getAttributes().getUsername()));
+        block.writeLong(PlayerAttributes.nameToLong(player.getAttributes().getUsername()));
         block.writeByte(3); // Combat level.
         block.writeShort(0); // Total level.
 
