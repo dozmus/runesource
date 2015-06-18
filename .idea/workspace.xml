@@ -7,25 +7,7 @@
     </artifacts-to-build>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="2fc7c759-5669-4e06-9306-f52dcabf554a" name="Default" comment="refactoring and removed erroneous code from command handler">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/bindings/packets/ActionButtonHandler.groovy" afterPath="$PROJECT_DIR$/plugins/bindings/packets/ActionButtonHandler.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/obj/Animation.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/obj/Animation.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/Client.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/Client.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/plugins/bindings/packets/CommandHandler.groovy" afterPath="$PROJECT_DIR$/plugins/bindings/packets/CommandHandler.groovy" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/obj/Graphic.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/obj/Graphic.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/io/JsonFileHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/io/JsonFileHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/npc/NpcUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/npc/NpcUpdating.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/Player.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerAttributes.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/io/PlayerFileHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/io/PlayerFileHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerUpdating.java" afterPath="$PROJECT_DIR$/src/com/rs/entity/player/PlayerUpdating.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/plugin/PluginBridge.java" afterPath="$PROJECT_DIR$/src/com/rs/plugin/PluginBridge.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/README.md" afterPath="$PROJECT_DIR$/README.md" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/Settings.java" afterPath="$PROJECT_DIR$/src/com/rs/Settings.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/net/StreamBuffer.java" afterPath="$PROJECT_DIR$/src/com/rs/net/StreamBuffer.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/task/Task.java" afterPath="$PROJECT_DIR$/src/com/rs/task/Task.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/src/com/rs/task/TaskHandler.java" afterPath="$PROJECT_DIR$/src/com/rs/task/TaskHandler.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/data/settings.json" afterPath="$PROJECT_DIR$/data/settings.json" />
+    <list default="true" id="2fc7c759-5669-4e06-9306-f52dcabf554a" name="Default" comment="">
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
     </list>
     <ignored path="runesource.iws" />
@@ -542,7 +524,7 @@
       <workItem from="1433858060631" duration="5000" />
       <workItem from="1433863388621" duration="557000" />
       <workItem from="1433864052489" duration="1347000" />
-      <workItem from="1433966796934" duration="130000" />
+      <workItem from="1433966796934" duration="140000" />
     </task>
     <task id="LOCAL-00001" summary="Formatted all code.">
       <created>1433460603992</created>
@@ -622,11 +604,17 @@
       <option name="project" value="LOCAL" />
       <updated>1433798337281</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="misc changes and refactoring">
+      <created>1433966932960</created>
+      <option name="number" value="00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1433966932960</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33798000" />
+    <option name="totallyTimeSpent" value="33808000" />
   </component>
   <component name="TodoView" selected-index="0">
     <todo-panel id="selected-file">
@@ -655,6 +643,7 @@
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32864866" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
+      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="IDEtalk" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32995737" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -675,7 +664,6 @@
       <window_info id="Message" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Hierarchy" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.25" sideWeight="0.5" order="2" side_tool="false" content_ui="combo" />
       <window_info id="Debug" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
-      <window_info id="Messages" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32900432" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Inspection" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.4" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32683983" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Find" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32756758" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -710,7 +698,8 @@
     <MESSAGE value="add energy use to running" />
     <MESSAGE value="corrected license and added password hashing" />
     <MESSAGE value="refactoring and removed erroneous code from command handler" />
-    <option name="LAST_COMMIT_MESSAGE" value="refactoring and removed erroneous code from command handler" />
+    <MESSAGE value="misc changes and refactoring" />
+    <option name="LAST_COMMIT_MESSAGE" value="misc changes and refactoring" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -875,6 +864,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="2686">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -905,6 +897,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="897">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -912,6 +905,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="901">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#1290#1291#0" expanded="true" />
+            <element signature="e#1336#1337#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -937,6 +934,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="1071">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -944,6 +942,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="1377">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -967,6 +966,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="2091">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#1201#1202#0" expanded="true" />
+            <element signature="e#1242#1243#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1004,6 +1007,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.32218507" vertical-offset="0" max-vertical-offset="1037">
           <caret line="17" column="0" selection-start-line="17" selection-start-column="0" selection-end-line="17" selection-end-column="0" />
+          <folding>
+            <element signature="e#1833#1834#0" expanded="true" />
+            <element signature="e#1869#1870#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1072,6 +1079,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.8208431" vertical-offset="13" max-vertical-offset="867">
           <caret line="42" column="137" selection-start-line="42" selection-start-column="137" selection-end-line="42" selection-end-column="137" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1079,6 +1087,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.039035592" vertical-offset="0" max-vertical-offset="871">
           <caret line="2" column="28" selection-start-line="2" selection-start-column="28" selection-end-line="2" selection-end-column="28" />
+          <folding />
         </state>
       </provider>
     </entry>
@@ -1086,6 +1095,7 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="715" max-vertical-offset="1513">
           <caret line="69" column="24" selection-start-line="69" selection-start-column="24" selection-end-line="69" selection-end-column="24" />
+          <folding />
         </state>
       </provider>
     </entry>
