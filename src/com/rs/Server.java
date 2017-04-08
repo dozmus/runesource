@@ -24,6 +24,7 @@ import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
 import com.rs.util.Misc;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.nio.channels.SelectionKey;
@@ -109,6 +110,7 @@ public class Server implements Runnable {
     @Override
     public void run() {
         try {
+            new File("./data/logs").mkdir();
             System.setOut(new Misc.TimestampLogger(System.out, "./data/logs/out.log"));
             System.setErr(new Misc.TimestampLogger(System.err, "./data/logs/err.log"));
 
