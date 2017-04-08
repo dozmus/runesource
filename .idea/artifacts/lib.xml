@@ -1,9 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="lib">
-    <output-path>$PROJECT_DIR$/out/artifacts/lib</output-path>
-    <root id="archive" name="lib.jar">
-      <element id="library" level="project" name="groovy-2.4.3" />
-      <element id="library" level="project" name="json-io-3.3.1" />
-    </root>
-  </artifact>
-</component>

@@ -1,2 +1,8 @@
-out/*
-.idea/workspace.xml
+# IDEA project files
+out
+.idea
+META-INF
+runesource.iml
+
+# Server log files
+data/logs
