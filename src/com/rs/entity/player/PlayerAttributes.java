@@ -430,16 +430,10 @@ public class PlayerAttributes {
     }
 
     public void decreaseRunEnergy(float amount) {
-        runEnergy -= amount;
-
-        if (runEnergy < 0) {
-            runEnergy = 0;
-        }
+        runEnergy = Math.max(0f, runEnergy - amount);
     }
 
-    public void increaseRunEnergy(float amount, float limit) {
-        if (runEnergy < limit) {
-            runEnergy += amount;
-        }
+    public void increaseRunEnergy(float amount) {
+        runEnergy = Math.min(100f, runEnergy + amount);
     }
 }

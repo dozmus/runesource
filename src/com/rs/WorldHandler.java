@@ -22,7 +22,6 @@ import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerUpdating;
 import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
-import com.rs.util.Misc;
 
 /**
  * Handles all logged in players.
@@ -40,6 +39,8 @@ public class WorldHandler {
      * All registered NPCs.
      */
     private static final Npc[] npcs = new Npc[8192];
+    private static int playerAmount = 0;
+    private static int npcAmount = 0;
 
     /**
      * Performs the processing of all players.
@@ -137,6 +138,7 @@ public class WorldHandler {
             if (players[i] == null) {
                 players[i] = player;
                 player.setSlot(i);
+                playerAmount++;
                 return;
             }
         }
@@ -153,6 +155,7 @@ public class WorldHandler {
             if (npcs[i] == null) {
                 npcs[i] = npc;
                 npc.setSlot(i);
+                npcAmount++;
                 return;
             }
         }
@@ -169,6 +172,7 @@ public class WorldHandler {
             return;
         }
         players[player.getSlot()] = null;
+        playerAmount--;
     }
 
     /**
@@ -181,39 +185,27 @@ public class WorldHandler {
             return;
         }
         npcs[npc.getSlot()] = null;
+        npcAmount--;
     }
 
     /**
-     * Gets the amount of players that are online.
-     *
      * @return the amount of online players
      */
     public static int playerAmount() {
-        int amount = 0;
-        for (int i = 1; i < players.length; i++) {
-            if (players[i] != null) {
-                amount++;
-            }
-        }
-        return amount;
+        return playerAmount;
     }
 
     /**
-     * Gets the amount of NPCs that are online.
-     *
      * @return the amount of online NPCs
      */
     public static int npcAmount() {
-        int amount = 0;
-        for (int i = 1; i < npcs.length; i++) {
-            if (npcs[i] != null) {
-                amount++;
-            }
-        }
-        return amount;
+        return npcAmount;
     }
 
     public static boolean isPlayerOnline(String username) {
+        if (playerAmount() == 0)
+            return false;
+
         for (Player player : WorldHandler.getPlayers()) {
             if (player == null)
                 continue;

@@ -79,7 +79,7 @@ public class MovementHandler {
         } else {
             // Restoring run energy
             if (player.getAttributes().getRunEnergy() != 100) {
-                player.getAttributes().increaseRunEnergy(player.getRunEnergyIncrement(), 100);
+                player.getAttributes().increaseRunEnergy(player.getRunEnergyIncrement());
                 player.sendRunEnergy();
             }
         }
