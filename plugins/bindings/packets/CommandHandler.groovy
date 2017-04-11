@@ -71,7 +71,7 @@ class CommandHandler extends Plugin {
         }
 
         if (keyword == "mypos") {
-            player.sendMessage "You are at: {$player.getPosition()}"
+            player.sendMessage "You are at: ${player.getPosition()}"
         }
     }
 
