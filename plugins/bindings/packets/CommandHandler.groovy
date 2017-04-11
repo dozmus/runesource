@@ -51,13 +51,13 @@ class CommandHandler extends Plugin {
         }
 
         if (keyword.equals("empty")) {
-            attributes.emptyInventory this
+            attributes.emptyInventory player
         }
 
         if (keyword.equals("pickup")) {
             int id = args[0].toInteger()
             int amount = args.length > 1 ? args[1].toInteger() : 1
-            attributes.addInventoryItem id, amount, this
+            attributes.addInventoryItem id, amount, player
             player.sendInventory()
         }
 
