@@ -22,7 +22,9 @@ import com.rs.entity.Position;
 import com.rs.net.StreamBuffer;
 import com.rs.util.Misc;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Provides static utility methods for updating players.
@@ -33,15 +35,52 @@ public final class PlayerUpdating {
 
     private static final int APPEARANCE_BUFFER_SIZE = 56;
 
+    private static int blockSize(Player player) {
+        if (player.getStage() != Client.Stage.LOGGED_IN)
+            return 0;
+        return APPEARANCE_BUFFER_SIZE + 11
+                + (player.isForceChatUpdateRequired() ? player.getForceChatText().length() : 0)
+                + (player.isChatUpdateRequired() ? 5 + player.getChatText().length : 0);
+    }
+
     /**
      * Updates the player.
      *
      * @param player the player
      */
     public static void update(Player player) {
+        // Calculate block buffer size
+        int blockSize = blockSize(player);
+
+        for (Player other : player.getPlayers()) {
+            if (!other.needsPlacement() && other.isUpdateRequired()
+                    && other.getPosition().isViewableFrom(player.getPosition())) {
+                blockSize += blockSize(other);
+            }
+        }
+
+        // Find other players in region
+        List<Player> othersFromRegion = new ArrayList<>();
+
+        for (int i = 0; i < WorldHandler.getPlayers().length; i++) {
+            if (player.getPlayers().size() + othersFromRegion.size() >= 255) {
+                break; // Local player limit has been reached.
+            }
+            Player other = WorldHandler.getPlayers()[i];
+
+            if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
+                continue;
+            }
+
+            if (!player.getPlayers().contains(other) && other.getPosition().isViewableFrom(player.getPosition())) {
+                othersFromRegion.add(other);
+                blockSize += blockSize(other);
+            }
+        }
+
         // XXX: The buffer sizes may need to be tuned.
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2048);
-        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(1024);
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1024 + blockSize);
+        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(blockSize);
 
         // Initialize the update packet.
         out.writeVariableShortPacketHeader(player.getEncryptor(), 81);
@@ -75,21 +114,10 @@ public final class PlayerUpdating {
         }
 
         // Update the local player list.
-        for (int i = 0; i < WorldHandler.getPlayers().length; i++) {
-            if (player.getPlayers().size() >= 255) {
-                break; // Local player limit has been reached.
-            }
-            Player other = WorldHandler.getPlayers()[i];
-
-            if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
-                continue;
-            }
-
-            if (!player.getPlayers().contains(other) && other.getPosition().isViewableFrom(player.getPosition())) {
-                player.getPlayers().add(other);
-                PlayerUpdating.addPlayer(out, player, other);
-                PlayerUpdating.updateState(other, block, true, false);
-            }
+        for (Player other : othersFromRegion) {
+            player.getPlayers().add(other);
+            PlayerUpdating.addPlayer(out, player, other);
+            PlayerUpdating.updateState(other, block, true, false);
         }
 
         // Append the attributes block to the main packet.
