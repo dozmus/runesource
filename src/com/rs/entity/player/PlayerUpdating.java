@@ -31,6 +31,8 @@ import java.util.Iterator;
  */
 public final class PlayerUpdating {
 
+    private static final int APPEARANCE_BUFFER_SIZE = 56;
+
     /**
      * Updates the player.
      *
@@ -47,16 +49,21 @@ public final class PlayerUpdating {
 
         // Update this player.
         PlayerUpdating.updateLocalPlayerMovement(player, out);
+
         if (player.isUpdateRequired()) {
             PlayerUpdating.updateState(player, block, false, true);
         }
 
         // Update other local players.
         out.writeBits(8, player.getPlayers().size());
+
         for (Iterator<Player> i = player.getPlayers().iterator(); i.hasNext(); ) {
             Player other = i.next();
-            if (other.getPosition().isViewableFrom(player.getPosition()) && other.getStage() == Client.Stage.LOGGED_IN && !other.needsPlacement()) {
+
+            if (other.getPosition().isViewableFrom(player.getPosition()) && other.getStage() == Client.Stage.LOGGED_IN
+                    && !other.needsPlacement()) {
                 PlayerUpdating.updateOtherPlayerMovement(other, out);
+
                 if (other.isUpdateRequired()) {
                     PlayerUpdating.updateState(other, block, false, false);
                 }
@@ -70,13 +77,14 @@ public final class PlayerUpdating {
         // Update the local player list.
         for (int i = 0; i < WorldHandler.getPlayers().length; i++) {
             if (player.getPlayers().size() >= 255) {
-                // Player limit has been reached.
-                break;
+                break; // Local player limit has been reached.
             }
             Player other = WorldHandler.getPlayers()[i];
+
             if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
                 continue;
             }
+
             if (!player.getPlayers().contains(other) && other.getPosition().isViewableFrom(player.getPosition())) {
                 player.getPlayers().add(other);
                 PlayerUpdating.addPlayer(out, player, other);
@@ -105,7 +113,7 @@ public final class PlayerUpdating {
      * @param out    the buffer
      */
     public static void appendAppearance(Player player, StreamBuffer.OutBuffer out) {
-        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(128);
+        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(APPEARANCE_BUFFER_SIZE);
 
         block.writeByte(player.getAttributes().getGender()); // Gender
         block.writeByte(0); // Skull icon
@@ -250,6 +258,7 @@ public final class PlayerUpdating {
      */
     public static void updateLocalPlayerMovement(Player player, StreamBuffer.OutBuffer out) {
         boolean updateRequired = player.isUpdateRequired();
+
         if (player.needsPlacement()) { // Do they need placement?
             out.writeBit(true); // Yes, there is an update.
             int posX = player.getPosition().getLocalX(player.getCurrentRegion());
@@ -258,27 +267,12 @@ public final class PlayerUpdating {
         } else { // No placement update, check for movement.
             int pDir = player.getPrimaryDirection();
             int sDir = player.getSecondaryDirection();
-            if (pDir != -1) { // If they moved.
-                out.writeBit(true); // Yes, there is an update.
-                if (sDir != -1) { // If they ran.
-                    appendRun(out, pDir, sDir, updateRequired);
-                } else { // Movement but no running - they walked.
-                    appendWalk(out, pDir, updateRequired);
-                }
-            } else { // No movement.
-                if (updateRequired) { // Does the state need to be updated?
-                    out.writeBit(true); // Yes, there is an update.
-                    appendStand(out);
-                } else { // No update whatsoever.
-                    out.writeBit(false);
-                }
-            }
+            updateMovement(out, pDir, sDir, updateRequired);
         }
     }
 
     /**
-     * Updates the movement of a player for another player (does not make use of
-     * sector 2,3).
+     * Updates the movement of a player for another player (does not make use of sector 2,3).
      *
      * @param player the player
      * @param out    the packet
@@ -287,8 +281,13 @@ public final class PlayerUpdating {
         boolean updateRequired = player.isUpdateRequired();
         int pDir = player.getPrimaryDirection();
         int sDir = player.getSecondaryDirection();
+        updateMovement(out, pDir, sDir, updateRequired);
+    }
+
+    private static void updateMovement(StreamBuffer.OutBuffer out, int pDir, int sDir, boolean updateRequired) {
         if (pDir != -1) { // If they moved.
             out.writeBit(true); // Yes, there is an update.
+
             if (sDir != -1) { // If they ran.
                 appendRun(out, pDir, sDir, updateRequired);
             } else { // Movement but no running - they walked.
