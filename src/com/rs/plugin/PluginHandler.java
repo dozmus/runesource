@@ -23,6 +23,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 
 /**
@@ -38,6 +39,7 @@ public final class PluginHandler {
      */
     private static final String PLUGIN_DIRECTORY = "./plugins/";
     private static final GroovyClassLoader classLoader = new GroovyClassLoader();
+    private static String loadedPluginFile = "";
 
     /**
      * All registered plugins.
@@ -79,6 +81,7 @@ public final class PluginHandler {
      * @throws Exception
      */
     public static void loadPlugins(String pluginsFile) throws Exception {
+        loadedPluginFile = pluginsFile;
         File file = new File(pluginsFile);
         BufferedReader reader = new BufferedReader(new FileReader(file));
         String pluginName;
@@ -94,6 +97,28 @@ public final class PluginHandler {
             plugin.setInstance(obj);
             register(pluginName.replace('/', '.'), plugin);
         }
+    }
+
+    /**
+     * Unregisters all plugins.
+     */
+    public static void unregisterAll() {
+        try {
+            for (Iterator<String> it = plugins.keySet().iterator(); it.hasNext();) {
+                plugins.get(it.next()).onDisable();
+                it.remove();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Reloads all plugins, based on the argument to the last call of {@link #loadPlugins(String)}.
+     */
+    public static void reloadAll() throws Exception {
+        unregisterAll();
+        loadPlugins(loadedPluginFile);
     }
 
     /**
@@ -117,10 +142,17 @@ public final class PluginHandler {
      * @param plugin The plugin to unregister
      */
     public static void unregister(Plugin plugin) {
+        String targetKey = null;
+
         for (Map.Entry<String, Plugin> entry : plugins.entrySet()) {
             if (entry.getValue().equals(plugin)) {
-                unregister(entry.getKey());
+                targetKey = entry.getKey();
+                break;
             }
+        }
+
+        if (targetKey != null) {
+            unregister(targetKey);
         }
     }
 
