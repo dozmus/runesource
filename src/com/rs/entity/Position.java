@@ -69,7 +69,7 @@ public class Position {
      * @return the delta coordinates contained within a position
      */
     public static Position delta(Position a, Position b) {
-        return new Position(b.getX() - a.getX(), b.getY() - a.getY());
+        return new Position(b.getX() - a.getX(), b.getY() - a.getY(), b.getZ() - a.getZ());
     }
 
     /**
@@ -263,7 +263,7 @@ public class Position {
      */
     public boolean isViewableFrom(Position other) {
         Position p = delta(this, other);
-        return p.x <= 14 && p.x >= -15 && p.y <= 14 && p.y >= -15;
+        return p.z == 0 && p.x <= 14 && p.x >= -15 && p.y <= 14 && p.y >= -15;
     }
 
 }
