@@ -73,15 +73,32 @@ public class Server implements Runnable {
      * @param args
      */
     public static void main(String[] args) {
-        if (args.length != 3) {
+        // Parse command line arguments
+        String host = "127.0.0.1";
+        int port = 43594;
+        int cycleRate = 600;
+
+        if (args.length == 3) {
+            host = args[0];
+            port = Integer.parseInt(args[1]);
+            cycleRate = Integer.parseInt(args[2]);
+        } else if (args.length != 0) {
             System.err.println("Usage: Server <host> <port> <cycleRate>");
             return;
         }
 
-        String host = args[0];
-        int port = Integer.parseInt(args[1]);
-        int cycleRate = Integer.parseInt(args[2]);
+        // Validate command line arguments
+        if (port < 0 || port > 65535) {
+            System.err.println("Invalid port number, must be between 0 and 65535.");
+            return;
+        }
 
+        if (cycleRate < 0) {
+            System.err.println("Invalid cycle rate, must be a positive integer.");
+            return;
+        }
+
+        // Start server
         setInstance(new Server(host, port, cycleRate));
         new Thread(getInstance()).start();
     }
