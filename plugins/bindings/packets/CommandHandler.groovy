@@ -9,40 +9,40 @@ import com.rs.plugin.PluginBridge
 class CommandHandler extends Plugin {
 
     void handle(Player player, String keyword, String[] args) {
-        PlayerAttributes attributes = player.getAttributes();
+        PlayerAttributes attributes = player.getAttributes()
 
-        if (keyword.equals("fchat")) {
+        if (keyword == "fchat") {
             player.setForceChatText args[0]
             player.setForceChatUpdateRequired true
             player.setUpdateRequired true
         }
 
-        if (keyword.equals("gfx")) {
+        if (keyword == "gfx") {
             if (args.length < 2)
-                return;
+                return
             player.startGraphic new Graphic(args[0].toInteger(), args[1].toInteger())
         }
 
-        if (keyword.equals("anim")) {
+        if (keyword == "anim") {
             if (args.length < 2)
-                return;
+                return
             player.startAnimation new Animation(args[0].toInteger(), args[1].toInteger())
         }
 
-        if (keyword.equals("energy")) {
+        if (keyword == "energy") {
             player.getAttributes().setRunEnergy args[0].toInteger()
-            player.sendRunEnergy();
+            player.sendRunEnergy()
         }
 
-        if (keyword.equals("master")) {
+        if (keyword == "master") {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 99
                 attributes.getExperience()[i] = 14000000
             }
-            player.sendSkills();
+            player.sendSkills()
         }
 
-        if (keyword.equals("noob")) {
+        if (keyword == "noob") {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 1
                 attributes.getExperience()[i] = 0
@@ -50,28 +50,28 @@ class CommandHandler extends Plugin {
             player.sendSkills()
         }
 
-        if (keyword.equals("empty")) {
+        if (keyword == "empty") {
             attributes.emptyInventory player
         }
 
-        if (keyword.equals("pickup")) {
+        if (keyword == "pickup" || keyword == "item") {
             int id = args[0].toInteger()
             int amount = args.length > 1 ? args[1].toInteger() : 1
             attributes.addInventoryItem id, amount, player
             player.sendInventory()
         }
 
-        if (keyword.equals("tele")) {
+        if (keyword == "tele") {
             if (args.length < 2)
-                return;
+                return
             int x = args[0].toInteger()
             int y = args[1].toInteger()
             int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ()
             player.teleport new Position(x, y, z)
         }
 
-        if (keyword.equals("mypos")) {
-            player.sendMessage "You are at: " + player.getPosition()
+        if (keyword == "mypos") {
+            player.sendMessage "You are at: {$player.getPosition()}"
         }
     }
 

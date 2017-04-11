@@ -16,7 +16,7 @@ class ActionButtonHandler extends Plugin {
                 player.getMovementHandler().setRunToggled false
                 break
             default:
-                println "Unhandled button: " + actionButtonId
+                println "Unhandled button: ${actionButtonId}"
                 break
 
             /* Emotes */
