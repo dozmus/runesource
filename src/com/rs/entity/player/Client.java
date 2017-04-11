@@ -320,7 +320,7 @@ public abstract class Client {
                     player.attributes.equip(slot, player);
                     break;
                 case 185: // Button clicking.
-                    PluginBridge.handleActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
+                    PluginBridge.triggerActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
@@ -335,7 +335,7 @@ public abstract class Client {
                 case 103: // Player command.
                     String command = in.readString();
                     String[] split = command.split(" ");
-                    PluginBridge.handleCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
+                    PluginBridge.triggerCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
                     break;
                 case 248: // Movement.
                 case 164: // ^

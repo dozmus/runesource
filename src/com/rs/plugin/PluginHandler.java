@@ -42,16 +42,14 @@ public final class PluginHandler {
     /**
      * All registered plugins.
      */
-    private static HashMap<String, Plugin> plugins = new HashMap<String, Plugin>();
+    private static final HashMap<String, Plugin> plugins = new HashMap<>();
 
     /**
      * Processes execution for all registered plugins.
      */
     public static void tick() throws Exception {
-        synchronized (plugins) {
-            for (Plugin plugin : plugins.values()) {
-                plugin.tick();
-            }
+        for (Plugin plugin : plugins.values()) {
+            plugin.tick();
         }
     }
 
@@ -107,10 +105,7 @@ public final class PluginHandler {
     public static void register(String name, Plugin plugin) {
         try {
             plugin.onEnable(name);
-
-            synchronized (plugins) {
-                plugins.put(name, plugin);
-            }
+            plugins.put(name, plugin);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -137,10 +132,7 @@ public final class PluginHandler {
     public static void unregister(String name) {
         try {
             plugins.get(name).onDisable();
-
-            synchronized (plugins) {
-                plugins.remove(name);
-            }
+            plugins.remove(name);
         } catch (Exception ex) {
             ex.printStackTrace();
         }

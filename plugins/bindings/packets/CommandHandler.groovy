@@ -8,7 +8,7 @@ import com.rs.plugin.PluginBridge
 
 class CommandHandler extends Plugin {
 
-    void handle(Player player, String keyword, String[] args) {
+    void onCommand(Player player, String keyword, String[] args) {
         PlayerAttributes attributes = player.getAttributes()
 
         if (keyword == "fchat") {
@@ -30,6 +30,8 @@ class CommandHandler extends Plugin {
         }
 
         if (keyword == "energy") {
+            if (args.length < 1)
+                return
             player.getAttributes().setRunEnergy args[0].toInteger()
             player.sendRunEnergy()
         }
@@ -81,7 +83,7 @@ class CommandHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginBridge.registerBinding(PluginBridge.COMMAND_HANDLER_BINDING_KEY, pluginName)
+        PluginBridge.registerEvent PluginBridge.COMMAND_HANDLER_EVENT, pluginName
     }
 
     @Override

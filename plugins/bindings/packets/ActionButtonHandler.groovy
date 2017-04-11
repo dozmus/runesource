@@ -4,7 +4,7 @@ import com.rs.plugin.PluginBridge
 
 class ActionButtonHandler extends Plugin {
 
-    void handle(Player player, int actionButtonId) {
+    void onActionButton(Player player, int actionButtonId) {
         switch (actionButtonId) {
             case 9154:
                 player.sendLogout()
@@ -113,7 +113,7 @@ class ActionButtonHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginBridge.registerBinding PluginBridge.ACTION_BUTTON_HANDLER_BINDING_KEY, pluginName
+        PluginBridge.registerEvent PluginBridge.ACTION_BUTTON_HANDLER_EVENT, pluginName
     }
 
     @Override
