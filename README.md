@@ -20,6 +20,7 @@ RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the g
 * Item equip - don't default to weapon equip
 * Add friends/ignore lists and private messaging
 * Buffer caching
+* Bug fixes
 
 ### How To
 #### Change server name/starting position/maximum connections per host/whether or not to hash password
@@ -33,6 +34,10 @@ So if you change the format the next time a player logs in and out it should be 
 
 #### Add a new command
 Add any commands into the Groovy script in the CommandHandler class (under /plugins/bindings/packets/).
+
+#### Add a new plugin
+Create a Groovy class file extending `Plugin` under /plugins/scripts/. Type its relative file name (without extension) in the `data/plugins.ini` file.  
+The next time you start the server it should be available. You can also have your script inherit further behaviours by registering a binding in its `onEnable` method (see the other files for examples).
 
 ### Dependencies
 * Groovy (v2.4.3)
