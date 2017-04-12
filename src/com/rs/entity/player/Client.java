@@ -244,6 +244,38 @@ public abstract class Client {
     }
 
     /**
+     * Sends the friends list status to the player.
+     * @param status 0 is loading, 1 is connecting, 2 is loaded.
+     */
+    public void sendFriendsListStatus(int status) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2);
+        out.writeHeader(getEncryptor(), 221);
+        out.writeByte(status);
+        send(out.getBuffer());
+    }
+
+    public void sendAddFriend(long name, int worldNo) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(10);
+        out.writeHeader(getEncryptor(), 50);
+        out.writeLong(name);
+        out.writeByte(worldNo);
+        send(out.getBuffer());
+    }
+
+    public void sendPrivateMessage(long name, int messageCounter, int rights, byte[] text) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(15 + text.length);
+        out.writeVariablePacketHeader(getEncryptor(), 196);
+        out.writeLong(name);
+        out.writeInt(messageCounter);
+        out.writeByte(rights);
+
+        for (byte b : text)
+            out.writeByte(b);
+        out.finishVariablePacketHeader();
+        send(out.getBuffer());
+    }
+
+    /**
      * Sends a packet that tells the client to forcibly modify the value of a setting.
      *
      * @param settingId
@@ -322,11 +354,23 @@ public abstract class Client {
                 case 185: // Button clicking.
                     PluginBridge.triggerActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
+                case 188: // Add friend.
+                    PluginBridge.triggerAddFriend(player, in.readLong());
+                    break;
+                case 215: // Remove friend.
+                    PluginBridge.triggerRemoveFriend(player, in.readLong());
+                    break;
+                case 126: // Private message.
+                    long username = in.readLong();
+                    int chatLength = (packetLength - 8);
+                    byte[] text = in.readBytes(chatLength);
+                    PluginBridge.triggerPrivateMessage(player, username, text);
+                    break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
                     int color = in.readByte(false, StreamBuffer.ValueType.S);
-                    int chatLength = (packetLength - 2);
-                    byte[] text = in.readBytesReverse(chatLength, StreamBuffer.ValueType.A);
+                    chatLength = (packetLength - 2);
+                    text = in.readBytesReverse(chatLength, StreamBuffer.ValueType.A);
                     player.setChatEffects(effects);
                     player.setChatColor(color);
                     player.setChatText(text);

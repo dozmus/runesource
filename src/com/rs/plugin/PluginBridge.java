@@ -40,6 +40,9 @@ public final class PluginBridge {
      * Before the player is logged out.
      */
     public static final String PLAYER_ON_LOGOUT_EVENT = "onLogout";
+    public static final String ADD_FRIEND_EVENT = "onAddFriend";
+    public static final String REMOVE_FRIEND_EVENT = "onRemoveFriend";
+    public static final String PRIVATE_MESSAGE_EVENT = "onPrivateMessage";
 
     /**
      * Registers a binding.
@@ -97,6 +100,39 @@ public final class PluginBridge {
 
         for (String pluginName : bindings.get(PLAYER_ON_LOGOUT_EVENT)) {
             PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGOUT_EVENT, player);
+        }
+        return true;
+    }
+
+    public static boolean triggerAddFriend(Player player, long name) {
+        if (!bindings.containsKey(ADD_FRIEND_EVENT)) {
+            return false;
+        }
+
+        for (String pluginName : bindings.get(ADD_FRIEND_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, ADD_FRIEND_EVENT, player, name);
+        }
+        return true;
+    }
+
+    public static boolean triggerRemoveFriend(Player player, long name) {
+        if (!bindings.containsKey(REMOVE_FRIEND_EVENT)) {
+            return false;
+        }
+
+        for (String pluginName : bindings.get(REMOVE_FRIEND_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, REMOVE_FRIEND_EVENT, player, name);
+        }
+        return true;
+    }
+
+    public static boolean triggerPrivateMessage(Player player, long name, byte[] text) {
+        if (!bindings.containsKey(PRIVATE_MESSAGE_EVENT)) {
+            return false;
+        }
+
+        for (String pluginName : bindings.get(PRIVATE_MESSAGE_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, PRIVATE_MESSAGE_EVENT, player, name, text);
         }
         return true;
     }

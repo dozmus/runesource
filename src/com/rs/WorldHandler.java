@@ -217,6 +217,21 @@ public class WorldHandler {
         return false;
     }
 
+    public static Player getPlayer(String username) {
+        if (playerAmount() == 0)
+            throw new IndexOutOfBoundsException();
+
+        for (Player player : WorldHandler.getPlayers()) {
+            if (player == null)
+                continue;
+
+            if (player.getAttributes().getUsername().equals(username)) {
+                return player;
+            }
+        }
+        throw new IndexOutOfBoundsException();
+    }
+
     /**
      * Gets all registered players.
      *
