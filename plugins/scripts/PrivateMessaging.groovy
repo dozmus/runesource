@@ -57,6 +57,10 @@ class PrivateMessaging extends Plugin {
     }
 
     void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
+        // Ignore if trying to add self
+        if (PlayerAttributes.nameToLong(evt.getPlayer().getAttributes().getUsername()) == evt.getTarget())
+            return
+
         // Regular logic
         evt.getPlayer().getAttributes().addFriend(evt.getTarget())
 
