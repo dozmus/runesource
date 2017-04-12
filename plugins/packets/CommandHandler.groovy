@@ -4,39 +4,43 @@ import com.rs.entity.player.PlayerAttributes
 import com.rs.entity.player.obj.Animation
 import com.rs.entity.player.obj.Graphic
 import com.rs.plugin.Plugin
-import com.rs.plugin.PluginBridge
+import com.rs.plugin.PluginEventDispatcher
+import com.rs.plugin.event.CommandEvent
 
 class CommandHandler extends Plugin {
 
-    void onCommand(Player player, String keyword, String[] args) {
+    void onCommand(CommandEvent evt) {
+        Player player = evt.getPlayer()
         PlayerAttributes attributes = player.getAttributes()
+        String commandName = evt.getCommandName()
+        String[] args = evt.getArgs()
 
-        if (keyword == "fchat") {
+        if (commandName == "fchat") {
             player.setForceChatText args[0]
             player.setForceChatUpdateRequired true
             player.setUpdateRequired true
         }
 
-        if (keyword == "gfx") {
+        if (commandName == "gfx") {
             if (args.length < 2)
                 return
             player.startGraphic new Graphic(args[0].toInteger(), args[1].toInteger())
         }
 
-        if (keyword == "anim") {
+        if (commandName == "anim") {
             if (args.length < 2)
                 return
             player.startAnimation new Animation(args[0].toInteger(), args[1].toInteger())
         }
 
-        if (keyword == "energy") {
+        if (commandName == "energy") {
             if (args.length < 1)
                 return
             player.getAttributes().setRunEnergy args[0].toInteger()
             player.sendRunEnergy()
         }
 
-        if (keyword == "master") {
+        if (commandName == "master") {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 99
                 attributes.getExperience()[i] = 14000000
@@ -44,7 +48,7 @@ class CommandHandler extends Plugin {
             player.sendSkills()
         }
 
-        if (keyword == "noob") {
+        if (commandName == "noob") {
             for (int i = 0; i < attributes.getSkills().length; i++) {
                 attributes.getSkills()[i] = 1
                 attributes.getExperience()[i] = 0
@@ -52,18 +56,18 @@ class CommandHandler extends Plugin {
             player.sendSkills()
         }
 
-        if (keyword == "empty") {
+        if (commandName == "empty") {
             attributes.emptyInventory player
         }
 
-        if (keyword == "pickup" || keyword == "item") {
+        if (commandName == "pickup" || commandName == "item") {
             int id = args[0].toInteger()
             int amount = args.length > 1 ? args[1].toInteger() : 1
             attributes.addInventoryItem id, amount, player
             player.sendInventory()
         }
 
-        if (keyword == "tele") {
+        if (commandName == "tele") {
             if (args.length < 2)
                 return
             int x = args[0].toInteger()
@@ -72,7 +76,7 @@ class CommandHandler extends Plugin {
             player.teleport new Position(x, y, z)
         }
 
-        if (keyword == "mypos") {
+        if (commandName == "mypos") {
             player.sendMessage "You are at: ${player.getPosition()}"
         }
     }
@@ -83,7 +87,7 @@ class CommandHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginBridge.registerEvent PluginBridge.COMMAND_HANDLER_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.COMMAND_HANDLER_EVENT, pluginName
     }
 
     @Override

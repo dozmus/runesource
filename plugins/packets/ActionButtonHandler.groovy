@@ -1,11 +1,14 @@
 import com.rs.entity.player.Player
 import com.rs.plugin.Plugin
-import com.rs.plugin.PluginBridge
+import com.rs.plugin.PluginEventDispatcher
+import com.rs.plugin.event.ActionButtonEvent
 
 class ActionButtonHandler extends Plugin {
 
-    void onActionButton(Player player, int actionButtonId) {
-        switch (actionButtonId) {
+    void onActionButton(ActionButtonEvent evt) {
+        Player player = evt.getPlayer()
+
+        switch (evt.getActionButtonId()) {
             case 9154:
                 player.sendLogout()
                 break
@@ -16,7 +19,7 @@ class ActionButtonHandler extends Plugin {
                 player.getMovementHandler().setRunToggled false
                 break
             default:
-                println "Unhandled button: ${actionButtonId}"
+                println "Unhandled button: ${evt.getActionButtonId()}"
                 break
 
             /* Emotes */
@@ -113,7 +116,7 @@ class ActionButtonHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginBridge.registerEvent PluginBridge.ACTION_BUTTON_HANDLER_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
     }
 
     @Override

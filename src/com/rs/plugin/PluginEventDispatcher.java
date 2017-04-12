@@ -17,17 +17,18 @@ package com.rs.plugin;
  */
 
 import com.rs.entity.player.Player;
+import com.rs.plugin.event.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
 /**
- * A bridge between invokable plugins and the core of the server.
+ * An event dispatcher which acts between invokable plugins and the core of the server.
  *
  * @author Pure_
  */
-public final class PluginBridge {
+public final class PluginEventDispatcher {
 
     private static HashMap<String, List<String>> bindings = new HashMap<>();
     public static final String ACTION_BUTTON_HANDLER_EVENT = "onActionButton";
@@ -60,79 +61,86 @@ public final class PluginBridge {
         }
     }
 
-    public static boolean triggerCommand(Player player, String keyword, String[] args) {
+    public static boolean dispatchCommand(Player player, String commandName, String[] args) {
         if (!bindings.containsKey(COMMAND_HANDLER_EVENT)) {
             return false;
         }
+        CommandEvent evt = new CommandEvent(player, commandName, args);
 
         for (String pluginName : bindings.get(COMMAND_HANDLER_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, COMMAND_HANDLER_EVENT, player, keyword, args);
+            PluginHandler.invokeMethod(pluginName, COMMAND_HANDLER_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerActionButton(Player player, int actionButtonId) {
+    public static boolean dispatchActionButton(Player player, int actionButtonId) {
         if (!bindings.containsKey(ACTION_BUTTON_HANDLER_EVENT)) {
             return false;
         }
+        ActionButtonEvent evt = new ActionButtonEvent(player, actionButtonId);
 
         for (String pluginName : bindings.get(ACTION_BUTTON_HANDLER_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, ACTION_BUTTON_HANDLER_EVENT, player, actionButtonId);
+            PluginHandler.invokeMethod(pluginName, ACTION_BUTTON_HANDLER_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerOnLogin(Player player) {
+    public static boolean dispatchLogin(Player player) {
         if (!bindings.containsKey(PLAYER_ON_LOGIN_EVENT)) {
             return false;
         }
+        PlayerLoggedOnEvent evt = new PlayerLoggedOnEvent(player);
 
         for (String pluginName : bindings.get(PLAYER_ON_LOGIN_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGIN_EVENT, player);
+            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGIN_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerOnLogout(Player player) {
+    public static boolean dispatchLogout(Player player) {
         if (!bindings.containsKey(PLAYER_ON_LOGOUT_EVENT)) {
             return false;
         }
+        PlayerLoggedOutEvent evt = new PlayerLoggedOutEvent(player);
 
         for (String pluginName : bindings.get(PLAYER_ON_LOGOUT_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGOUT_EVENT, player);
+            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGOUT_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerAddFriend(Player player, long name) {
+    public static boolean dispatchAddFriend(Player player, long name) {
         if (!bindings.containsKey(ADD_FRIEND_EVENT)) {
             return false;
         }
+        ModifyFriendsListEvent evt = new ModifyFriendsListEvent(player, name, ModifyFriendsListEvent.Type.ADD);
 
         for (String pluginName : bindings.get(ADD_FRIEND_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, ADD_FRIEND_EVENT, player, name);
+            PluginHandler.invokeMethod(pluginName, ADD_FRIEND_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerRemoveFriend(Player player, long name) {
+    public static boolean dispatchRemoveFriend(Player player, long name) {
         if (!bindings.containsKey(REMOVE_FRIEND_EVENT)) {
             return false;
         }
+        ModifyFriendsListEvent evt = new ModifyFriendsListEvent(player, name, ModifyFriendsListEvent.Type.REMOVE);
 
         for (String pluginName : bindings.get(REMOVE_FRIEND_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, REMOVE_FRIEND_EVENT, player, name);
+            PluginHandler.invokeMethod(pluginName, REMOVE_FRIEND_EVENT, evt);
         }
         return true;
     }
 
-    public static boolean triggerPrivateMessage(Player player, long name, byte[] text) {
+    public static boolean dispatchPrivateMessage(Player player, long name, byte[] text) {
         if (!bindings.containsKey(PRIVATE_MESSAGE_EVENT)) {
             return false;
         }
+        PrivateMessageEvent evt = new PrivateMessageEvent(player, name, text);
 
         for (String pluginName : bindings.get(PRIVATE_MESSAGE_EVENT)) {
-            PluginHandler.invokeMethod(pluginName, PRIVATE_MESSAGE_EVENT, player, name, text);
+            PluginHandler.invokeMethod(pluginName, PRIVATE_MESSAGE_EVENT, evt);
         }
         return true;
     }

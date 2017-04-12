@@ -25,7 +25,7 @@ import com.rs.entity.player.obj.Animation;
 import com.rs.entity.player.obj.Graphic;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.PluginBridge;
+import com.rs.plugin.PluginEventDispatcher;
 import com.rs.util.Misc;
 
 import java.nio.channels.SelectionKey;
@@ -181,12 +181,12 @@ public class Player extends Client {
         sendResetAllButtonStates();
         sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");
         System.out.println(this + " has logged in.");
-        PluginBridge.triggerOnLogin(this);
+        PluginEventDispatcher.dispatchLogin(this);
     }
 
     @Override
     public void logout() throws Exception {
-        PluginBridge.triggerOnLogout(this);
+        PluginEventDispatcher.dispatchLogout(this);
         WorldHandler.unregister(this);
         setStage(Client.Stage.LOGGED_OUT);
         System.out.println(this + " has logged out.");

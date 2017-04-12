@@ -21,7 +21,7 @@ import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.PluginBridge;
+import com.rs.plugin.PluginEventDispatcher;
 import com.rs.task.TaskHandler;
 import com.rs.util.Misc;
 
@@ -352,19 +352,19 @@ public abstract class Client {
                     player.attributes.equip(slot, player);
                     break;
                 case 185: // Button clicking.
-                    PluginBridge.triggerActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
+                    PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
                 case 188: // Add friend.
-                    PluginBridge.triggerAddFriend(player, in.readLong());
+                    PluginEventDispatcher.dispatchAddFriend(player, in.readLong());
                     break;
                 case 215: // Remove friend.
-                    PluginBridge.triggerRemoveFriend(player, in.readLong());
+                    PluginEventDispatcher.dispatchRemoveFriend(player, in.readLong());
                     break;
                 case 126: // Private message.
                     long username = in.readLong();
                     int chatLength = (packetLength - 8);
                     byte[] text = in.readBytes(chatLength);
-                    PluginBridge.triggerPrivateMessage(player, username, text);
+                    PluginEventDispatcher.dispatchPrivateMessage(player, username, text);
                     break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
@@ -379,7 +379,7 @@ public abstract class Client {
                 case 103: // Player command.
                     String command = in.readString();
                     String[] split = command.split(" ");
-                    PluginBridge.triggerCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
+                    PluginEventDispatcher.dispatchCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
                     break;
                 case 248: // Movement.
                 case 164: // ^

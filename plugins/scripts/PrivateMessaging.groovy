@@ -3,7 +3,11 @@ import com.rs.entity.player.Client
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 import com.rs.plugin.Plugin
-import com.rs.plugin.PluginBridge
+import com.rs.plugin.PluginEventDispatcher
+import com.rs.plugin.event.ModifyFriendsListEvent
+import com.rs.plugin.event.PlayerLoggedOutEvent
+import com.rs.plugin.event.PlayerLoggedOnEvent
+import com.rs.plugin.event.PrivateMessageEvent
 
 class PrivateMessaging extends Plugin {
 
@@ -13,8 +17,9 @@ class PrivateMessaging extends Plugin {
     void tick() throws Exception {
     }
 
-    void onLogin(Player player) throws Exception {
+    void onLogin(PlayerLoggedOnEvent evt) throws Exception {
         // Update this player
+        Player player = evt.getPlayer()
         long playerName = PlayerAttributes.nameToLong(player.getAttributes().getUsername())
         player.sendFriendsListStatus(1) // status: connecting
 
@@ -37,9 +42,9 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onLogout(Player player) throws Exception {
+    void onLogout(PlayerLoggedOutEvent evt) throws Exception {
         // Update other players
-        long playerName = PlayerAttributes.nameToLong(player.getAttributes().getUsername())
+        long playerName = PlayerAttributes.nameToLong(evt.getPlayer().getAttributes().getUsername())
 
         WorldHandler.getPlayers().each { other ->
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
@@ -51,23 +56,25 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onAddFriend(Player player, long name) throws Exception {
-        player.getAttributes().addFriend(name)
+    void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
+        // Regular logic
+        evt.getPlayer().getAttributes().addFriend(evt.getTarget())
 
-        if (WorldHandler.isPlayerOnline(PlayerAttributes.nameForLong(name))) {
-            player.sendAddFriend(name, 10)
+        if (WorldHandler.isPlayerOnline(PlayerAttributes.nameForLong(evt.getTarget()))) {
+            evt.getPlayer().sendAddFriend(evt.getTarget(), 10)
         }
     }
 
-    void onRemoveFriend(Player player, long name) throws Exception {
-        player.getAttributes().removeFriend(name)
+    void onRemoveFriend(ModifyFriendsListEvent evt) throws Exception {
+        evt.getPlayer().getAttributes().removeFriend(evt.getTarget())
     }
 
-    void onPrivateMessage(Player player, long name, byte[] text) throws Exception {
+    void onPrivateMessage(PrivateMessageEvent evt) throws Exception {
         try {
-            Player other = WorldHandler.getPlayer(PlayerAttributes.nameForLong(name))
+            Player player = evt.getPlayer()
+            Player other = WorldHandler.getPlayer(PlayerAttributes.nameForLong(evt.getTarget()))
             other.sendPrivateMessage(PlayerAttributes.nameToLong(player.getAttributes().getUsername()),
-                    MESSAGE_COUNTER++, player.getAttributes().getStaffRights(), text)
+                    MESSAGE_COUNTER++, player.getAttributes().getStaffRights(), evt.getText())
         } catch (IndexOutOfBoundsException ex) {
             player.sendMessage("This player is not online.")
         }
@@ -75,11 +82,11 @@ class PrivateMessaging extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginBridge.registerEvent PluginBridge.PLAYER_ON_LOGIN_EVENT, pluginName
-        PluginBridge.registerEvent PluginBridge.PLAYER_ON_LOGOUT_EVENT, pluginName
-        PluginBridge.registerEvent PluginBridge.ADD_FRIEND_EVENT, pluginName
-        PluginBridge.registerEvent PluginBridge.REMOVE_FRIEND_EVENT, pluginName
-        PluginBridge.registerEvent PluginBridge.PRIVATE_MESSAGE_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.PLAYER_ON_LOGOUT_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.ADD_FRIEND_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.REMOVE_FRIEND_EVENT, pluginName
+        PluginEventDispatcher.registerEvent PluginEventDispatcher.PRIVATE_MESSAGE_EVENT, pluginName
     }
 
     @Override
