@@ -32,6 +32,14 @@ public final class PluginBridge {
     private static HashMap<String, List<String>> bindings = new HashMap<>();
     public static final String ACTION_BUTTON_HANDLER_EVENT = "onActionButton";
     public static final String COMMAND_HANDLER_EVENT = "onCommand";
+    /**
+     * After the player is logged in.
+     */
+    public static final String PLAYER_ON_LOGIN_EVENT = "onLogin";
+    /**
+     * Before the player is logged out.
+     */
+    public static final String PLAYER_ON_LOGOUT_EVENT = "onLogout";
 
     /**
      * Registers a binding.
@@ -67,6 +75,28 @@ public final class PluginBridge {
 
         for (String pluginName : bindings.get(ACTION_BUTTON_HANDLER_EVENT)) {
             PluginHandler.invokeMethod(pluginName, ACTION_BUTTON_HANDLER_EVENT, player, actionButtonId);
+        }
+        return true;
+    }
+
+    public static boolean triggerOnLogin(Player player) {
+        if (!bindings.containsKey(PLAYER_ON_LOGIN_EVENT)) {
+            return false;
+        }
+
+        for (String pluginName : bindings.get(PLAYER_ON_LOGIN_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGIN_EVENT, player);
+        }
+        return true;
+    }
+
+    public static boolean triggerOnLogout(Player player) {
+        if (!bindings.containsKey(PLAYER_ON_LOGOUT_EVENT)) {
+            return false;
+        }
+
+        for (String pluginName : bindings.get(PLAYER_ON_LOGOUT_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGOUT_EVENT, player);
         }
         return true;
     }
