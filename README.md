@@ -11,7 +11,8 @@ RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the g
 * Improved plugin system (uses Groovy)
 * Task system
 * More player updating
-* JSON saving/loading of data (passwords are hashed using SHA-256)
+* Friends list and Private Messaging
+* JSON data serialization (optional: passwords are hashed using SHA-256)
 * Lots of misc. stuff (emotes, running, etc.)
 
 ### Planned Features
