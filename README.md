@@ -14,14 +14,7 @@ RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the g
 * Friends list and Private Messaging
 * JSON data serialization (optional: passwords are hashed using SHA-256)
 * Lots of misc. stuff (emotes, running, etc.)
-
-### Planned Features
-* Finish player appearance updating (i.e. send combat level, whether or not the player is wearing a platebody, etc)
-* Add all NPC/Player mask handling
-* Item equip - don't default to weapon equip
-* Add friends/ignore lists and private messaging
-* Buffer caching
-* Bug fixes
+* [More planned...](https://github.com/PureCS/runesource/issues)
 
 ### How To
 #### Change server name/starting position/maximum connections per host/whether or not to hash password
