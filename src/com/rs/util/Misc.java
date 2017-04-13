@@ -256,7 +256,7 @@ public class Misc {
 
     public static boolean validatePassword(String password) {
         // Length check
-        if (password.length() < 4 || password.length() > 16) {
+        if (password.length() == 0 || password.length() > 16) {
             return false;
         }
 
