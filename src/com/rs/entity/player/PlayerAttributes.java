@@ -399,38 +399,22 @@ public class PlayerAttributes {
     public void equip(int slot, Player player) {
         int id = getInventory()[slot];
         int amount = getInventoryN()[slot];
-        if (amount > 1) {
-            // More than one? Equip the stack.
-            if (Misc.isStackable(id)) {
-                // Empty the inventory slot first, to make room.
-                getInventory()[slot] = -1;
-                getInventoryN()[slot] = 0;
+        int eSlot = Misc.getEquipmentSlot(id);
 
-                // Unequip the equipment slot if need be.
-                int eSlot = Misc.getEquipmentSlot(id);
-                if (getEquipment()[eSlot] != -1) {
-                    unequip(eSlot, player); // Will add the item to the inventory.
-                }
+        if (eSlot == Misc.EQUIPMENT_SLOT_INVALID)
+            return;
 
-                // And equip the new item stack.
-                getEquipment()[eSlot] = id;
-                getEquipmentN()[eSlot] = amount;
-                player.sendEquipment(eSlot, id, amount);
-                player.sendInventory();
-                player.setAppearanceUpdateRequired(true);
-            }
-        } else {
+        if (amount > 1 && Misc.isStackable(id) || amount == 1) {
             // Empty the inventory slot first, to make room.
             getInventory()[slot] = -1;
             getInventoryN()[slot] = 0;
 
             // Unequip the equipment slot if need be.
-            int eSlot = Misc.getEquipmentSlot(id);
             if (getEquipment()[eSlot] != -1) {
                 unequip(eSlot, player); // Will add the item to the inventory.
             }
 
-            // And equip the new item.
+            // And equip the new item/item stack.
             getEquipment()[eSlot] = id;
             getEquipmentN()[eSlot] = amount;
             player.sendEquipment(eSlot, id, amount);
