@@ -177,46 +177,46 @@ public class Misc {
      * @return the slot
      */
     public static int getEquipmentSlot(int itemID) {
-        if (Arrays.binarySearch(PLATEBODY_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(PLATEBODY_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_CHEST;
         }
-        if (Arrays.binarySearch(FULL_HELM_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(FULL_HELM_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_HEAD;
         }
-        if (Arrays.binarySearch(FULL_MASK_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(FULL_MASK_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_HEAD;
         }
-        if (Arrays.binarySearch(BODY_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(BODY_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_CHEST;
         }
-        if (Arrays.binarySearch(LEGS_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(LEGS_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_LEGS;
         }
-        if (Arrays.binarySearch(CAPE_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(CAPE_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_CAPE;
         }
-        if (Arrays.binarySearch(BOOTS_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(BOOTS_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_FEET;
         }
-        if (Arrays.binarySearch(GLOVES_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(GLOVES_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_HANDS;
         }
-        if (Arrays.binarySearch(SHIELD_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(SHIELD_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_SHIELD;
         }
-        if (Arrays.binarySearch(HAT_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(HAT_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_HEAD;
         }
-        if (Arrays.binarySearch(AMULET_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(AMULET_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_AMULET;
         }
-        if (Arrays.binarySearch(ARROW_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(ARROW_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_ARROWS;
         }
-        if (Arrays.binarySearch(RING_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(RING_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_RING;
         }
-        if (Arrays.binarySearch(WEAPON_IDS, itemID) > 0) {
+        if (Arrays.binarySearch(WEAPON_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_WEAPON;
         }
         return EQUIPMENT_SLOT_INVALID;
