@@ -51,7 +51,7 @@ public final class PluginEventDispatcher {
      * @param event event name
      * @param pluginName plugin name
      */
-    public static void registerEvent(String event, String pluginName) {
+    public static void register(String event, String pluginName) {
         if (bindings.containsKey(event)) {
             bindings.get(event).add(pluginName);
         } else {

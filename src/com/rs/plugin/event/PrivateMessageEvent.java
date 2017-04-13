@@ -6,7 +6,7 @@ import com.rs.plugin.PlayerEvent;
 /**
  * Private message event.
  */
-public class PrivateMessageEvent extends PlayerEvent {
+public final class PrivateMessageEvent extends PlayerEvent {
 
     private final long target;
     private final byte[] text;

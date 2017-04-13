@@ -87,7 +87,7 @@ class CommandHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.COMMAND_HANDLER_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.COMMAND_HANDLER_EVENT, pluginName
     }
 
     @Override

@@ -116,7 +116,7 @@ class ActionButtonHandler extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
     }
 
     @Override

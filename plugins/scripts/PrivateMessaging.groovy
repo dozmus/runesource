@@ -86,11 +86,11 @@ class PrivateMessaging extends Plugin {
 
     @Override
     void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.PLAYER_ON_LOGOUT_EVENT, pluginName
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.ADD_FRIEND_EVENT, pluginName
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.REMOVE_FRIEND_EVENT, pluginName
-        PluginEventDispatcher.registerEvent PluginEventDispatcher.PRIVATE_MESSAGE_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGOUT_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.ADD_FRIEND_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.REMOVE_FRIEND_EVENT, pluginName
+        PluginEventDispatcher.register PluginEventDispatcher.PRIVATE_MESSAGE_EVENT, pluginName
     }
 
     @Override
