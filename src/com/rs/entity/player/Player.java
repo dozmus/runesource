@@ -40,8 +40,11 @@ import java.util.List;
  */
 public class Player extends Client {
 
-    private final List<Player> players = new LinkedList<Player>();
-    private final List<Npc> npcs = new LinkedList<Npc>();
+    private static final int[] SIDEBAR_INTERFACE_IDS = {
+            2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 4445, 147, 6299
+    };
+    private final List<Player> players = new LinkedList<>();
+    private final List<Npc> npcs = new LinkedList<>();
     PlayerAttributes attributes = new PlayerAttributes();
     private MovementHandler movementHandler = new MovementHandler(this);
     private Position currentRegion = new Position(0, 0, 0);
@@ -164,19 +167,11 @@ public class Player extends Client {
         sendEquipment();
         setUpdateRequired(true);
         setAppearanceUpdateRequired(true);
-        sendSidebarInterface(1, 3917);
-        sendSidebarInterface(2, 638);
-        sendSidebarInterface(3, 3213);
-        sendSidebarInterface(4, 1644);
-        sendSidebarInterface(5, 5608);
-        sendSidebarInterface(6, 1151);
-        sendSidebarInterface(8, 5065);
-        sendSidebarInterface(9, 5715);
-        sendSidebarInterface(10, 2449);
-        sendSidebarInterface(11, 4445);
-        sendSidebarInterface(12, 147);
-        sendSidebarInterface(13, 6299);
-        sendSidebarInterface(0, 2423);
+
+        // Send sidebar interfaces
+        for (int i = 0; i < SIDEBAR_INTERFACE_IDS.length; i++) {
+            sendSidebarInterface(i, SIDEBAR_INTERFACE_IDS[i]);
+        }
         sendRunEnergy();
         sendResetAllButtonStates();
         sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");

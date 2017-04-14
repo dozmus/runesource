@@ -20,7 +20,7 @@ class PrivateMessaging extends Plugin {
     void onLogin(PlayerLoggedOnEvent evt) throws Exception {
         // Update this player
         Player player = evt.getPlayer()
-        long playerName = PlayerAttributes.nameToLong(player.getAttributes().getUsername())
+        long playerName = PlayerAttributes.encodeBase37(player.getAttributes().getUsername())
         player.sendFriendsListStatus(1) // status: connecting
 
         player.getAttributes().getFriends().each { Map.Entry<Long, String> entry ->
@@ -44,7 +44,7 @@ class PrivateMessaging extends Plugin {
 
     void onLogout(PlayerLoggedOutEvent evt) throws Exception {
         // Update other players
-        long playerName = PlayerAttributes.nameToLong(evt.getPlayer().getAttributes().getUsername())
+        long playerName = PlayerAttributes.encodeBase37(evt.getPlayer().getAttributes().getUsername())
 
         WorldHandler.getPlayers().each { other ->
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
@@ -58,13 +58,13 @@ class PrivateMessaging extends Plugin {
 
     void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
         // Ignore if trying to add self
-        if (PlayerAttributes.nameToLong(evt.getPlayer().getAttributes().getUsername()) == evt.getTarget())
+        if (PlayerAttributes.encodeBase37(evt.getPlayer().getAttributes().getUsername()) == evt.getTarget())
             return
 
         // Regular logic
         evt.getPlayer().getAttributes().addFriend(evt.getTarget())
 
-        if (WorldHandler.isPlayerOnline(PlayerAttributes.nameForLong(evt.getTarget()))) {
+        if (WorldHandler.isPlayerOnline(PlayerAttributes.decodeBase37(evt.getTarget()))) {
             evt.getPlayer().sendAddFriend(evt.getTarget(), 10)
         }
     }
@@ -76,8 +76,8 @@ class PrivateMessaging extends Plugin {
     void onPrivateMessage(PrivateMessageEvent evt) throws Exception {
         try {
             Player player = evt.getPlayer()
-            Player other = WorldHandler.getPlayer(PlayerAttributes.nameForLong(evt.getTarget()))
-            other.sendPrivateMessage(PlayerAttributes.nameToLong(player.getAttributes().getUsername()),
+            Player other = WorldHandler.getPlayer(PlayerAttributes.decodeBase37(evt.getTarget()))
+            other.sendPrivateMessage(PlayerAttributes.encodeBase37(player.getAttributes().getUsername()),
                     MESSAGE_COUNTER++, player.getAttributes().getStaffRights(), evt.getText())
         } catch (IndexOutOfBoundsException ex) {
             player.sendMessage("This player is not online.")

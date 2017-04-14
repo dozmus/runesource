@@ -57,11 +57,13 @@ public class PlayerAttributes {
     /**
      * Converts the username to a long value.
      */
-    public static long nameToLong(String name) {
+    public static long encodeBase37(String name) {
         long l = 0L;
+
         for (int i = 0; i < name.length() && i < 12; i++) {
             char c = name.charAt(i);
             l *= 37L;
+
             if (c >= 'A' && c <= 'Z')
                 l += (1 + c) - 65;
             else if (c >= 'a' && c <= 'z')
@@ -69,6 +71,7 @@ public class PlayerAttributes {
             else if (c >= '0' && c <= '9')
                 l += (27 + c) - 48;
         }
+
         while (l % 37L == 0L && l != 0L)
             l /= 37L;
         return l;
@@ -77,7 +80,7 @@ public class PlayerAttributes {
     /**
      * Converts the long into a username.
      */
-    public static String nameForLong(long name) throws IllegalArgumentException {
+    public static String decodeBase37(long name) throws IllegalArgumentException {
         try {
             if (name <= 0L || name >= 0x5b5b57f8a98a5dd1L) {
                 throw new IllegalArgumentException();
@@ -267,6 +270,7 @@ public class PlayerAttributes {
         } else {
             // Check if there are the amount of items.
             int amountFound = 0;
+
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
                     amountFound++;
@@ -297,6 +301,7 @@ public class PlayerAttributes {
         } else {
             // Remove the desired amount.
             int amountRemoved = 0;
+
             for (int i = 0; i < getInventory().length && amountRemoved < amount; i++) {
                 if (getInventory()[i] == id) {
                     getInventory()[i] = -1;
@@ -321,33 +326,29 @@ public class PlayerAttributes {
     public boolean addInventoryItem(int id, int amount, Player player) {
         if (Misc.isStackable(id)) {
             // Add the item to an existing stack if there is one.
-            boolean found = false;
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
                     getInventoryN()[i] += amount;
-                    found = true;
                     return true;
                 }
             }
-            if (!found) {
-                // No stack, try to add the item stack to an empty slot.
-                boolean added = false;
-                for (int i = 0; i < getInventory().length; i++) {
-                    if (getInventory()[i] == -1) {
-                        getInventory()[i] = id;
-                        getInventoryN()[i] = amount;
-                        added = true;
-                        return true;
-                    }
-                }
-                if (!added) {
-                    // No empty slot.
-                    player.sendMessage("You do not have enough inventory space.");
+
+            // Item not found
+            // No stack, try to add the item stack to an empty slot.
+            for (int i = 0; i < getInventory().length; i++) {
+                if (getInventory()[i] == -1) {
+                    getInventory()[i] = id;
+                    getInventoryN()[i] = amount;
+                    return true;
                 }
             }
+
+            // No empty slot.
+            player.sendMessage("You do not have enough inventory space.");
         } else {
             // Try to add the amount of items to empty slots.
             int amountAdded = 0;
+
             for (int i = 0; i < getInventory().length && amountAdded < amount; i++) {
                 if (getInventory()[i] == -1) {
                     getInventory()[i] = id;
@@ -355,6 +356,7 @@ public class PlayerAttributes {
                     amountAdded++;
                 }
             }
+
             if (amountAdded != amount) {
                 // We couldn't add all of them.
                 player.sendMessage("You do not have enough inventory space.");
@@ -463,7 +465,7 @@ public class PlayerAttributes {
     }
 
     public void addFriend(long name) {
-        friends.put(name, nameForLong(name));
+        friends.put(name, decodeBase37(name));
     }
 
     public void removeFriend(long name) {
@@ -475,7 +477,7 @@ public class PlayerAttributes {
     }
 
     public void addIgnored(long name) {
-        ignored.put(name, nameForLong(name));
+        ignored.put(name, decodeBase37(name));
     }
 
     public void removeIgnored(long name) {
