@@ -400,6 +400,17 @@ public abstract class Client {
                 case 215: // Remove friend.
                     PluginEventDispatcher.dispatchRemoveFriend(player, in.readLong());
                     break;
+                case 214: // Move item.
+                    int frameId = in.readShort(StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+                    int insertMode = in.readByte();
+                    int initialSlot = in.readShort(StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+                    int endSlot = in.readShort(StreamBuffer.ByteOrder.LITTLE);
+
+                    // Inventory
+                    if (frameId == 3214) {
+                        player.getAttributes().swapInventoryItem(initialSlot, endSlot);
+                    }
+                    break;
                 case 126: // Private message.
                     long username = in.readLong();
                     int chatLength = (packetLength - 8);

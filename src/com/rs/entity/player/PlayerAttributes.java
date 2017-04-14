@@ -369,6 +369,21 @@ public class PlayerAttributes {
     }
 
     /**
+     * Swaps the items in the given two slots. This performs validation on the slots.
+     */
+    public void swapInventoryItem(int slot1, int slot2) {
+        if (slot1 < 0 || slot1 > inventory.length || slot2 < 0 || slot2 > inventory.length)
+            throw new IllegalArgumentException("one of the two slots are invalid: slot1=" + slot1 + ", slot2=" + slot2);
+
+        int initialId = inventory[slot1];
+        int initialAmt = inventoryN[slot1];
+        inventory[slot1] = inventory[slot2];
+        inventoryN[slot1] = inventoryN[slot2];
+        inventory[slot2] = initialId;
+        inventoryN[slot2] = initialAmt;
+    }
+
+    /**
      * Unequips an item.
      *
      * @param slot   the equipment slot.
