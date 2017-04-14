@@ -137,6 +137,7 @@ public class Server implements Runnable {
             // Loading configuration
             Misc.Stopwatch timer = new Misc.Stopwatch();
             settings = Settings.load("./data/settings.json");
+            Misc.loadWeaponDefinitions("./data/weapons.json");
             Misc.sortEquipmentSlotDefinitions();
             Misc.loadStackableItems("./data/stackable.dat");
             playerFileHandler = new JsonFileHandler();

@@ -24,6 +24,7 @@ import com.rs.net.StreamBuffer;
 import com.rs.plugin.PluginEventDispatcher;
 import com.rs.task.TaskHandler;
 import com.rs.util.Misc;
+import com.rs.util.WeaponDefinition;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
@@ -298,6 +299,24 @@ public abstract class Client {
         send(out.getBuffer());
     }
 
+    public void sendInterfaceText(int interfaceId, String text) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(6 + text.length());
+        out.writeVariableShortPacketHeader(getEncryptor(), 126);
+        out.writeString(text);
+        out.writeShort(interfaceId, StreamBuffer.ValueType.A);
+        out.finishVariableShortPacketHeader();
+        send(out.getBuffer());
+    }
+
+    public void sendInterfaceItem(int interfaceId, int itemId, int zoom) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(7);
+        out.writeHeader(getEncryptor(), 246);
+        out.writeShort(interfaceId, StreamBuffer.ByteOrder.LITTLE);
+        out.writeShort(zoom);
+        out.writeShort(itemId);
+        send(out.getBuffer());
+    }
+
     /**
      * Sends a packet that tells the client to reset all button states.
      */
@@ -305,6 +324,27 @@ public abstract class Client {
         StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
         out.writeHeader(getEncryptor(), 68);
         send(out.getBuffer());
+    }
+
+    public void sendWeaponInterface() {
+        int weaponId = player.getAttributes().getEquipment()[Misc.EQUIPMENT_SLOT_WEAPON];
+        WeaponDefinition def = Misc.getWeaponDefinition(weaponId);
+        int interfaceId = def.getType().getInterfaceId();
+
+        // Send player weapon interface
+        if (player.getCurrentWeaponInterfaceId() != interfaceId) {
+            player.setCurrentWeaponInterfaceId(interfaceId);
+            sendSidebarInterface(0, interfaceId);
+        }
+
+        // Send interface text and model
+        if (def.getType().getWeaponNameId() != -1) {
+            sendInterfaceText(def.getType().getWeaponNameId(), def.getName());
+        }
+
+        if (def.getType().getWeaponImageId() != -1) {
+            sendInterfaceItem(def.getType().getWeaponImageId(), def.getId(), 150);
+        }
     }
 
     /**

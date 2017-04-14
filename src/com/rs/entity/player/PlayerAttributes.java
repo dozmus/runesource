@@ -389,6 +389,10 @@ public class PlayerAttributes {
             player.sendEquipment(slot, -1, 0);
             player.sendInventory();
             player.setAppearanceUpdateRequired(true);
+
+            if (slot == Misc.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
+                player.sendWeaponInterface();
+            }
         }
     }
 
@@ -428,6 +432,9 @@ public class PlayerAttributes {
             player.sendEquipment(slotId, id, getEquipmentN()[slotId]);
             player.sendInventory();
             player.setAppearanceUpdateRequired(true);
+
+            // Send new weapon interface, if necessary
+            player.sendWeaponInterface();
         }
     }
 

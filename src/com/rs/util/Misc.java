@@ -16,11 +16,14 @@ package com.rs.util;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.cedarsoftware.util.io.JsonReader;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 
@@ -137,23 +140,7 @@ public class Misc {
             1153, 1155, 1157, 1159, 1161, 1163, 1165, 2587, 2595, 2605, 2613, 2619, 2627, 2657, 2673, 3486
     };
     private static int[] FULL_MASK_IDS = {1053, 1055, 1057};
-    private static int[] WEAPON_IDS = {
-            35, 746, 747, 772, 841, 843, 845, 847, 849, 851, 853, 855, 857, 859, 861, 863, 864, 865, 866, 867, 868, 869,
-            870, 871, 872, 873, 874, 875, 876, 1203, 1205, 1207, 1209, 1211, 1213, 1215, 1217, 1219, 1219, 1221, 1223,
-            1225, 1227, 1229, 1231, 1233, 1235, 1237, 1239, 1241, 1243, 1245, 1247, 1249, 1251, 1253, 1255, 1257, 1259,
-            1261, 1263, 1265, 1269, 1271, 1273, 1275, 1291, 1293, 1295, 1297, 1299, 1301, 1303, 1305, 1321, 1323, 1325,
-            1327, 1329, 1331, 1333, 1335, 1337, 1339, 1341, 1343, 1345, 1347, 1349, 1351, 1353, 1355, 1357, 1359, 1361,
-            1363, 1365, 1367, 1369, 1371, 1373, 1375, 1377, 1379, 1381, 1383, 1385, 1387, 1389, 1391, 1393, 1395, 1397,
-            1399, 1401, 1403, 1405, 1407, 1409, 1420, 1422, 1424, 1426, 1428, 1430, 1432, 1434, 1813, 1814, 2387, 2415,
-            2416, 2417, 2425, 2497, 3053, 3054, 3095, 3096, 3097, 3098, 3099, 3100, 3101, 3170, 3171, 3172, 3173, 3174,
-            3175, 3176, 3190, 3192, 3194, 3196, 3198, 3200, 3202, 3204, 4151, 4153, 4158, 4170, 4214, 4215, 4216, 4217,
-            4218, 4219, 4220, 4221, 4222, 4223, 4236, 4415, 4444, 4580, 4582, 4584, 4584, 4587, 4675, 4710, 4718, 4726,
-            4734, 4755, 4862, 4863, 4864, 4865, 4886, 4887, 4888, 4889, 4910, 4911, 4912, 4913, 4982, 4983, 4984, 4985,
-            5016, 5056, 5057, 5058, 5059, 5654, 5655, 5656, 5657, 5658, 5659, 5660, 5661, 5662, 5663, 5664, 5665, 5666,
-            5667, 5668, 5670, 5672, 5674, 5676, 5678, 5680, 5682, 5684, 5686, 5688, 5690, 5692, 5694, 5696, 5698, 5700,
-            5702, 5704, 5706, 5708, 5710, 5712, 5714, 5716, 5718, 5720, 5722, 5724, 5726, 5728, 5730, 5734, 5736, 6523,
-            6525, 6526, 6527, 6528
-    };
+    private static WeaponDefinition[] WEAPONS;
     private static boolean[] stackableItems = new boolean[7000];
     private static char[] VALID_PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ".toCharArray();
     private static char[] VALID_USERNAME_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789! ".toCharArray();
@@ -216,7 +203,7 @@ public class Misc {
         if (Arrays.binarySearch(RING_IDS, itemID) >= 0) {
             return EQUIPMENT_SLOT_RING;
         }
-        if (Arrays.binarySearch(WEAPON_IDS, itemID) >= 0) {
+        if (searchWeaponDefinitions(itemID) >= 0) {
             return EQUIPMENT_SLOT_WEAPON;
         }
         return EQUIPMENT_SLOT_INVALID;
@@ -235,7 +222,54 @@ public class Misc {
         Arrays.sort(PLATEBODY_IDS);
         Arrays.sort(FULL_HELM_IDS);
         Arrays.sort(FULL_MASK_IDS);
-        Arrays.sort(WEAPON_IDS);
+        Arrays.sort(WEAPONS);
+    }
+
+    private static int searchWeaponDefinitions(int itemId) {
+        return searchWeaponDefinitions(0, WEAPONS.length, itemId);
+    }
+
+    private static int searchWeaponDefinitions(int fromIndex, int toIndex, int itemId) {
+        int low = fromIndex;
+        int high = toIndex - 1;
+
+        while (low <= high) {
+            int mid = (low + high) >>> 1;
+            WeaponDefinition midVal = WEAPONS[mid];
+            int cmp = midVal.getId() - itemId;
+
+            if (cmp < 0)
+                low = mid + 1;
+            else if (cmp > 0)
+                high = mid - 1;
+            else
+                return mid; // key found
+        }
+        return -(low + 1);  // key not found.
+    }
+
+    public static WeaponDefinition getWeaponDefinition(int itemId) {
+        int idx = searchWeaponDefinitions(itemId);
+
+        if (idx >= 0) {
+            return WEAPONS[idx];
+        } else {
+            throw new IllegalArgumentException("provided item id is not a weapon id (or is unhandled)");
+        }
+    }
+
+    public static void loadWeaponDefinitions(String fileName) throws Exception {
+        // Checking if file exists
+        File file = new File(fileName);
+
+        if (!file.exists()) {
+            throw new FileNotFoundException("The weapon definitions file was not found");
+        }
+
+        // Reading file
+        JsonReader reader = new JsonReader(new FileInputStream(file));
+        WEAPONS = ((ArrayList<WeaponDefinition>) reader.readObject()).toArray(new WeaponDefinition[0]);
+        reader.close();
     }
 
     public static void loadStackableItems(String fileName) {

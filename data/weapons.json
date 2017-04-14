@@ -1,0 +1,2417 @@
+{
+  "@type":"java.util.ArrayList",
+  "@items":[
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":-1,
+      "name":"Unarmed",
+      "type":{
+        "interfaceId":5855,
+        "name":"UNARMED",
+        "ordinal":0
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":35,
+      "name":"Excalibur",
+      "type":{
+        "@id":1,
+        "interfaceId":2423,
+        "name":"SWORD",
+        "ordinal":3
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":667,
+      "name":"Blurite sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":732,
+      "name":"Holy water",
+      "type":{
+        "@id":12,
+        "interfaceId":-1,
+        "name":"UNKNOWN",
+        "ordinal":22
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":746,
+      "name":"Dark dagger",
+      "type":{
+        "@id":4,
+        "interfaceId":2276,
+        "name":"DAGGER",
+        "ordinal":7
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":747,
+      "name":"Glowing dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":767,
+      "name":"Phoenix crossbow",
+      "type":{
+        "@id":10,
+        "interfaceId":1749,
+        "name":"CROSSBOW",
+        "ordinal":11
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":772,
+      "name":"Dramen staff",
+      "type":{
+        "@id":11,
+        "interfaceId":328,
+        "name":"STAFF",
+        "ordinal":2
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":800,
+      "name":"Bronze thrownaxe",
+      "type":{
+        "@id":20,
+        "interfaceId":4446,
+        "name":"THROWNAXE",
+        "ordinal":16
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":801,
+      "name":"Iron thrownaxe",
+      "type":{"@ref":20}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":802,
+      "name":"Steel thrownaxe",
+      "type":{"@ref":20}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":803,
+      "name":"Mithril thrownaxe",
+      "type":{"@ref":20}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":804,
+      "name":"Adamant thrownaxe",
+      "type":{"@ref":20}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":805,
+      "name":"Rune thrownaxe",
+      "type":{"@ref":20}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":806,
+      "name":"Bronze dart",
+      "type":{
+        "@id":7,
+        "interfaceId":4446,
+        "name":"DART",
+        "ordinal":14
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":807,
+      "name":"Iron dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":808,
+      "name":"Steel dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":809,
+      "name":"Mithril dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":810,
+      "name":"Adamant dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":811,
+      "name":"Rune dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":812,
+      "name":"Bronze dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":813,
+      "name":"Iron dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":814,
+      "name":"Steel dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":815,
+      "name":"Mithril dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":816,
+      "name":"Adamant dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":817,
+      "name":"Rune dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":818,
+      "name":"Poisoned dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":825,
+      "name":"Bronze javelin",
+      "type":{
+        "@id":5,
+        "interfaceId":4446,
+        "name":"KNIFE",
+        "ordinal":13
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":826,
+      "name":"Iron javelin",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":827,
+      "name":"Steel javelin",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":828,
+      "name":"Mithril javelin",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":829,
+      "name":"Adamant javelin",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":830,
+      "name":"Rune javelin",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":831,
+      "name":"Bronze javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":832,
+      "name":"Iron javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":833,
+      "name":"Steel javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":834,
+      "name":"Mithril javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":835,
+      "name":"Adamant javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":836,
+      "name":"Rune javelin(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":837,
+      "name":"Crossbow",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":839,
+      "name":"Longbow",
+      "type":{
+        "@id":13,
+        "interfaceId":1764,
+        "name":"BOW",
+        "ordinal":10
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":841,
+      "name":"Shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":843,
+      "name":"Oak shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":845,
+      "name":"Oak longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":847,
+      "name":"Willow longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":849,
+      "name":"Willow shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":851,
+      "name":"Maple longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":853,
+      "name":"Maple shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":855,
+      "name":"Yew longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":857,
+      "name":"Yew shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":859,
+      "name":"Magic longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":861,
+      "name":"Magic shortbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":863,
+      "name":"Iron knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":864,
+      "name":"Bronze knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":865,
+      "name":"Steel knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":866,
+      "name":"Mithril knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":867,
+      "name":"Adamant knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":868,
+      "name":"Rune knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":869,
+      "name":"Black knife",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":870,
+      "name":"Bronze knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":871,
+      "name":"Iron knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":872,
+      "name":"Steel knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":873,
+      "name":"Mithril knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":874,
+      "name":"Black knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":875,
+      "name":"Adamant knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":876,
+      "name":"Rune knife(p)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":975,
+      "name":"Machete",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1203,
+      "name":"Iron dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1205,
+      "name":"Bronze dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1207,
+      "name":"Steel dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1209,
+      "name":"Mithril dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1211,
+      "name":"Adamant dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1213,
+      "name":"Rune dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1215,
+      "name":"Dragon dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1217,
+      "name":"Black dagger",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1219,
+      "name":"Iron dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1221,
+      "name":"Bronze dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1223,
+      "name":"Steel dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1225,
+      "name":"Mithril dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1227,
+      "name":"Adamant dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1229,
+      "name":"Rune dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1231,
+      "name":"Dragon dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1233,
+      "name":"Black dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1235,
+      "name":"Poisoned dagger(p)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1237,
+      "name":"Bronze spear",
+      "type":{
+        "@id":3,
+        "interfaceId":4679,
+        "name":"SPEAR",
+        "ordinal":17
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1239,
+      "name":"Iron spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1241,
+      "name":"Steel spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1243,
+      "name":"Mithril spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1245,
+      "name":"Adamant spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1247,
+      "name":"Rune spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1249,
+      "name":"Dragon spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1251,
+      "name":"Bronze spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1253,
+      "name":"Iron spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1255,
+      "name":"Steel spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1257,
+      "name":"Mithril spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1259,
+      "name":"Adamant spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1261,
+      "name":"Rune spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1263,
+      "name":"Dragon spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1265,
+      "name":"Bronze pickaxe",
+      "type":{
+        "@id":19,
+        "interfaceId":5570,
+        "name":"PICKAXE",
+        "ordinal":18
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1267,
+      "name":"Iron pickaxe",
+      "type":{"@ref":19}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1269,
+      "name":"Steel pickaxe",
+      "type":{"@ref":19}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1271,
+      "name":"Adamant pickaxe",
+      "type":{"@ref":19}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1273,
+      "name":"Mithril pickaxe",
+      "type":{"@ref":19}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1275,
+      "name":"Rune pickaxe",
+      "type":{"@ref":19}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1277,
+      "name":"Bronze sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1279,
+      "name":"Iron sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1281,
+      "name":"Steel sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1283,
+      "name":"Black sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1285,
+      "name":"Mithril sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1287,
+      "name":"Adamant sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1289,
+      "name":"Rune sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1291,
+      "name":"Bronze longsword",
+      "type":{
+        "@id":18,
+        "interfaceId":4705,
+        "name":"LONGSWORD",
+        "ordinal":5
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1293,
+      "name":"Iron longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1295,
+      "name":"Steel longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1297,
+      "name":"Black longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1299,
+      "name":"Mithril longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1301,
+      "name":"Adamant longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1303,
+      "name":"Rune longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1305,
+      "name":"Dragon longsword",
+      "type":{"@ref":18}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1307,
+      "name":"Bronze 2h sword",
+      "type":{
+        "@id":17,
+        "interfaceId":4705,
+        "name":"SWORD_2H",
+        "ordinal":4
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1309,
+      "name":"Iron 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1311,
+      "name":"Steel 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1313,
+      "name":"Black 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1315,
+      "name":"Mithril 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1317,
+      "name":"Adamant 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1319,
+      "name":"Rune 2h sword",
+      "type":{"@ref":17}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1321,
+      "name":"Bronze scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1323,
+      "name":"Iron scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1325,
+      "name":"Steel scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1327,
+      "name":"Black scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1329,
+      "name":"Mithril scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1331,
+      "name":"Adamant scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1333,
+      "name":"Rune scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1335,
+      "name":"Iron warhammer",
+      "type":{
+        "@id":9,
+        "interfaceId":425,
+        "name":"WARHAMMER",
+        "ordinal":6
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1337,
+      "name":"Bronze warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1339,
+      "name":"Steel warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1341,
+      "name":"Black warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1343,
+      "name":"Mithril warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1345,
+      "name":"Adamnt warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1347,
+      "name":"Rune warhammer",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1349,
+      "name":"Iron axe",
+      "type":{
+        "@id":8,
+        "interfaceId":1698,
+        "name":"BATTLE_AXE",
+        "ordinal":9
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1351,
+      "name":"Bronze axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1353,
+      "name":"Steel axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1355,
+      "name":"Mithril axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1357,
+      "name":"Adamant axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1359,
+      "name":"Rune axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1361,
+      "name":"Black axe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1363,
+      "name":"Iron battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1365,
+      "name":"Steel battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1367,
+      "name":"Black battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1369,
+      "name":"Mithril battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1371,
+      "name":"Adamant battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1373,
+      "name":"Rune battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1375,
+      "name":"Bronze battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1377,
+      "name":"Dragon battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1379,
+      "name":"Staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1381,
+      "name":"Staff of air",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1383,
+      "name":"Staff of water",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1385,
+      "name":"Staff of earth",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1387,
+      "name":"Staff of fire",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1389,
+      "name":"Magic staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1391,
+      "name":"Battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1393,
+      "name":"Fire battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1395,
+      "name":"Water battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1397,
+      "name":"Air battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1399,
+      "name":"Earth battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1401,
+      "name":"Mystic fire staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1403,
+      "name":"Mystic water staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1405,
+      "name":"Mystic air staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1407,
+      "name":"Mystic earth staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1409,
+      "name":"Iban's staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1419,
+      "name":"Scythe",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1420,
+      "name":"Iron mace",
+      "type":{
+        "@id":2,
+        "interfaceId":3796,
+        "name":"MACE",
+        "ordinal":12
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1422,
+      "name":"Bronze mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1424,
+      "name":"Steel mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1426,
+      "name":"Black mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1428,
+      "name":"Mithril mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1430,
+      "name":"Adamant mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1432,
+      "name":"Rune mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":1434,
+      "name":"Dragon mace",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2402,
+      "name":"Silverlight",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2415,
+      "name":"Saradomin staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2416,
+      "name":"Guthix staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2417,
+      "name":"Zamorak staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2460,
+      "name":"Flowers",
+      "type":{
+        "@id":16,
+        "interfaceId":2423,
+        "name":"FLOWERS",
+        "ordinal":1
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2462,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2464,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2466,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2468,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2470,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2472,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2474,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2476,
+      "name":"Flowers",
+      "type":{"@ref":16}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2883,
+      "name":"Ogre bow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2952,
+      "name":"Wolfbane",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2961,
+      "name":"Silver sickle",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":2963,
+      "name":"Silver sickle(b)",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3053,
+      "name":"Lava battlestaff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3054,
+      "name":"Mystic lava staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3093,
+      "name":"Black dart",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3094,
+      "name":"Black dart(p)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3095,
+      "name":"Bronze claws",
+      "type":{
+        "@id":15,
+        "interfaceId":7762,
+        "name":"CLAW",
+        "ordinal":19
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3096,
+      "name":"Iron claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3097,
+      "name":"Steel claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3098,
+      "name":"Black claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3099,
+      "name":"Mithril claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3100,
+      "name":"Adamant claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3101,
+      "name":"Rune claws",
+      "type":{"@ref":15}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3170,
+      "name":"Bronze spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3171,
+      "name":"Iron spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3172,
+      "name":"Steel spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3173,
+      "name":"Mithril spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3174,
+      "name":"Adamant spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3175,
+      "name":"Rune spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3176,
+      "name":"Dragon spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3190,
+      "name":"Bronze halberd",
+      "type":{
+        "@id":14,
+        "interfaceId":8460,
+        "name":"HALBERD",
+        "ordinal":20
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3192,
+      "name":"Iron halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3194,
+      "name":"Steel halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3196,
+      "name":"Black halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3198,
+      "name":"Mithril halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3200,
+      "name":"Adamant halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3202,
+      "name":"Rune halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3204,
+      "name":"Dragon halberd",
+      "type":{"@ref":14}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3757,
+      "name":"Fremennik blade",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":3899,
+      "name":"Iron sickle",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4037,
+      "name":"Saradomin banner",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4039,
+      "name":"Zamorak banner",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4068,
+      "name":"Decorative sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4086,
+      "name":"Trollweiss",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4151,
+      "name":"Abyssal whip",
+      "type":{
+        "interfaceId":12290,
+        "name":"WHIP",
+        "ordinal":21
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4153,
+      "name":"Granite maul",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4158,
+      "name":"Leaf-bladed spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4170,
+      "name":"Slayer's staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4212,
+      "name":"New crystal bow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4214,
+      "name":"Crystal bow full",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4215,
+      "name":"Crystal bow 9/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4216,
+      "name":"Crystal bow 8/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4217,
+      "name":"Crystal bow 7/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4218,
+      "name":"Crystal bow 6/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4219,
+      "name":"Crystal bow 5/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4220,
+      "name":"Crystal bow 4/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4221,
+      "name":"Crystal bow 3/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4222,
+      "name":"Crystal bow 2/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4223,
+      "name":"Crystal bow 1/10",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4236,
+      "name":"Oak longbow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4503,
+      "name":"Decorative sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4508,
+      "name":"Decorative sword",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4565,
+      "name":"Basket of eggs",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4566,
+      "name":"Rubber chicken",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4580,
+      "name":"Black spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4582,
+      "name":"Black spear(p)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4584,
+      "name":"Black spear(kp)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4587,
+      "name":"Dragon scimitar",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4599,
+      "name":"Oak-blackjack",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4600,
+      "name":"Willow-blackjack",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4675,
+      "name":"Ancient staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4710,
+      "name":"Ahrims staff",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4718,
+      "name":"Dharoks greataxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4726,
+      "name":"Guthans warspear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4734,
+      "name":"Karils crossbow",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4747,
+      "name":"Torags hammers",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4755,
+      "name":"Veracs flail",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4827,
+      "name":"Comp ogre bow",
+      "type":{"@ref":13}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4862,
+      "name":"Ahrims staff 100",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4863,
+      "name":"Ahrims staff 75",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4864,
+      "name":"Ahrims staff 50",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4865,
+      "name":"Ahrims staff 25",
+      "type":{"@ref":11}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4886,
+      "name":"Dharoks axe 100",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4887,
+      "name":"Dharoks axe 75",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4888,
+      "name":"Dharoks axe 50",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4889,
+      "name":"Dharoks axe 25",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4910,
+      "name":"Guthans spear 100",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4911,
+      "name":"Guthans spear 75",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4912,
+      "name":"Guthans spear 50",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4913,
+      "name":"Guthans spear 25",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4934,
+      "name":"Karils x-bow 100",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4935,
+      "name":"Karils x-bow 75",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4936,
+      "name":"Karils x-bow 50",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4937,
+      "name":"Karils x-bow 25",
+      "type":{"@ref":10}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4958,
+      "name":"Torags hammer 100",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4959,
+      "name":"Torags hammer 75",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4960,
+      "name":"Torags hammer 50",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4961,
+      "name":"Torags hammer 25",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4982,
+      "name":"Veracs flail 100",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4983,
+      "name":"Veracs flail 75",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4984,
+      "name":"Veracs flail 50",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":4985,
+      "name":"Veracs flail 25",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5016,
+      "name":"Bone spear",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5018,
+      "name":"Bone club",
+      "type":{"@ref":9}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5056,
+      "name":"Dwarven battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5057,
+      "name":"Dwarven battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5058,
+      "name":"Dwarven battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5059,
+      "name":"Dwarven battleaxe",
+      "type":{"@ref":8}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5628,
+      "name":"Bronze dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5629,
+      "name":"Iron dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5630,
+      "name":"Steel dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5631,
+      "name":"Black dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5632,
+      "name":"Mithril dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5633,
+      "name":"Adamant dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5634,
+      "name":"Rune dart(+)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5635,
+      "name":"Bronze dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5636,
+      "name":"Iron dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5637,
+      "name":"Steel dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5638,
+      "name":"Black dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5639,
+      "name":"Mithril dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5640,
+      "name":"Adamant dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5641,
+      "name":"Rune dart(s)",
+      "type":{"@ref":7}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5642,
+      "name":"Bronze javelin(+)",
+      "type":{
+        "@id":6,
+        "interfaceId":4446,
+        "name":"JAVELIN",
+        "ordinal":15
+      }
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5643,
+      "name":"Iron javelin(+)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5644,
+      "name":"Steel javelin(+)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5645,
+      "name":"Mithril javelin(+)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5646,
+      "name":"Adamant javelin(+)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5647,
+      "name":"Rune javelin(+)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5648,
+      "name":"Bronze javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5649,
+      "name":"Iron javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5650,
+      "name":"Steel javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5651,
+      "name":"Mithril javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5652,
+      "name":"Adamant javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5653,
+      "name":"Rune javelin(s)",
+      "type":{"@ref":6}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5654,
+      "name":"Bronze knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5655,
+      "name":"Iron knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5656,
+      "name":"Steel knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5657,
+      "name":"Mithril knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5658,
+      "name":"Black knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5659,
+      "name":"Adamant knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5660,
+      "name":"Rune knife(+)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5661,
+      "name":"Bronze knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5662,
+      "name":"Iron knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5663,
+      "name":"Steel knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5664,
+      "name":"Mithril knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5665,
+      "name":"Black knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5666,
+      "name":"Adamant knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5667,
+      "name":"Rune knife(s)",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5668,
+      "name":"Iron dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5670,
+      "name":"Bronze dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5672,
+      "name":"Steel dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5674,
+      "name":"Mithril dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5676,
+      "name":"Adamant dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5678,
+      "name":"Rune dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5680,
+      "name":"Dragon dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5682,
+      "name":"Black dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5684,
+      "name":"Poisoned dagger(+)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5686,
+      "name":"Iron dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5688,
+      "name":"Bronze dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5690,
+      "name":"Steel dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5692,
+      "name":"Mithril dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5694,
+      "name":"Adamant dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5696,
+      "name":"Rune dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5698,
+      "name":"Dragon dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5700,
+      "name":"Black dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5702,
+      "name":"Poisoned dagger(s)",
+      "type":{"@ref":4}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5704,
+      "name":"Bronze spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5706,
+      "name":"Iron spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5708,
+      "name":"Steel spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5710,
+      "name":"Mithril spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5712,
+      "name":"Adamant spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5714,
+      "name":"Rune spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5716,
+      "name":"Dragon spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5718,
+      "name":"Bronze spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5720,
+      "name":"Iron spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5722,
+      "name":"Steel spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5724,
+      "name":"Mithril spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5726,
+      "name":"Adamant spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5728,
+      "name":"Rune spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5730,
+      "name":"Dragon spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5734,
+      "name":"Black spear(+)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":5736,
+      "name":"Black spear(s)",
+      "type":{"@ref":3}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6082,
+      "name":"Fixed device",
+      "type":{"@ref":12}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6313,
+      "name":"Opal machete",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6315,
+      "name":"Jade machete",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6317,
+      "name":"Red topaz machete",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6408,
+      "name":"Oak blackjack(a)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6410,
+      "name":"Oak blackjack(d)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6412,
+      "name":"Willow blackjack(a)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6414,
+      "name":"Willow blackjack(d)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6416,
+      "name":"Maple blackjack",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6418,
+      "name":"Maple blackjack(a)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6420,
+      "name":"Maple blackjack(d)",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6522,
+      "name":"Toktz-xil-ul",
+      "type":{"@ref":5}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6523,
+      "name":"Toktz-xil-ak",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6525,
+      "name":"Toktz-xil-ek",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6526,
+      "name":"Toktz-mej-tal",
+      "type":{"@ref":1}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6527,
+      "name":"Tzhaar-ket-em",
+      "type":{"@ref":2}
+    },
+    {
+      "@type":"com.rs.util.WeaponDefinition",
+      "id":6528,
+      "name":"Tzhaar-ket-om",
+      "type":{"@ref":9}
+    }
+  ]
+}

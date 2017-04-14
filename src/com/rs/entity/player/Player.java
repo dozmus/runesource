@@ -41,8 +41,9 @@ import java.util.List;
 public class Player extends Client {
 
     private static final int[] SIDEBAR_INTERFACE_IDS = {
-            2423, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 4445, 147, 6299
+            -1, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 4445, 147, 6299
     };
+    private int currentWeaponInterfaceId = -2;
     private final List<Player> players = new LinkedList<>();
     private final List<Npc> npcs = new LinkedList<>();
     PlayerAttributes attributes = new PlayerAttributes();
@@ -165,11 +166,12 @@ public class Player extends Client {
         sendInventory();
         sendSkills();
         sendEquipment();
+        sendWeaponInterface();
         setUpdateRequired(true);
         setAppearanceUpdateRequired(true);
 
         // Send sidebar interfaces
-        for (int i = 0; i < SIDEBAR_INTERFACE_IDS.length; i++) {
+        for (int i = 1; i < SIDEBAR_INTERFACE_IDS.length; i++) {
             sendSidebarInterface(i, SIDEBAR_INTERFACE_IDS[i]);
         }
         sendRunEnergy();
@@ -486,5 +488,13 @@ public class Player extends Client {
 
     public void startGraphic(int graphicId) {
         startGraphic(graphicId, 0);
+    }
+
+    public int getCurrentWeaponInterfaceId() {
+        return currentWeaponInterfaceId;
+    }
+
+    public void setCurrentWeaponInterfaceId(int currentWeaponInterfaceId) {
+        this.currentWeaponInterfaceId = currentWeaponInterfaceId;
     }
 }
