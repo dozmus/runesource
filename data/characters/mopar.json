@@ -165,5 +165,11 @@
     0,
     0,
     0
-  ]
+  ],
+  "friends":{
+    "@type":"java.util.HashMap"
+  },
+  "ignored":{
+    "@type":"java.util.HashMap"
+  }
 }

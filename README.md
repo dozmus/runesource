@@ -16,7 +16,10 @@ RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the g
 * Lots of misc. stuff (emotes, running, etc.)
 * [More planned...](https://github.com/PureCS/runesource/issues)
 
-### How To
+### F.A.Q.
+#### What is the 'mopar' account's password
+`test`
+
 #### Change server name/starting position/maximum connections per host/whether or not to hash password
 Edit the server config file in /data/settings.json.
 Note: If you change the hash passwords variable any existing accounts will be rendered inaccessible, unless if you change it back.
