@@ -18,7 +18,6 @@ package com.rs.io;
 
 import com.cedarsoftware.util.io.JsonReader;
 import com.cedarsoftware.util.io.JsonWriter;
-import com.rs.Server;
 import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerAttributes;
 
@@ -47,7 +46,7 @@ public final class JsonFileHandler implements PlayerFileHandler {
         }
 
         // Generating pretty json
-        Map<String, Object> args = new HashMap<String, Object>();
+        Map<String, Object> args = new HashMap<>();
         args.put("JsonWriter.PRETTY_PRINT", true);
         String json = JsonWriter.objectToJson(player.getAttributes(), args);
         json = JsonWriter.formatJson(json);

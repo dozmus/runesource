@@ -16,6 +16,7 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.util.Tickable;
 import groovy.lang.GroovyObject;
 
 /**
@@ -25,7 +26,7 @@ import groovy.lang.GroovyObject;
  * @author Pure_
  * @author blakeman8192
  */
-public abstract class Plugin {
+public abstract class Plugin implements Tickable {
 
     private GroovyObject instance;
 

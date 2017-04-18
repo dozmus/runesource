@@ -16,6 +16,7 @@ package com.rs.task;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.util.Tickable;
 import com.rs.entity.player.Player;
 
 /**
@@ -23,14 +24,14 @@ import com.rs.entity.player.Player;
  *
  * @author Pure_
  */
-public abstract class Task {
+public abstract class Task implements Tickable {
 
     private boolean running;
     private int currentDelay;
-    private int delay;
-    private boolean runOnce;
-    private Player player;
-    private Object[] args;
+    private final int delay;
+    private final boolean runOnce;
+    private final Player player;
+    private final Object[] args;
     private int ticks;
 
     /**
@@ -68,7 +69,7 @@ public abstract class Task {
     /**
      * Performs a logic tick, this checks if the task can be executed yet.
      */
-    public void tick() {
+    public void tick() throws Exception {
         if (running && currentDelay-- <= 0) {
             process();
             ticks++;

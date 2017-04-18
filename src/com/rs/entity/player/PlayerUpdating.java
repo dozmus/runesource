@@ -20,6 +20,7 @@ package com.rs.entity.player;
 import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.net.StreamBuffer;
+import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 
 import java.util.ArrayList;
@@ -62,11 +63,11 @@ public final class PlayerUpdating {
         // Find other players in region
         List<Player> othersFromRegion = new ArrayList<>();
 
-        for (int i = 0; i < WorldHandler.getPlayers().length; i++) {
+        for (int i = 0; i < WorldHandler.getInstance().getPlayers().length; i++) {
             if (player.getPlayers().size() + othersFromRegion.size() >= 255) {
                 break; // Local player limit has been reached.
             }
-            Player other = WorldHandler.getPlayers()[i];
+            Player other = WorldHandler.getInstance().getPlayers()[i];
 
             if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
                 continue;
@@ -150,87 +151,87 @@ public final class PlayerUpdating {
         int[] e = player.getAttributes().getEquipment();
 
         // Hat.
-        if (e[Misc.EQUIPMENT_SLOT_HEAD] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_HEAD]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_HEAD] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_HEAD]);
         } else {
             block.writeByte(0);
         }
 
         // Cape.
-        if (e[Misc.EQUIPMENT_SLOT_CAPE] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_CAPE]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_CAPE] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_CAPE]);
         } else {
             block.writeByte(0);
         }
 
         // Amulet.
-        if (e[Misc.EQUIPMENT_SLOT_AMULET] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_AMULET]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_AMULET] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_AMULET]);
         } else {
             block.writeByte(0);
         }
 
         // Weapon.
-        if (e[Misc.EQUIPMENT_SLOT_WEAPON] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_WEAPON]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_WEAPON] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_WEAPON]);
         } else {
             block.writeByte(0);
         }
 
         // Chest.
-        if (e[Misc.EQUIPMENT_SLOT_CHEST] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_CHEST]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_CHEST] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_CHEST]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_CHEST]);
         }
 
         // Shield.
-        if (e[Misc.EQUIPMENT_SLOT_SHIELD] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_SHIELD]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_SHIELD] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_SHIELD]);
         } else {
             block.writeByte(0);
         }
 
         // Arms TODO: Check platebody/non-platebody.
-        if (e[Misc.EQUIPMENT_SLOT_CHEST] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_CHEST]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_CHEST] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_ARMS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_ARMS]);
         }
 
         // Legs.
-        if (e[Misc.EQUIPMENT_SLOT_LEGS] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_LEGS]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_LEGS] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_LEGS]);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_LEGS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_LEGS]);
         }
 
         // Head (with a hat already on).
-        if (Misc.isFullHelm(e[Misc.EQUIPMENT_SLOT_HEAD]) || Misc.isFullMask(Misc.EQUIPMENT_SLOT_HEAD)) {
+        if (EquipmentHelper.isFullHelm(e[EquipmentHelper.EQUIPMENT_SLOT_HEAD]) || EquipmentHelper.isFullMask(EquipmentHelper.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_HEAD]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_HEAD]);
         }
 
         // Hands.
-        if (e[Misc.EQUIPMENT_SLOT_HANDS] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_HANDS]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_HANDS] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_HANDS]);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_HANDS]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_HANDS]);
         }
 
         // Feet.
-        if (e[Misc.EQUIPMENT_SLOT_FEET] > 1) {
-            block.writeShort(0x200 + e[Misc.EQUIPMENT_SLOT_FEET]);
+        if (e[EquipmentHelper.EQUIPMENT_SLOT_FEET] > 1) {
+            block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_FEET]);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_FEET]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_FEET]);
         }
 
         // Beard.
-        if (Misc.isFullHelm(e[Misc.EQUIPMENT_SLOT_HEAD]) || Misc.isFullMask(Misc.EQUIPMENT_SLOT_HEAD)) {
+        if (EquipmentHelper.isFullHelm(e[EquipmentHelper.EQUIPMENT_SLOT_HEAD]) || EquipmentHelper.isFullMask(EquipmentHelper.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + player.getAttributes().getAppearance()[Misc.APPEARANCE_SLOT_BEARD]);
+            block.writeShort(0x100 + player.getAttributes().getAppearance()[EquipmentHelper.APPEARANCE_SLOT_BEARD]);
         }
 
         // Player colors
@@ -247,7 +248,7 @@ public final class PlayerUpdating {
         block.writeShort(0x336); // turn 90 ccw
         block.writeShort(0x338); // run
 
-        block.writeLong(PlayerAttributes.encodeBase37(player.getAttributes().getUsername()));
+        block.writeLong(Misc.encodeBase37(player.getAttributes().getUsername()));
         block.writeByte(3); // Combat level.
         block.writeShort(0); // Total level.
 
@@ -411,7 +412,7 @@ public final class PlayerUpdating {
      */
     public static void appendChat(Player player, StreamBuffer.OutBuffer out) {
         out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
-        out.writeByte(player.getAttributes().getStaffRights());
+        out.writeByte(player.getAttributes().getPrivilege().toInt());
         out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
         out.writeBytesReverse(player.getChatText());
     }

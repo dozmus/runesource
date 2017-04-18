@@ -47,9 +47,9 @@ public class Npc extends Player {
     }
 
     @Override
-    public void process() {
+    public void tick() {
         // NPC-specific processing.
-        getMovementHandler().process();
+        getMovementHandler().tick();
     }
 
     @Override

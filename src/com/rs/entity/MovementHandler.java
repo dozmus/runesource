@@ -18,6 +18,7 @@ package com.rs.entity;
 
 import com.rs.entity.npc.Npc;
 import com.rs.entity.player.Player;
+import com.rs.util.Tickable;
 
 import java.util.Deque;
 import java.util.LinkedList;
@@ -27,10 +28,10 @@ import java.util.LinkedList;
  *
  * @author blakeman8192
  */
-public class MovementHandler {
+public class MovementHandler implements Tickable {
 
     private final Player player;
-    private Deque<Point> waypoints = new LinkedList<Point>();
+    private final Deque<Point> waypoints = new LinkedList<>();
     private boolean runToggled = false;
     private boolean runPath = false;
 
@@ -43,8 +44,8 @@ public class MovementHandler {
         this.player = player;
     }
 
-    public void process() {
-        Point walkPoint = null;
+    public void tick() {
+        Point walkPoint;
         Point runPoint = null;
 
         // Handle the movement.

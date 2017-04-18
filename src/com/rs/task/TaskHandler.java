@@ -31,7 +31,7 @@ public final class TaskHandler {
     /**
      * A collection of tasks.
      */
-    private static ArrayList<Task> tasks = new ArrayList<Task>();
+    private static final ArrayList<Task> tasks = new ArrayList<>();
 
     /**
      * Performs a processing task on all active tasks.
@@ -47,7 +47,11 @@ public final class TaskHandler {
             }
 
             // Processing task
-            task.tick();
+            try {
+                task.tick();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
     }
 

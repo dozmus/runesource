@@ -18,13 +18,14 @@ package com.rs.entity.player;
 
 import com.rs.Server;
 import com.rs.entity.Position;
+import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents all player attributes that are saved to the disk.
+ * Represents all player attributes that are persistent.
  *
  * @author Pure_
  */
@@ -33,7 +34,7 @@ public class PlayerAttributes {
     private String username;
     private String password;
     private Position position = new Position(0, 0);
-    private int staffRights = 0;
+    private Player.Privilege privilege = Player.Privilege.REGULAR;
     private int gender = Misc.GENDER_MALE;
     private float runEnergy = 100;
     private final int[] appearance = new int[7];
@@ -46,62 +47,6 @@ public class PlayerAttributes {
     private final int[] equipmentN = new int[14];
     private final Map<Long, String> friends = new HashMap<>();
     private final Map<Long, String> ignored = new HashMap<>();
-
-    private static final char[] VALID_CHARACTERS = {
-            '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
-            'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
-            't', 'u', 'v', 'w', 'x', 'y', 'z', '0', '1', '2',
-            '3', '4', '5', '6', '7', '8', '9'
-    };
-
-    /**
-     * Converts the username to a long value.
-     */
-    public static long encodeBase37(String name) {
-        long l = 0L;
-
-        for (int i = 0; i < name.length() && i < 12; i++) {
-            char c = name.charAt(i);
-            l *= 37L;
-
-            if (c >= 'A' && c <= 'Z')
-                l += (1 + c) - 65;
-            else if (c >= 'a' && c <= 'z')
-                l += (1 + c) - 97;
-            else if (c >= '0' && c <= '9')
-                l += (27 + c) - 48;
-        }
-
-        while (l % 37L == 0L && l != 0L)
-            l /= 37L;
-        return l;
-    }
-
-    /**
-     * Converts the long into a username.
-     */
-    public static String decodeBase37(long name) throws IllegalArgumentException {
-        try {
-            if (name <= 0L || name >= 0x5b5b57f8a98a5dd1L) {
-                throw new IllegalArgumentException();
-            }
-
-            if (name % 37L == 0L) {
-                throw new IllegalArgumentException();
-            }
-            int i = 0;
-            char ac[] = new char[12];
-
-            while (name != 0L) {
-                long l1 = name;
-                name /= 37L;
-                ac[11 - i++] = VALID_CHARACTERS[(int) (l1 - name * 37L)];
-            }
-            return new String(ac, 12 - i, i);
-        } catch (RuntimeException ignored) {
-        }
-        throw new IllegalArgumentException();
-    }
 
     public int[] getColors() {
         return colors;
@@ -140,13 +85,13 @@ public class PlayerAttributes {
         position.setAs(Server.getInstance().getSettings().getStartPosition());
 
         // Set the default appearance.
-        appearance[Misc.APPEARANCE_SLOT_CHEST] = 18;
-        appearance[Misc.APPEARANCE_SLOT_ARMS] = 26;
-        appearance[Misc.APPEARANCE_SLOT_LEGS] = 36;
-        appearance[Misc.APPEARANCE_SLOT_HEAD] = 0;
-        appearance[Misc.APPEARANCE_SLOT_HANDS] = 33;
-        appearance[Misc.APPEARANCE_SLOT_FEET] = 42;
-        appearance[Misc.APPEARANCE_SLOT_BEARD] = 10;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_CHEST] = 18;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_ARMS] = 26;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_LEGS] = 36;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_HEAD] = 0;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_HANDS] = 33;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_FEET] = 42;
+        appearance[EquipmentHelper.APPEARANCE_SLOT_BEARD] = 10;
 
         // Set the default colors.
         colors[0] = 7;
@@ -183,12 +128,12 @@ public class PlayerAttributes {
         this.gender = gender;
     }
 
-    public int getStaffRights() {
-        return staffRights;
+    public Player.Privilege getPrivilege() {
+        return privilege;
     }
 
-    public void setStaffRights(int staffRights) {
-        this.staffRights = staffRights;
+    public void setPrivilege(Player.Privilege privilege) {
+        this.privilege = privilege;
     }
 
     public Position getPosition() {
@@ -260,7 +205,7 @@ public class PlayerAttributes {
      * the inventory
      */
     public boolean hasInventoryItem(int id, int amount) {
-        if (Misc.isStackable(id)) {
+        if (EquipmentHelper.isStackable(id)) {
             // Check if an existing stack has the amount of item.
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
@@ -288,7 +233,7 @@ public class PlayerAttributes {
      * @param amount the desired amount
      */
     public void removeInventoryItem(int id, int amount) {
-        if (Misc.isStackable(id)) {
+        if (EquipmentHelper.isStackable(id)) {
             // Find the existing stack (if there is one).
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
@@ -324,7 +269,7 @@ public class PlayerAttributes {
      * inventory
      */
     public boolean addInventoryItem(int id, int amount, Player player) {
-        if (Misc.isStackable(id)) {
+        if (EquipmentHelper.isStackable(id)) {
             // Add the item to an existing stack if there is one.
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
@@ -405,7 +350,7 @@ public class PlayerAttributes {
             player.sendInventory();
             player.setAppearanceUpdateRequired(true);
 
-            if (slot == Misc.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
+            if (slot == EquipmentHelper.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
                 player.sendWeaponInterface();
             }
         }
@@ -420,13 +365,13 @@ public class PlayerAttributes {
     public void equip(int slot, Player player) {
         int id = getInventory()[slot];
         int amount = getInventoryN()[slot];
-        int slotId = Misc.getEquipmentSlot(id);
-        boolean stackable = Misc.isStackable(id);
+        int slotId = EquipmentHelper.getEquipmentSlot(id);
+        boolean stackable = EquipmentHelper.isStackable(id);
 
-        if (slotId == Misc.EQUIPMENT_SLOT_INVALID)
+        if (slotId == EquipmentHelper.EQUIPMENT_SLOT_INVALID)
             return;
 
-        if (amount > 1 && Misc.isStackable(id) || amount == 1) {
+        if (amount > 1 && EquipmentHelper.isStackable(id) || amount == 1) {
             // Empty the inventory slot first, to make room.
             getInventory()[slot] = -1;
             getInventoryN()[slot] = 0;
@@ -487,7 +432,7 @@ public class PlayerAttributes {
     }
 
     public void addFriend(long name) {
-        friends.put(name, decodeBase37(name));
+        friends.put(name, Misc.decodeBase37(name));
     }
 
     public void removeFriend(long name) {
@@ -499,7 +444,7 @@ public class PlayerAttributes {
     }
 
     public void addIgnored(long name) {
-        ignored.put(name, decodeBase37(name));
+        ignored.put(name, Misc.decodeBase37(name));
     }
 
     public void removeIgnored(long name) {

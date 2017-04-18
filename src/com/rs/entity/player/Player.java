@@ -17,6 +17,7 @@ package com.rs.entity.player;
  */
 
 import com.rs.Server;
+import com.rs.util.Tickable;
 import com.rs.WorldHandler;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
@@ -38,7 +39,7 @@ import java.util.List;
  * @author blakeman8192
  * @author Pure_
  */
-public class Player extends Client {
+public class Player extends Client implements Tickable {
 
     private static final int[] SIDEBAR_INTERFACE_IDS = {
             -1, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 4445, 147, 6299
@@ -85,14 +86,14 @@ public class Player extends Client {
      *
      * @throws Exception
      */
-    public void process() throws Exception {
+    public void tick() throws Exception {
         // If no is received packet for more than 5 seconds, disconnect.
         if (getTimeoutStopwatch().elapsed() > 5000) {
             System.out.println(this + " timed out.");
             disconnect();
             return;
         }
-        movementHandler.process();
+        movementHandler.tick();
     }
 
     /**
@@ -129,18 +130,17 @@ public class Player extends Client {
         int response = Misc.LOGIN_RESPONSE_OK;
 
         // Updating credentials
-        String rawPassword = password;
         getAttributes().setUsername(username);
         getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
 
         // Check if the player is already logged in.
-        if (WorldHandler.isPlayerOnline(username)) {
+        if (WorldHandler.getInstance().isPlayerOnline(username)) {
             response = Misc.LOGIN_RESPONSE_ACCOUNT_ONLINE;
         }
 
         // Load the player and send the login response.
         PlayerFileHandler.LoadResponse status = Server.getInstance().getPlayerFileHandler().load(this);
-        boolean validCredentials = Misc.validatePassword(rawPassword) && Misc.validateUsername(getAttributes().getUsername());
+        boolean validCredentials = Misc.validatePassword(password) && Misc.validateUsername(getAttributes().getUsername());
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
         if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials)
@@ -151,7 +151,7 @@ public class Player extends Client {
         // Sending response
         StreamBuffer.OutBuffer resp = StreamBuffer.newOutBuffer(3);
         resp.writeByte(response);
-        resp.writeByte(getAttributes().getStaffRights());
+        resp.writeByte(getAttributes().getPrivilege().toInt());
         resp.writeByte(0);
         send(resp.getBuffer());
 
@@ -161,7 +161,7 @@ public class Player extends Client {
         }
 
         // Initialising player session
-        WorldHandler.register(this);
+        WorldHandler.getInstance().register(this);
         sendMapRegion();
         sendInventory();
         sendSkills();
@@ -184,7 +184,7 @@ public class Player extends Client {
     @Override
     public void logout() throws Exception {
         PluginEventDispatcher.dispatchLogout(this);
-        WorldHandler.unregister(this);
+        WorldHandler.getInstance().unregister(this);
         setStage(Client.Stage.LOGGED_OUT);
         System.out.println(this + " has logged out.");
 
@@ -496,5 +496,15 @@ public class Player extends Client {
 
     public void setCurrentWeaponInterfaceId(int currentWeaponInterfaceId) {
         this.currentWeaponInterfaceId = currentWeaponInterfaceId;
+    }
+
+    public enum Privilege {
+        REGULAR,
+        MODERATOR,
+        ADMINISTRATOR;
+
+        public int toInt() {
+            return ordinal();
+        }
     }
 }

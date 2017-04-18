@@ -3,11 +3,14 @@
   "username":"mopar",
   "password":"9f86d081884c7d659a2feaa0c55ad015a3bf4f1b2b0b822cd15d6c15b0f00a08",
   "position":{
-    "x":3224,
-    "y":3216,
+    "x":3223,
+    "y":3215,
     "z":0
   },
-  "staffRights":0,
+  "privileges":{
+    "name":"REGULAR",
+    "ordinal":0
+  },
   "gender":0,
   "runEnergy":100.0,
   "appearance":[
@@ -138,7 +141,7 @@
     -1,
     -1,
     -1,
-    -1,
+    4151,
     -1,
     -1,
     -1,
@@ -154,7 +157,7 @@
     0,
     0,
     0,
-    0,
+    1,
     0,
     0,
     0,

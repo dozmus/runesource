@@ -30,9 +30,17 @@ public abstract class StreamBuffer {
     /**
      * Bit masks.
      */
-    public static final int[] BIT_MASK = {0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff, 0x7fff, 0xffff, 0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff, 0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1};
-    private static char[] xlateTable = {' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b', 'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',', ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[', ']'};
-    private static char[] decodeBuf = new char[4096];
+    public static final int[] BIT_MASK = {
+            0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff, 0x7fff, 0xffff,
+            0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff,
+            0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1
+    };
+    private static final char[] textUnpackTable = {
+            ' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b',
+            'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',',
+            ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[', ']'
+    };
+    private static final char[] decodeBuf = new char[4096];
     /**
      * The current AccessType of the buffer.
      */
@@ -48,7 +56,7 @@ public abstract class StreamBuffer {
      * @param data the data
      * @return a new InBuffer
      */
-    public static final InBuffer newInBuffer(ByteBuffer data) {
+    public static InBuffer newInBuffer(ByteBuffer data) {
         return new InBuffer(data);
     }
 
@@ -58,7 +66,7 @@ public abstract class StreamBuffer {
      * @param size the size
      * @return a new OutBuffer
      */
-    public static final OutBuffer newOutBuffer(int size) {
+    public static OutBuffer newOutBuffer(int size) {
         return new OutBuffer(size);
     }
 
@@ -66,9 +74,9 @@ public abstract class StreamBuffer {
         int value = 0;
         int n = 1000;
 
-        for (int i = 0; i < data.length; i++) {
-            int num = (data[i] & 0xFF) * n;
-            value += (int) num;
+        for (byte b : data) {
+            int num = (b & 0xFF) * n;
+            value += num;
 
             if (n > 1) {
                 n = n / 1000;
@@ -83,11 +91,11 @@ public abstract class StreamBuffer {
             int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
             if (highNibble == -1) {
                 if (val < 13)
-                    decodeBuf[idx++] = xlateTable[val];
+                    decodeBuf[idx++] = textUnpackTable[val];
                 else
                     highNibble = val;
             } else {
-                decodeBuf[idx++] = xlateTable[((highNibble << 4) + val) - 195];
+                decodeBuf[idx++] = textUnpackTable[((highNibble << 4) + val) - 195];
                 highNibble = -1;
             }
         }
@@ -144,7 +152,7 @@ public abstract class StreamBuffer {
      *
      * @author blakeman8192
      */
-    public static enum ByteOrder {
+    public enum ByteOrder {
         LITTLE, BIG, MIDDLE, INVERSE_MIDDLE
     }
 
@@ -156,7 +164,7 @@ public abstract class StreamBuffer {
      *
      * @author blakeman8192
      */
-    public static enum ValueType {
+    public enum ValueType {
         STANDARD, A, C, S
     }
 
@@ -167,7 +175,7 @@ public abstract class StreamBuffer {
      *
      * @author blakeman8192
      */
-    public static enum AccessType {
+    public enum AccessType {
         BYTE_ACCESS, BIT_ACCESS
     }
 
@@ -181,7 +189,7 @@ public abstract class StreamBuffer {
         /**
          * The internal buffer.
          */
-        private ByteBuffer buffer;
+        private final ByteBuffer buffer;
 
         /**
          * Creates a new InBuffer.

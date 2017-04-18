@@ -30,7 +30,7 @@ import java.util.List;
  */
 public final class PluginEventDispatcher {
 
-    private static HashMap<String, List<String>> bindings = new HashMap<>();
+    private static final HashMap<String, List<String>> bindings = new HashMap<>();
     public static final String ACTION_BUTTON_HANDLER_EVENT = "onActionButton";
     public static final String COMMAND_HANDLER_EVENT = "onCommand";
     /**

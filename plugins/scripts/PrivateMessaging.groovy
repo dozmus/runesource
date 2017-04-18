@@ -1,13 +1,13 @@
 import com.rs.WorldHandler
 import com.rs.entity.player.Client
 import com.rs.entity.player.Player
-import com.rs.entity.player.PlayerAttributes
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.ModifyFriendsListEvent
-import com.rs.plugin.event.PlayerLoggedOutEvent
 import com.rs.plugin.event.PlayerLoggedOnEvent
+import com.rs.plugin.event.PlayerLoggedOutEvent
 import com.rs.plugin.event.PrivateMessageEvent
+import com.rs.util.Misc
 
 class PrivateMessaging extends Plugin {
 
@@ -20,11 +20,11 @@ class PrivateMessaging extends Plugin {
     void onLogin(PlayerLoggedOnEvent evt) throws Exception {
         // Update this player
         Player player = evt.getPlayer()
-        long playerName = PlayerAttributes.encodeBase37(player.getAttributes().getUsername())
+        long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
         player.sendFriendsListStatus(1) // status: connecting
 
         player.getAttributes().getFriends().each { Map.Entry<Long, String> entry ->
-            player.sendAddFriend(entry.key, WorldHandler.isPlayerOnline(entry.value) ? 10 : 0)
+            player.sendAddFriend(entry.key, WorldHandler.getInstance().isPlayerOnline(entry.value) ? 10 : 0)
         }
 
         // TODO send ignores
@@ -32,7 +32,7 @@ class PrivateMessaging extends Plugin {
         player.sendFriendsListStatus(2) // status: connected
 
         // Update other players
-        WorldHandler.getPlayers().each { other ->
+        WorldHandler.getInstance().getPlayers().each { other ->
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
                 return
 
@@ -44,9 +44,9 @@ class PrivateMessaging extends Plugin {
 
     void onLogout(PlayerLoggedOutEvent evt) throws Exception {
         // Update other players
-        long playerName = PlayerAttributes.encodeBase37(evt.getPlayer().getAttributes().getUsername())
+        long playerName = Misc.encodeBase37(evt.getPlayer().getAttributes().getUsername())
 
-        WorldHandler.getPlayers().each { other ->
+        WorldHandler.getInstance().getPlayers().each { other ->
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
                 return
 
@@ -58,13 +58,13 @@ class PrivateMessaging extends Plugin {
 
     void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
         // Ignore if trying to add self
-        if (PlayerAttributes.encodeBase37(evt.getPlayer().getAttributes().getUsername()) == evt.getTarget())
+        if (Misc.encodeBase37(evt.getPlayer().getAttributes().getUsername()) == evt.getTarget())
             return
 
         // Regular logic
         evt.getPlayer().getAttributes().addFriend(evt.getTarget())
 
-        if (WorldHandler.isPlayerOnline(PlayerAttributes.decodeBase37(evt.getTarget()))) {
+        if (WorldHandler.getInstance().isPlayerOnline(Misc.decodeBase37(evt.getTarget()))) {
             evt.getPlayer().sendAddFriend(evt.getTarget(), 10)
         }
     }
@@ -76,9 +76,9 @@ class PrivateMessaging extends Plugin {
     void onPrivateMessage(PrivateMessageEvent evt) throws Exception {
         try {
             Player player = evt.getPlayer()
-            Player other = WorldHandler.getPlayer(PlayerAttributes.decodeBase37(evt.getTarget()))
-            other.sendPrivateMessage(PlayerAttributes.encodeBase37(player.getAttributes().getUsername()),
-                    MESSAGE_COUNTER++, player.getAttributes().getStaffRights(), evt.getText())
+            Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
+            other.sendPrivateMessage(Misc.encodeBase37(player.getAttributes().getUsername()),
+                    MESSAGE_COUNTER++, player.getAttributes().getPrivilege(), evt.getText())
         } catch (IndexOutOfBoundsException ex) {
             player.sendMessage("This player is not online.")
         }

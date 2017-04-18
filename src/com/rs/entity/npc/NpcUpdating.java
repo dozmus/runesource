@@ -28,7 +28,7 @@ import java.util.Iterator;
  *
  * @author blakeman8192
  */
-public class NpcUpdating {
+public final class NpcUpdating {
 
     /**
      * Updates all NPCs for the argued Player.
@@ -46,10 +46,13 @@ public class NpcUpdating {
 
         // Update the NPCs in the local list.
         out.writeBits(8, player.getNpcs().size());
+
         for (Iterator<Npc> i = player.getNpcs().iterator(); i.hasNext(); ) {
             Npc npc = i.next();
+
             if (npc.getPosition().isViewableFrom(player.getPosition()) && npc.isVisible()) {
                 NpcUpdating.updateNpcMovement(out, npc);
+
                 if (npc.isUpdateRequired()) {
                     NpcUpdating.updateState(block, npc);
                 }
@@ -62,13 +65,16 @@ public class NpcUpdating {
         }
 
         // Update the local NPC list itself.
-        for (int i = 0; i < WorldHandler.getNpcs().length; i++) {
-            Npc npc = WorldHandler.getNpcs()[i];
+        for (int i = 0; i < WorldHandler.getInstance().getNpcs().length; i++) {
+            Npc npc = WorldHandler.getInstance().getNpcs()[i];
+
             if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()) {
                 continue;
             }
+
             if (npc.getPosition().isViewableFrom(player.getPosition())) {
                 addNpc(out, player, npc);
+
                 if (npc.isUpdateRequired()) {
                     NpcUpdating.updateState(block, npc);
                 }

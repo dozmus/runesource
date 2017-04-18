@@ -28,7 +28,7 @@ public interface PlayerFileHandler {
      *
      * @param player the player to save
      */
-    public void save(Player player) throws Exception;
+    void save(Player player) throws Exception;
 
 
     /**
@@ -37,21 +37,21 @@ public interface PlayerFileHandler {
      * @param player the player to load.
      * @return login response
      */
-    public LoadResponse load(Player player) throws Exception;
+    LoadResponse load(Player player) throws Exception;
 
     /**
      * The directory to store player files.
      *
      * @return player file directory
      */
-    public String getDirectory();
+    String getDirectory();
 
     /**
      * A collection of possible load responses.
      *
      * @author Pure_
      */
-    public enum LoadResponse {
+    enum LoadResponse {
         SUCCESS, NOT_FOUND, INVALID_CREDENTIALS
     }
 }

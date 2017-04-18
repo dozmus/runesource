@@ -30,27 +30,27 @@ package com.rs.net;
  *
  * @author Graham Edgecombe
  */
-public class ISAACCipher {
+public final class ISAACCipher {
 
     /**
      * The golden ratio.
      */
-    public static final int RATIO = 0x9e3779b9;
+    private static final int RATIO = 0x9e3779b9;
 
     /**
      * The log of the size of the results and memory arrays.
      */
-    public static final int SIZE_LOG = 8;
+    private static final int SIZE_LOG = 8;
 
     /**
      * The size of the results and memory arrays.
      */
-    public static final int SIZE = 1 << SIZE_LOG;
+    private static final int SIZE = 1 << SIZE_LOG;
 
     /**
      * For pseudo-random lookup.
      */
-    public static final int MASK = (SIZE - 1) << 2;
+    private static final int MASK = (SIZE - 1) << 2;
 
     /**
      * The count through the results.
@@ -60,12 +60,12 @@ public class ISAACCipher {
     /**
      * The results.
      */
-    private int results[] = new int[SIZE];
+    private final int[] results = new int[SIZE];
 
     /**
      * The internal memory state.
      */
-    private int memory[] = new int[SIZE];
+    private final int[] memory = new int[SIZE];
 
     /**
      * The accumulator.
@@ -88,9 +88,7 @@ public class ISAACCipher {
      * @param seed The seed.
      */
     public ISAACCipher(int[] seed) {
-        for (int i = 0; i < seed.length; i++) {
-            results[i] = seed[i];
-        }
+        System.arraycopy(seed, 0, results, 0, seed.length);
         init(true);
     }
 
@@ -110,9 +108,10 @@ public class ISAACCipher {
     /**
      * Generates 256 results.
      */
-    public void isaac() {
+    private void isaac() {
         int i, j, x, y;
         b += ++c;
+
         for (i = 0, j = SIZE / 2; i < SIZE / 2; ) {
             x = memory[i];
             a ^= a << 13;
@@ -138,6 +137,7 @@ public class ISAACCipher {
             memory[i] = y = memory[(x & MASK) >> 2] + a + b;
             results[i++] = b = memory[((y >> SIZE_LOG) & MASK) >> 2] + x;
         }
+
         for (j = 0; j < SIZE / 2; ) {
             x = memory[i];
             a ^= a << 13;
@@ -168,12 +168,13 @@ public class ISAACCipher {
     /**
      * Initialises the ISAAC.
      *
-     * @param flag Flag indicating if we should perform a second pass.
+     * @param secondPass Flag indicating if we should perform a second pass.
      */
-    public void init(boolean flag) {
+    private void init(boolean secondPass) {
         int i;
         int a, b, c, d, e, f, g, h;
         a = b = c = d = e = f = g = h = RATIO;
+
         for (i = 0; i < 4; ++i) {
             a ^= b << 11;
             d += a;
@@ -200,8 +201,9 @@ public class ISAACCipher {
             c += h;
             a += b;
         }
+
         for (i = 0; i < SIZE; i += 8) {
-            if (flag) {
+            if (secondPass) {
                 a += results[i];
                 b += results[i + 1];
                 c += results[i + 2];
@@ -244,7 +246,8 @@ public class ISAACCipher {
             memory[i + 6] = g;
             memory[i + 7] = h;
         }
-        if (flag) {
+
+        if (secondPass) {
             for (i = 0; i < SIZE; i += 8) {
                 a += memory[i];
                 b += memory[i + 1];

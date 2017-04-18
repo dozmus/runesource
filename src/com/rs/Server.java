@@ -22,7 +22,9 @@ import com.rs.io.JsonFileHandler;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
+import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
+import com.rs.util.Tickable;
 
 import java.io.File;
 import java.io.IOException;
@@ -39,7 +41,7 @@ import java.util.Map;
  *
  * @author blakeman8192
  */
-public class Server implements Runnable {
+public class Server implements Runnable, Tickable {
 
     private static Server instance;
     private final String host;
@@ -137,9 +139,9 @@ public class Server implements Runnable {
             // Loading configuration
             Misc.Stopwatch timer = new Misc.Stopwatch();
             settings = Settings.load("./data/settings.json");
-            Misc.loadWeaponDefinitions("./data/weapons.json");
-            Misc.sortEquipmentSlotDefinitions();
-            Misc.loadStackableItems("./data/stackable.dat");
+            EquipmentHelper.loadWeaponDefinitions("./data/weapons.json");
+            EquipmentHelper.sortEquipmentSlotDefinitions();
+            EquipmentHelper.loadStackableItems("./data/stackable.dat");
             playerFileHandler = new JsonFileHandler();
             System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
 
@@ -153,7 +155,7 @@ public class Server implements Runnable {
             System.out.println("Started as " + settings.getServerName());
 
             while (true) {
-                cycle();
+                tick();
                 sleep();
             }
         } catch (Exception ex) {
@@ -178,7 +180,7 @@ public class Server implements Runnable {
 
         // Finally, initialize whatever else we need.
         cycleTimer = new Misc.Stopwatch();
-        clientMap = new HashMap<SelectionKey, Client>();
+        clientMap = new HashMap<>();
     }
 
     /**
@@ -221,7 +223,7 @@ public class Server implements Runnable {
     /**
      * Performs a server tick.
      */
-    private void cycle() {
+    public void tick() {
         // First, handle all network events.
         try {
             selector.selectNow();
@@ -242,7 +244,7 @@ public class Server implements Runnable {
 
         // Next, perform game processing.
         try {
-            WorldHandler.process();
+            WorldHandler.getInstance().tick();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -255,6 +257,7 @@ public class Server implements Runnable {
      */
     private void sleep() throws InterruptedException {
         long sleepTime = cycleRate - cycleTimer.elapsed();
+
         if (sleepTime > 0) {
             Thread.sleep(sleepTime);
         } else {

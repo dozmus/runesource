@@ -23,6 +23,7 @@ import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
 import com.rs.plugin.PluginEventDispatcher;
 import com.rs.task.TaskHandler;
+import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 import com.rs.util.WeaponDefinition;
 
@@ -263,12 +264,12 @@ public abstract class Client {
         send(out.getBuffer());
     }
 
-    public void sendPrivateMessage(long name, int messageCounter, int rights, byte[] text) {
+    public void sendPrivateMessage(long name, int messageCounter, Player.Privilege privilege, byte[] text) {
         StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(15 + text.length);
         out.writeVariablePacketHeader(getEncryptor(), 196);
         out.writeLong(name);
         out.writeInt(messageCounter);
-        out.writeByte(rights);
+        out.writeByte(privilege.toInt());
 
         for (byte b : text)
             out.writeByte(b);
@@ -327,8 +328,8 @@ public abstract class Client {
     }
 
     public void sendWeaponInterface() {
-        int weaponId = player.getAttributes().getEquipment()[Misc.EQUIPMENT_SLOT_WEAPON];
-        WeaponDefinition def = Misc.getWeaponDefinition(weaponId);
+        int weaponId = player.getAttributes().getEquipment()[EquipmentHelper.EQUIPMENT_SLOT_WEAPON];
+        WeaponDefinition def = EquipmentHelper.getWeaponDefinition(weaponId);
         int interfaceId = def.getType().getInterfaceId();
 
         // Send player weapon interface

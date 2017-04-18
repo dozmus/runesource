@@ -22,42 +22,51 @@ import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerUpdating;
 import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
+import com.rs.util.Tickable;
 
 /**
  * Handles all logged in players.
  *
  * @author blakeman8192
  */
-public class WorldHandler {
+public final class WorldHandler implements Tickable {
 
+    /**
+     * Singleton instance.
+     */
+    private static final WorldHandler instance = new WorldHandler();
     /**
      * All registered players.
      */
-    private static final Player[] players = new Player[2048];
-
+    private final Player[] players = new Player[2048];
     /**
      * All registered NPCs.
      */
-    private static final Npc[] npcs = new Npc[8192];
-    private static int playerAmount = 0;
-    private static int npcAmount = 0;
+    private final Npc[] npcs = new Npc[8192];
+    private int playerAmount = 0;
+    private int npcAmount = 0;
 
     /**
-     * Performs the processing of all players.
-     *
-     * @throws Exception
+     * @return Singleton instance.
      */
-    public static void process() throws Exception {
+    public static WorldHandler getInstance() {
+        return instance;
+    }
+
+    /**
+     * Performs the processing of all world functions.
+     */
+    public void tick() throws Exception {
         // XXX: Maybe we could implement loop fusion to speed this up.
 
         // Perform any logic processing for players.
-        for (int i = 0; i < players.length; i++) {
-            Player player = players[i];
+        for (Player player : players) {
             if (player == null) {
                 continue;
             }
+
             try {
-                player.process();
+                player.tick();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 player.disconnect();
@@ -65,13 +74,13 @@ public class WorldHandler {
         }
 
         // Perform any logic processing for NPCs.
-        for (int i = 0; i < npcs.length; i++) {
-            Npc npc = npcs[i];
+        for (Npc npc : npcs) {
             if (npc == null) {
                 continue;
             }
+
             try {
-                npc.process();
+                npc.tick();
             } catch (Exception ex) {
                 ex.printStackTrace();
                 unregister(npc);
@@ -85,11 +94,11 @@ public class WorldHandler {
         TaskHandler.tick();
 
         // Update all players.
-        for (int i = 0; i < players.length; i++) {
-            Player player = players[i];
+        for (Player player : players) {
             if (player == null) {
                 continue;
             }
+
             try {
                 PlayerUpdating.update(player);
                 NpcUpdating.update(player);
@@ -100,11 +109,11 @@ public class WorldHandler {
         }
 
         // Reset all players after tick.
-        for (int i = 0; i < players.length; i++) {
-            Player player = players[i];
+        for (Player player : players) {
             if (player == null) {
                 continue;
             }
+
             try {
                 player.reset();
             } catch (Exception ex) {
@@ -114,11 +123,11 @@ public class WorldHandler {
         }
 
         // Reset all NPCs after tick.
-        for (int i = 0; i < npcs.length; i++) {
-            Npc npc = npcs[i];
+        for (Npc npc : npcs) {
             if (npc == null) {
                 continue;
             }
+
             try {
                 npc.reset();
             } catch (Exception ex) {
@@ -133,7 +142,7 @@ public class WorldHandler {
      *
      * @param player the player
      */
-    public static void register(Player player) {
+    public void register(Player player) {
         for (int i = 1; i < players.length; i++) {
             if (players[i] == null) {
                 players[i] = player;
@@ -150,7 +159,7 @@ public class WorldHandler {
      *
      * @param npc the npc
      */
-    public static void register(Npc npc) {
+    public void register(Npc npc) {
         for (int i = 1; i < npcs.length; i++) {
             if (npcs[i] == null) {
                 npcs[i] = npc;
@@ -167,7 +176,7 @@ public class WorldHandler {
      *
      * @param player the player
      */
-    public static void unregister(Player player) {
+    public void unregister(Player player) {
         if (player.getSlot() == -1) {
             return;
         }
@@ -180,7 +189,7 @@ public class WorldHandler {
      *
      * @param npc the npc
      */
-    public static void unregister(Npc npc) {
+    public void unregister(Npc npc) {
         if (npc.getSlot() == -1) {
             return;
         }
@@ -191,22 +200,22 @@ public class WorldHandler {
     /**
      * @return the amount of online players
      */
-    public static int playerAmount() {
+    public int playerAmount() {
         return playerAmount;
     }
 
     /**
      * @return the amount of online NPCs
      */
-    public static int npcAmount() {
+    public int npcAmount() {
         return npcAmount;
     }
 
-    public static boolean isPlayerOnline(String username) {
-        if (playerAmount() == 0)
+    public boolean isPlayerOnline(String username) {
+        if (playerAmount == 0)
             return false;
 
-        for (Player player : WorldHandler.getPlayers()) {
+        for (Player player : players) {
             if (player == null)
                 continue;
 
@@ -217,11 +226,11 @@ public class WorldHandler {
         return false;
     }
 
-    public static Player getPlayer(String username) {
-        if (playerAmount() == 0)
+    public Player getPlayer(String username) {
+        if (playerAmount == 0)
             throw new IndexOutOfBoundsException();
 
-        for (Player player : WorldHandler.getPlayers()) {
+        for (Player player : players) {
             if (player == null)
                 continue;
 
@@ -237,7 +246,7 @@ public class WorldHandler {
      *
      * @return the players
      */
-    public static Player[] getPlayers() {
+    public Player[] getPlayers() {
         return players;
     }
 
@@ -246,7 +255,7 @@ public class WorldHandler {
      *
      * @return the npcs
      */
-    public static Npc[] getNpcs() {
+    public Npc[] getNpcs() {
         return npcs;
     }
 

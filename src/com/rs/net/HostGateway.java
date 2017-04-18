@@ -21,17 +21,16 @@ import com.rs.Server;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * A static gateway type class that is used to limit the maximum amount of
- * connections per host.
+ * A static gateway type class that is used to limit the maximum amount of connections per host.
  *
  * @author blakeman8192
  */
-public class HostGateway {
+public final class HostGateway {
 
     /**
      * Used to keep track of hosts and their amount of connections.
      */
-    private static ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<String, Integer>();
+    private static final ConcurrentHashMap<String, Integer> map = new ConcurrentHashMap<>();
 
     /**
      * Checks the host into the gateway.
