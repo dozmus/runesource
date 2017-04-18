@@ -20,6 +20,7 @@ import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
+import com.rs.util.OverflowException;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -268,13 +269,15 @@ public class PlayerAttributes {
      * @return whether or not the amount of the item could be added to the
      * inventory
      */
-    public boolean addInventoryItem(int id, int amount, Player player) {
+    public boolean addInventoryItem(int id, int amount, Player player) throws OverflowException {
         if (EquipmentHelper.isStackable(id)) {
             // Add the item to an existing stack if there is one.
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
                     if (Misc.willAdditionOverflow(getInventoryN()[i], amount)) {
-                        return false;
+                        int remainder = amount - (Integer.MAX_VALUE - getInventoryN()[i]);
+                        getInventoryN()[i] = Integer.MAX_VALUE;
+                        throw new OverflowException(remainder);
                     } else {
                         getInventoryN()[i] += amount;
                         return true;
@@ -347,16 +350,25 @@ public class PlayerAttributes {
 		 * completed in its entirety because it's impossible to equip multiple
 		 * non-stackable items.
 		 */
-        if (addInventoryItem(id, amount, player)) {
-            getEquipment()[slot] = -1;
-            getEquipmentN()[slot] = 0;
-            player.sendEquipment(slot, -1, 0);
-            player.sendInventory();
-            player.setAppearanceUpdateRequired(true);
-
-            if (slot == EquipmentHelper.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
-                player.sendWeaponInterface();
+		try {
+            if (addInventoryItem(id, amount, player)) {
+                getEquipment()[slot] = -1;
+                getEquipmentN()[slot] = 0;
+            } else {
+                return;
             }
+        } catch (OverflowException ex) {
+            System.out.println(ex.getRemainder());
+            getEquipmentN()[slot] = ex.getRemainder();
+        }
+
+        // Send update
+        player.sendEquipment(slot, getEquipment()[slot], getEquipmentN()[slot]);
+        player.sendInventory();
+        player.setAppearanceUpdateRequired(true);
+
+        if (slot == EquipmentHelper.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
+            player.sendWeaponInterface();
         }
     }
 
