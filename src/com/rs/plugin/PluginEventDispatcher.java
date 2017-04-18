@@ -43,6 +43,8 @@ public final class PluginEventDispatcher {
     public static final String PLAYER_ON_LOGOUT_EVENT = "onLogout";
     public static final String ADD_FRIEND_EVENT = "onAddFriend";
     public static final String REMOVE_FRIEND_EVENT = "onRemoveFriend";
+    public static final String ADD_IGNORE_EVENT = "onAddIgnore";
+    public static final String REMOVE_IGNORE_EVENT = "onRemoveIgnore";
     public static final String PRIVATE_MESSAGE_EVENT = "onPrivateMessage";
 
     /**
@@ -105,6 +107,30 @@ public final class PluginEventDispatcher {
 
         for (String pluginName : bindings.get(PLAYER_ON_LOGOUT_EVENT)) {
             PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGOUT_EVENT, evt);
+        }
+        return true;
+    }
+
+    public static boolean dispatchAddIgnore(Player player, long name) {
+        if (!bindings.containsKey(ADD_IGNORE_EVENT)) {
+            return false;
+        }
+        ModifyIgnoredListEvent evt = new ModifyIgnoredListEvent(player, name, ModifyIgnoredListEvent.Type.ADD);
+
+        for (String pluginName : bindings.get(ADD_IGNORE_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, ADD_IGNORE_EVENT, evt);
+        }
+        return true;
+    }
+
+    public static boolean dispatchRemoveIgnore(Player player, long name) {
+        if (!bindings.containsKey(REMOVE_IGNORE_EVENT)) {
+            return false;
+        }
+        ModifyIgnoredListEvent evt = new ModifyIgnoredListEvent(player, name, ModifyIgnoredListEvent.Type.REMOVE);
+
+        for (String pluginName : bindings.get(REMOVE_IGNORE_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, REMOVE_IGNORE_EVENT, evt);
         }
         return true;
     }

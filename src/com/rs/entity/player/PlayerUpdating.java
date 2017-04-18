@@ -105,7 +105,8 @@ public final class PlayerUpdating {
                 PlayerUpdating.updateOtherPlayerMovement(other, out);
 
                 if (other.isUpdateRequired()) {
-                    PlayerUpdating.updateState(other, block, false, false);
+                    boolean ignored = player.getAttributes().isIgnored(Misc.encodeBase37(other.getAttributes().getUsername()));
+                    PlayerUpdating.updateState(other, block, false, ignored);
                 }
             } else {
                 out.writeBit(true);
@@ -116,9 +117,10 @@ public final class PlayerUpdating {
 
         // Update the local player list.
         for (Player other : othersFromRegion) {
+            boolean ignored = player.getAttributes().isIgnored(Misc.encodeBase37(other.getAttributes().getUsername()));
             player.getPlayers().add(other);
             PlayerUpdating.addPlayer(out, player, other);
-            PlayerUpdating.updateState(other, block, true, false);
+            PlayerUpdating.updateState(other, block, true, ignored);
         }
 
         // Append the attributes block to the main packet.

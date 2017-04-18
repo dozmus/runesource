@@ -16,9 +16,9 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.net.HostGateway;
 import com.rs.Server;
 import com.rs.entity.Position;
+import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
 import com.rs.plugin.PluginEventDispatcher;
@@ -33,6 +33,7 @@ import java.nio.channels.SelectionKey;
 import java.nio.channels.SocketChannel;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.Collection;
 
 /**
  * The class behind a Player that handles all networking-related things.
@@ -264,6 +265,17 @@ public abstract class Client {
         send(out.getBuffer());
     }
 
+    public void sendAddIgnores(Collection<Long> names) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(3 + names.size()*8);
+        out.writeVariableShortPacketHeader(getEncryptor(), 214);
+
+        for (long name : names) {
+            out.writeLong(name);
+        }
+        out.finishVariableShortPacketHeader();
+        send(out.getBuffer());
+    }
+
     public void sendPrivateMessage(long name, int messageCounter, Player.Privilege privilege, byte[] text) {
         StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(15 + text.length);
         out.writeVariablePacketHeader(getEncryptor(), 196);
@@ -394,6 +406,12 @@ public abstract class Client {
                     break;
                 case 185: // Button clicking.
                     PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
+                    break;
+                case 133: // Add ignore.
+                    PluginEventDispatcher.dispatchAddIgnore(player, in.readLong());
+                    break;
+                case 74: // Remove ignore.
+                    PluginEventDispatcher.dispatchRemoveIgnore(player, in.readLong());
                     break;
                 case 188: // Add friend.
                     PluginEventDispatcher.dispatchAddFriend(player, in.readLong());
