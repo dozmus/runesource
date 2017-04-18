@@ -172,6 +172,28 @@ public class Misc {
     }
 
     /**
+     * Source: https://stackoverflow.com/a/3001879
+     */
+    public static boolean willAdditionOverflow(int left, int right) {
+        if (right < 0 && right != Integer.MIN_VALUE) {
+            return willSubtractionOverflow(left, -right);
+        } else {
+            return (~(left ^ right) & (left ^ (left + right))) < 0;
+        }
+    }
+
+    /**
+     * Source: https://stackoverflow.com/a/3001879
+     */
+    public static boolean willSubtractionOverflow(int left, int right) {
+        if (right < 0) {
+            return willAdditionOverflow(left, -right);
+        } else {
+            return ((left ^ right) & (left ^ (left - right))) < 0;
+        }
+    }
+
+    /**
      * A simple logging utility that prefixes all messages with a timestamp.
      *
      * @author blakeman8192

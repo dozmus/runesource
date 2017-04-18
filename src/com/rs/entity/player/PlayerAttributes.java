@@ -273,8 +273,12 @@ public class PlayerAttributes {
             // Add the item to an existing stack if there is one.
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
-                    getInventoryN()[i] += amount;
-                    return true;
+                    if (Misc.willAdditionOverflow(getInventoryN()[i], amount)) {
+                        return false;
+                    } else {
+                        getInventoryN()[i] += amount;
+                        return true;
+                    }
                 }
             }
 
@@ -378,7 +382,13 @@ public class PlayerAttributes {
 
             // Check if we're merging stacks
             if (stackable && getEquipment()[slotId] == id) {
-                getEquipmentN()[slotId] += amount;
+                if (Misc.willAdditionOverflow(getEquipmentN()[slotId], amount)) {
+                    getInventory()[slot] = id;
+                    getInventoryN()[slot] = amount - (Integer.MAX_VALUE - getEquipmentN()[slotId]);
+                    getEquipmentN()[slotId] = Integer.MAX_VALUE;
+                } else {
+                    getEquipmentN()[slotId] += amount;
+                }
             } else {
                 // Unequip the equipment slot if need be.
                 if (getEquipment()[slotId] != -1) {

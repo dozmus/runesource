@@ -154,15 +154,15 @@ public abstract class Client {
      * Sends the equipment to the client.
      *
      * @param slot       the equipment slot
-     * @param itemID     the item ID
+     * @param itemId     the item ID
      * @param itemAmount the item amount
      */
-    public void sendEquipment(int slot, int itemID, int itemAmount) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1 + 2 + 2 + 1 + 2 + 3 + 2);
+    public void sendEquipment(int slot, int itemId, int itemAmount) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(13);
         out.writeVariableShortPacketHeader(getEncryptor(), 34);
         out.writeShort(1688);
         out.writeByte(slot);
-        out.writeShort(itemID + 1);
+        out.writeShort(itemId + 1);
 
         if (itemAmount > 254) {
             out.writeByte(255);
@@ -394,6 +394,7 @@ public abstract class Client {
                     int interfaceID = in.readShort(StreamBuffer.ValueType.A);
                     int slot = in.readShort(StreamBuffer.ValueType.A);
                     in.readShort(StreamBuffer.ValueType.A); // Item ID.
+
                     if (interfaceID == 1688) {
                         player.attributes.unequip(slot, player);
                     }
