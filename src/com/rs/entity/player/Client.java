@@ -166,7 +166,7 @@ public abstract class Client {
 
         if (itemAmount > 254) {
             out.writeByte(255);
-            out.writeShort(itemAmount);
+            out.writeInt(itemAmount);
         } else {
             out.writeByte(itemAmount);
         }
