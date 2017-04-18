@@ -12,6 +12,8 @@ import com.rs.util.Misc
 
 class PrivateMessaging extends Plugin {
 
+    private static final int MAX_FRIENDS_LIST = 200
+    private static final int MAX_IGNORED_LIST = 200
     private int MESSAGE_COUNTER = 1_000_000 * Math.random()
 
     @Override
@@ -68,19 +70,24 @@ class PrivateMessaging extends Plugin {
     void onAddIgnore(ModifyIgnoredListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
+        String otherPlayerName = Misc.decodeBase37(evt.getTarget())
 
         // Ignore if trying to add self
         if (playerName == evt.getTarget())
             return
 
         // Ignore if target on friends list
-        if (evt.getPlayer().getAttributes().isFriend(evt.getTarget()))
+        if (player.getAttributes().isFriend(evt.getTarget()))
+            return
+
+        // Ignore if list full
+        if (player.getAttributes().getIgnored().size() >= MAX_IGNORED_LIST)
             return
 
         player.getAttributes().addIgnored(evt.getTarget())
 
         try {
-            Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
+            Player other = WorldHandler.getInstance().getPlayer(otherPlayerName)
 
             if (other.getAttributes().isFriend(playerName)) {
                 other.sendAddFriend(playerName, 0)
@@ -108,20 +115,25 @@ class PrivateMessaging extends Plugin {
     void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
+        String otherPlayerName = Misc.decodeBase37(evt.getTarget())
 
         // Ignore if trying to add self
         if (playerName == evt.getTarget())
             return
 
         // Ignore if target on ignored list
-        if (evt.getPlayer().getAttributes().isIgnored(evt.getTarget()))
+        if (player.getAttributes().isIgnored(evt.getTarget()))
+            return
+
+        // Ignore if list full
+        if (player.getAttributes().getFriends().size() >= MAX_FRIENDS_LIST)
             return
 
         // Regular logic
         player.getAttributes().addFriend(evt.getTarget())
 
         try {
-            Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
+            Player other = WorldHandler.getInstance().getPlayer(otherPlayerName)
             player.sendAddFriend(evt.getTarget(), other.getAttributes().isIgnored(playerName) ? 0 : 10)
         } catch (IndexOutOfBoundsException ex) {
             player.sendAddFriend(evt.getTarget(), 0)
