@@ -84,6 +84,10 @@ class PrivateMessaging extends Plugin {
         if (player.getAttributes().getIgnored().size() >= MAX_IGNORED_LIST)
             return
 
+        // Ignore if name invalid
+        if (!Misc.validateUsername(otherPlayerName))
+            return
+        
         player.getAttributes().addIgnored(evt.getTarget())
 
         try {
@@ -127,6 +131,10 @@ class PrivateMessaging extends Plugin {
 
         // Ignore if list full
         if (player.getAttributes().getFriends().size() >= MAX_FRIENDS_LIST)
+            return
+
+        // Ignore if name invalid
+        if (!Misc.validateUsername(otherPlayerName))
             return
 
         // Regular logic
