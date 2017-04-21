@@ -32,7 +32,6 @@ public class MovementHandler implements Tickable {
 
     private final Player player;
     private final Deque<Point> waypoints = new LinkedList<>();
-    private boolean runToggled = false;
     private boolean runPath = false;
 
     /**
@@ -52,12 +51,12 @@ public class MovementHandler implements Tickable {
         walkPoint = waypoints.poll();
 
         // Handling run energy
-        if (isRunToggled() || isRunPath()) {
+        if (player.getAttributes().getSettings().isRunToggled() || isRunPath()) {
             if (player.getAttributes().hasRunEnergy()) {
                 runPoint = waypoints.poll();
             } else { // Player is out of energy
                 player.sendClientSetting(173, 0);
-                setRunToggled(false);
+                player.getAttributes().getSettings().setRunToggled(false);
                 setRunPath(false);
                 runPoint = null;
             }
@@ -164,24 +163,6 @@ public class MovementHandler implements Tickable {
         if (direction > -1) {
             waypoints.add(new Point(x, y, direction));
         }
-    }
-
-    /**
-     * Gets whether or not run is toggled.
-     *
-     * @return run toggled
-     */
-    public boolean isRunToggled() {
-        return runToggled;
-    }
-
-    /**
-     * Toggles the running flag.
-     *
-     * @param runToggled the flag
-     */
-    public void setRunToggled(boolean runToggled) {
-        this.runToggled = runToggled;
     }
 
     /**

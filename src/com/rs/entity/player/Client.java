@@ -290,10 +290,7 @@ public abstract class Client {
     }
 
     /**
-     * Sends a packet that tells the client to forcibly modify the value of a setting.
-     *
-     * @param settingId
-     * @param value
+     * Sends a packet that tells the client to forcibly modify the current and default value of a setting.
      */
     public void sendClientSetting(int settingId, int value) {
         StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4);

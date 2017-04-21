@@ -11,6 +11,21 @@
     "name":"REGULAR",
     "ordinal":0
   },
+  "settings":{
+    "mouseButtons":{
+      "name":"TWO",
+      "ordinal":1
+    },
+    "brightness":{
+      "name":"NORMAL",
+      "ordinal":1
+    },
+    "chatEffects":true,
+    "splitPrivateChat":true,
+    "acceptAid":false,
+    "runToggled":false,
+    "autoRetaliate":false
+  },
   "gender":0,
   "runEnergy":100.0,
   "appearance":[

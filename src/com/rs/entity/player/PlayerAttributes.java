@@ -36,6 +36,7 @@ public class PlayerAttributes {
     private String password;
     private Position position = new Position(0, 0);
     private Player.Privilege privilege = Player.Privilege.REGULAR;
+    private PlayerSettings settings = new PlayerSettings();
     private int gender = Misc.GENDER_MALE;
     private float runEnergy = 100;
     private final int[] appearance = new int[7];
@@ -483,5 +484,9 @@ public class PlayerAttributes {
 
     public Map<Long, String> getIgnored() {
         return ignored;
+    }
+
+    public PlayerSettings getSettings() {
+        return settings;
     }
 }

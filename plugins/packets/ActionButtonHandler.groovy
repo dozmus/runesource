@@ -13,10 +13,10 @@ class ActionButtonHandler extends Plugin {
                 player.sendLogout()
                 break
             case 153:
-                player.getMovementHandler().setRunToggled true
+                player.getAttributes().getSettings().setRunToggled true
                 break
             case 152:
-                player.getMovementHandler().setRunToggled false
+                player.getAttributes().getSettings().setRunToggled false
                 break
             default:
                 println "Unhandled button: ${evt.getActionButtonId()}"
