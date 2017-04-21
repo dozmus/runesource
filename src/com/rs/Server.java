@@ -205,11 +205,8 @@ public class Server implements Runnable, Tickable {
                 break;
             }
 
-            // Make sure we can allow this connection.
-            if (!HostGateway.enter(socket.socket().getInetAddress().getHostAddress())) {
-                socket.close();
-                continue;
-            }
+            // Register the connection
+            HostGateway.enter(socket.socket().getInetAddress().getHostAddress());
 
             // Set up the new connection.
             socket.configureBlocking(false);

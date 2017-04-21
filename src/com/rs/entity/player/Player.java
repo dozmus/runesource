@@ -17,7 +17,6 @@ package com.rs.entity.player;
  */
 
 import com.rs.Server;
-import com.rs.util.Tickable;
 import com.rs.WorldHandler;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
@@ -25,9 +24,11 @@ import com.rs.entity.npc.Npc;
 import com.rs.entity.player.obj.Animation;
 import com.rs.entity.player.obj.Graphic;
 import com.rs.io.PlayerFileHandler;
+import com.rs.net.HostGateway;
 import com.rs.net.StreamBuffer;
 import com.rs.plugin.PluginEventDispatcher;
 import com.rs.util.Misc;
+import com.rs.util.Tickable;
 
 import java.nio.channels.SelectionKey;
 import java.util.LinkedList;
@@ -146,6 +147,11 @@ public class Player extends Client implements Tickable {
         if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials)
                 || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
+        }
+
+        // Check if connection limit is exceeded
+        if (HostGateway.count(getHost()) >= Server.getInstance().getSettings().getMaxConsPerHost() + 1) {
+            response = Misc.LOGIN_RESPONSE_LOGIN_LIMIT_EXCEEDED;
         }
 
         // Sending response

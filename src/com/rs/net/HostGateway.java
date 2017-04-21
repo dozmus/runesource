@@ -16,8 +16,6 @@ package com.rs.net;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.Server;
-
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -39,22 +37,14 @@ public final class HostGateway {
      * @return true if the host can connect, false if it has reached the maximum
      * amount of connections
      */
-    public static boolean enter(String host) {
+    public static void enter(String host) {
         Integer amount = map.putIfAbsent(host, 1);
 
         // If the host was not in the map, they're clear to go.
-        if (amount == null) {
-            return true;
-        }
-
-        // If they've reached the connection limit, return false.
-        if (amount == Server.getInstance().getSettings().getMaxConsPerHost()) {
-            return false;
-        }
-
         // Otherwise, replace the key with the next value if it was present.
-        map.replace(host, amount + 1);
-        return true;
+        if (amount != null) {
+            map.replace(host, amount + 1);
+        }
     }
 
     /**
@@ -72,9 +62,13 @@ public final class HostGateway {
         }
 
         // Otherwise decrement the amount of connections stored.
-        if (amount != null) {
-            map.replace(host, amount - 1);
-        }
+        map.replace(host, amount - 1);
     }
 
+    /**
+     * @return The number of connections from the given host.
+     */
+    public static int count(String host) {
+        return map.getOrDefault(host, 0);
+    }
 }
