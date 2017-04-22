@@ -24,6 +24,7 @@ import com.rs.entity.npc.Npc;
 import com.rs.entity.player.obj.Animation;
 import com.rs.entity.player.obj.Graphic;
 import com.rs.io.PlayerFileHandler;
+import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.net.StreamBuffer;
 import com.rs.plugin.PluginEventDispatcher;
@@ -148,11 +149,17 @@ public class Player extends Client implements Tickable {
         if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials)
                 || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
+            ConnectionThrottle.enter(getHost());
         }
 
         // Check if connection limit is exceeded
         if (HostGateway.count(getHost()) >= Server.getInstance().getSettings().getMaxConsPerHost() + 1) {
             response = Misc.LOGIN_RESPONSE_LOGIN_LIMIT_EXCEEDED;
+        }
+
+        // Check if login attempts exceeded
+        if (ConnectionThrottle.throttled(getHost())) {
+            response = Misc.LOGIN_RESPONSE_LOGIN_ATTEMPTS_EXCEEDED;
         }
 
         // Sending response

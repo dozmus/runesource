@@ -20,6 +20,7 @@ import com.rs.entity.player.Client;
 import com.rs.entity.player.Player;
 import com.rs.io.JsonFileHandler;
 import com.rs.io.PlayerFileHandler;
+import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
 import com.rs.util.EquipmentHelper;
@@ -237,6 +238,11 @@ public class Server implements Runnable, Tickable {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
+        }
+
+        // Next, check if connection throttling needs a clear
+        if (System.currentTimeMillis() % ConnectionThrottle.COOLDOWN == 0) {
+            ConnectionThrottle.clear();
         }
 
         // Next, perform game processing.
