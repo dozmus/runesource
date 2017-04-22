@@ -87,11 +87,11 @@ public final class PluginEventDispatcher {
         return true;
     }
 
-    public static boolean dispatchLogin(Player player) {
+    public static boolean dispatchLogin(Player player, boolean newPlayer) {
         if (!bindings.containsKey(PLAYER_ON_LOGIN_EVENT)) {
             return false;
         }
-        PlayerLoggedOnEvent evt = new PlayerLoggedOnEvent(player);
+        PlayerLoggedOnEvent evt = new PlayerLoggedOnEvent(player, newPlayer);
 
         for (String pluginName : bindings.get(PLAYER_ON_LOGIN_EVENT)) {
             PluginHandler.invokeMethod(pluginName, PLAYER_ON_LOGIN_EVENT, evt);

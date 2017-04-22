@@ -290,6 +290,25 @@ public abstract class Client {
     }
 
     /**
+     * Shows the given interface on the client.
+     */
+    public void sendInterface(int interfaceId) {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(3);
+        out.writeHeader(getEncryptor(), 97);
+        out.writeShort(interfaceId);
+        send(out.getBuffer());
+    }
+
+    /**
+     * Closes all interfaces open in the client.
+     */
+    public void sendClearScreen() {
+        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        out.writeHeader(getEncryptor(), 219);
+        send(out.getBuffer());
+    }
+
+    /**
      * Sends a packet that tells the client to forcibly modify the current and default value of a setting.
      */
     public void sendClientSetting(int settingId, int value) {
@@ -401,6 +420,37 @@ public abstract class Client {
                     slot = in.readShort(StreamBuffer.ValueType.A);
                     in.readShort(); // Interface ID.
                     player.attributes.equip(slot, player);
+                    break;
+                case 101: // Design character screen.
+                    int gender = in.readByte();
+                    int[] appearance = new int[7];
+                    int[] colors = new int[5];
+
+                    for (int i = 0; i < appearance.length; i++)
+                        appearance[i] = in.readByte();
+
+                    for (int i = 0; i < colors.length; i++)
+                        colors[i] = in.readByte();
+
+                    // Validate the interface is open
+                    if (player.getCurrentInterfaceId() != 3559)
+                        break;
+
+                    // Validate values
+                    if (gender != 0 && gender != 1)
+                        break;
+
+                    if (!Misc.validateColors(colors) || !Misc.validateAppearance(appearance))
+                        break;
+
+                    // Set changes
+                    player.getAttributes().setGender(gender);
+                    System.arraycopy(colors, 0, player.getAttributes().getColors(), 0, colors.length);
+                    System.arraycopy(appearance, 0, player.getAttributes().getAppearance(), 0, appearance.length);
+
+                    // Set update flags
+                    player.setUpdateRequired(true);
+                    player.setAppearanceUpdateRequired(true);
                     break;
                 case 185: // Button clicking.
                     PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));

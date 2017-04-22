@@ -97,6 +97,45 @@ public class Misc {
         return false;
     }
 
+    public static boolean validateColors(int[] colors) {
+        if (!in(colors[0], 0, 11))
+            return false;
+        if (!in(colors[1], 0, 15))
+            return false;
+        if (!in(colors[2], 0, 15))
+            return false;
+        if (!in(colors[3], 0, 5))
+            return false;
+        if (!in(colors[4], 0, 7))
+            return false;
+        return true;
+    }
+
+    public static boolean validateAppearance(int[] appearance) {
+        if (!in(appearance[0], 0, 8))
+            return false;
+        if (!in(appearance[1], 10, 17))
+            return false;
+        if (!in(appearance[2], 18, 25))
+            return false;
+        if (!in(appearance[3], 26, 31))
+            return false;
+        if (!in(appearance[4], 33, 34))
+            return false;
+        if (!in(appearance[5], 36, 40))
+            return false;
+        if (!in(appearance[6], 42, 43))
+            return false;
+        return true;
+    }
+
+    /**
+     * Inclusive bounds check.
+     */
+    private static boolean in(int k, int a, int b) {
+        return k >= a && k <= b;
+    }
+
     /**
      * Generates the SHA256 hash for the given input.
      *

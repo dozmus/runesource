@@ -24,7 +24,14 @@ import com.rs.plugin.PlayerEvent;
  */
 public final class PlayerLoggedOnEvent extends PlayerEvent {
 
-    public PlayerLoggedOnEvent(Player player) {
+    private final boolean newPlayer;
+
+    public PlayerLoggedOnEvent(Player player, boolean newPlayer) {
         super(player);
+        this.newPlayer = newPlayer;
+    }
+
+    public boolean isNewPlayer() {
+        return newPlayer;
     }
 }

@@ -53,6 +53,7 @@ public class Player extends Client implements Tickable {
     private Position currentRegion = new Position(0, 0, 0);
     private int primaryDirection = -1;
     private int secondaryDirection = -1;
+    private int currentInterfaceId = -1;
     private int slot = -1;
     private int chatColor;
     private int chatEffects;
@@ -184,7 +185,7 @@ public class Player extends Client implements Tickable {
         sendResetAllButtonStates();
         sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");
         System.out.println(this + " has logged in.");
-        PluginEventDispatcher.dispatchLogin(this);
+        PluginEventDispatcher.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
     }
 
     @Override
@@ -502,6 +503,14 @@ public class Player extends Client implements Tickable {
 
     public void setCurrentWeaponInterfaceId(int currentWeaponInterfaceId) {
         this.currentWeaponInterfaceId = currentWeaponInterfaceId;
+    }
+
+    public int getCurrentInterfaceId() {
+        return currentInterfaceId;
+    }
+
+    public void setCurrentInterfaceId(int currentInterfaceId) {
+        this.currentInterfaceId = currentInterfaceId;
     }
 
     public enum Privilege {
