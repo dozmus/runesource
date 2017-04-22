@@ -49,6 +49,18 @@ class CommandHandler extends Plugin {
             player.startAnimation new Animation(args[0].toInteger(), args[1].toInteger())
         }
 
+        if (commandName == "interface") {
+            if (args.length < 1)
+                return
+            player.sendInterface args[0].toInteger()
+            player.setCurrentInterfaceId args[0].toInteger()
+        }
+
+        if (commandName == "closeinterface") {
+            player.sendClearScreen()
+            player.setCurrentInterfaceId(-1)
+        }
+
         if (commandName == "energy") {
             if (args.length < 1)
                 return
