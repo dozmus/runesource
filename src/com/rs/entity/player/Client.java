@@ -447,27 +447,30 @@ public abstract class Client {
                 case 103: // Player command.
                     String command = in.readString();
                     String[] split = command.split(" ");
-                    PluginEventDispatcher.dispatchCommand(player, split[0].toLowerCase(), Arrays.copyOfRange(split, 1, split.length));
+                    String[] args = Arrays.copyOfRange(split, 1, split.length);
+                    PluginEventDispatcher.dispatchCommand(player, split[0].toLowerCase(), args);
                     break;
                 case 248: // Movement.
                 case 164: // ^
                 case 98: // ^
                     int length = packetLength;
+
                     if (packetOpcode == 248) {
                         length -= 14;
                     }
                     int steps = (length - 5) / 2;
                     int[][] path = new int[steps][2];
                     int firstStepX = in.readShort(StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+
                     for (int i = 0; i < steps; i++) {
                         path[i][0] = in.readByte();
                         path[i][1] = in.readByte();
                     }
                     int firstStepY = in.readShort(StreamBuffer.ByteOrder.LITTLE);
-
                     player.getMovementHandler().reset();
                     player.getMovementHandler().setRunPath(in.readByte(StreamBuffer.ValueType.C) == 1);
                     player.getMovementHandler().addToPath(new Position(firstStepX, firstStepY));
+
                     for (int i = 0; i < steps; i++) {
                         path[i][0] += firstStepX;
                         path[i][1] += firstStepY;
@@ -520,6 +523,7 @@ public abstract class Client {
                 // Decode the packet length.
                 if (packetLength == -1) {
                     packetLength = PACKET_LENGTHS[packetOpcode];
+
                     if (packetLength == -1) {
                         if (!inData.hasRemaining()) {
                             inData.flip();
@@ -585,6 +589,7 @@ public abstract class Client {
                 // Validate the request.
                 int request = inData.get() & 0xff;
                 inData.get(); // Name hash.
+
                 if (request != 14) {
                     System.err.println("Invalid login request: " + request);
                     disconnect();
@@ -597,7 +602,6 @@ public abstract class Client {
                 out.writeByte(0); // The response opcode, 0 for logging in.
                 out.writeLong(new SecureRandom().nextLong()); // SSK.
                 send(out.getBuffer());
-
                 setStage(Stage.LOGGING_IN);
                 break;
             case LOGGING_IN:
@@ -608,6 +612,7 @@ public abstract class Client {
 
                 // Validate the login type.
                 int loginType = inData.get();
+
                 if (loginType != 16 && loginType != 18) {
                     System.err.println("Invalid login type: " + loginType);
                     disconnect();
@@ -616,6 +621,7 @@ public abstract class Client {
 
                 // Ensure that we can read all of the login block.
                 int blockLength = inData.get() & 0xff;
+
                 if (inData.remaining() < blockLength) {
                     inData.flip();
                     inData.compact();
@@ -628,6 +634,7 @@ public abstract class Client {
 
                 // Validate the client version.
                 int clientVersion = in.readShort();
+
                 if (clientVersion != 317) {
                     System.err.println("Invalid client version: " + clientVersion);
                     disconnect();
@@ -646,6 +653,7 @@ public abstract class Client {
 
                 // Validate that the RSA block was decoded properly.
                 int rsaOpcode = in.readByte();
+
                 if (rsaOpcode != 10) {
                     System.err.println("Unable to decode RSA block properly!");
                     disconnect();
