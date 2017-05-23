@@ -28,8 +28,8 @@ import com.rs.util.Misc
 
 class PrivateMessaging extends Plugin {
 
-    private static final int MAX_FRIENDS_LIST = 200
-    private static final int MAX_IGNORED_LIST = 200
+    private static final int MAX_FRIENDS_LIST = 100
+    private static final int MAX_IGNORED_LIST = 100
     private int MESSAGE_COUNTER = 1_000_000 * Math.random()
 
     @Override
