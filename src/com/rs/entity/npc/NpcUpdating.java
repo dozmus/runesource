@@ -73,11 +73,9 @@ public final class NpcUpdating {
             }
 
             if (npc.getPosition().isViewableFrom(player.getPosition())) {
+                player.getNpcs().add(npc);
                 addNpc(out, player, npc);
-
-                if (npc.isUpdateRequired()) {
-                    NpcUpdating.updateState(block, npc);
-                }
+                NpcUpdating.updateState(block, npc);
             }
         }
 
@@ -130,7 +128,7 @@ public final class NpcUpdating {
             out.writeBit(true);
             out.writeBits(2, 1);
             out.writeBits(3, npc.getPrimaryDirection());
-            out.writeBit(true);
+            out.writeBit(npc.isUpdateRequired());
         }
     }
 
