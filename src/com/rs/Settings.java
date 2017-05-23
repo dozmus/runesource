@@ -26,7 +26,7 @@ import java.io.FileNotFoundException;
 /**
  * A collection of server settings, loaded from json.
  */
-public class Settings {
+public final class Settings {
 
     private String serverName;
     private Position startPosition;

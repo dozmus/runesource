@@ -37,8 +37,8 @@ public final class NpcUpdating {
      */
     public static void update(Player player) {
         // XXX: The buffer sizes may need to be tuned.
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2048);
-        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(1024);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(2048);
+        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(1024);
 
         // Initialize the update packet.
         out.writeVariableShortPacketHeader(player.getEncryptor(), 65);
@@ -102,7 +102,7 @@ public final class NpcUpdating {
      * @param player The player
      * @param npc    The NPC being added
      */
-    private static void addNpc(StreamBuffer.OutBuffer out, Player player, Npc npc) {
+    private static void addNpc(StreamBuffer.WriteBuffer out, Player player, Npc npc) {
         out.writeBits(14, npc.getSlot());
         Position delta = Position.delta(player.getPosition(), npc.getPosition());
         out.writeBits(5, delta.getY());
@@ -118,7 +118,7 @@ public final class NpcUpdating {
      * @param out The buffer to write to
      * @param npc The NPC to update
      */
-    private static void updateNpcMovement(StreamBuffer.OutBuffer out, Npc npc) {
+    private static void updateNpcMovement(StreamBuffer.WriteBuffer out, Npc npc) {
         if (npc.getPrimaryDirection() == -1) {
             if (npc.isUpdateRequired()) {
                 out.writeBit(true);
@@ -140,7 +140,7 @@ public final class NpcUpdating {
      * @param block The update block to append to
      * @param npc   The NPC to update
      */
-    private static void updateState(StreamBuffer.OutBuffer block, Npc npc) {
+    private static void updateState(StreamBuffer.WriteBuffer block, Npc npc) {
         int mask = 0x0;
 
         // TODO: NPC update masks.

@@ -30,17 +30,17 @@ public abstract class StreamBuffer {
     /**
      * Bit masks.
      */
-    public static final int[] BIT_MASK = {
+    public static final int[] BIT_MASKS = {
             0, 0x1, 0x3, 0x7, 0xf, 0x1f, 0x3f, 0x7f, 0xff, 0x1ff, 0x3ff, 0x7ff, 0xfff, 0x1fff, 0x3fff, 0x7fff, 0xffff,
             0x1ffff, 0x3ffff, 0x7ffff, 0xfffff, 0x1fffff, 0x3fffff, 0x7fffff, 0xffffff, 0x1ffffff, 0x3ffffff, 0x7ffffff,
             0xfffffff, 0x1fffffff, 0x3fffffff, 0x7fffffff, -1
     };
-    private static final char[] textUnpackTable = {
+    private static final char[] TEXT_UNPACK_TABLE = {
             ' ', 'e', 't', 'a', 'o', 'i', 'h', 'n', 's', 'r', 'd', 'l', 'u', 'm', 'w', 'c', 'y', 'f', 'g', 'p', 'b',
             'v', 'k', 'x', 'j', 'q', 'z', '0', '1', '2', '3', '4', '5', '6', '7', '8', '9', ' ', '!', '?', '.', ',',
             ':', ';', '(', ')', '-', '&', '*', '\\', '\'', '@', '#', '+', '=', '\243', '$', '%', '"', '[', ']'
     };
-    private static final char[] decodeBuf = new char[4096];
+    private static final char[] DECODE_BUFFER = new char[4096];
     /**
      * The current AccessType of the buffer.
      */
@@ -54,20 +54,18 @@ public abstract class StreamBuffer {
      * Creates a new InBuffer.
      *
      * @param data the data
-     * @return a new InBuffer
      */
-    public static InBuffer newInBuffer(ByteBuffer data) {
-        return new InBuffer(data);
+    public static ReadBuffer createReadBuffer(ByteBuffer data) {
+        return new ReadBuffer(data);
     }
 
     /**
      * Creates a new OutBuffer.
      *
      * @param size the size
-     * @return a new OutBuffer
      */
-    public static OutBuffer newOutBuffer(int size) {
-        return new OutBuffer(size);
+    public static WriteBuffer createWriteBuffer(int size) {
+        return new WriteBuffer(size);
     }
 
     public static int hexToInt(byte[] data) {
@@ -91,15 +89,15 @@ public abstract class StreamBuffer {
             int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
             if (highNibble == -1) {
                 if (val < 13)
-                    decodeBuf[idx++] = textUnpackTable[val];
+                    DECODE_BUFFER[idx++] = TEXT_UNPACK_TABLE[val];
                 else
                     highNibble = val;
             } else {
-                decodeBuf[idx++] = textUnpackTable[((highNibble << 4) + val) - 195];
+                DECODE_BUFFER[idx++] = TEXT_UNPACK_TABLE[((highNibble << 4) + val) - 195];
                 highNibble = -1;
             }
         }
-        return new String(decodeBuf, 0, idx);
+        return new String(DECODE_BUFFER, 0, idx);
     }
 
     /**
@@ -184,7 +182,7 @@ public abstract class StreamBuffer {
      *
      * @author blakeman8192
      */
-    public static final class InBuffer extends StreamBuffer {
+    public static final class ReadBuffer extends StreamBuffer {
 
         /**
          * The internal buffer.
@@ -196,7 +194,7 @@ public abstract class StreamBuffer {
          *
          * @param buffer the buffer
          */
-        private InBuffer(ByteBuffer buffer) {
+        private ReadBuffer(ByteBuffer buffer) {
             this.buffer = buffer;
         }
 
@@ -623,7 +621,7 @@ public abstract class StreamBuffer {
      *
      * @author blakeman8192
      */
-    public static final class OutBuffer extends StreamBuffer {
+    public static final class WriteBuffer extends StreamBuffer {
 
         /**
          * The internal buffer.
@@ -640,7 +638,7 @@ public abstract class StreamBuffer {
          *
          * @param size the size
          */
-        private OutBuffer(int size) {
+        private WriteBuffer(int size) {
             buffer = ByteBuffer.allocate(size);
         }
 
@@ -767,20 +765,20 @@ public abstract class StreamBuffer {
 
             for (; amount > bitOffset; bitOffset = 8) {
                 byte tmp = buffer.get(bytePos);
-                tmp &= ~BIT_MASK[bitOffset];
-                tmp |= (value >> (amount - bitOffset)) & BIT_MASK[bitOffset];
+                tmp &= ~BIT_MASKS[bitOffset];
+                tmp |= (value >> (amount - bitOffset)) & BIT_MASKS[bitOffset];
                 buffer.put(bytePos++, tmp);
                 amount -= bitOffset;
             }
             if (amount == bitOffset) {
                 byte tmp = buffer.get(bytePos);
-                tmp &= ~BIT_MASK[bitOffset];
-                tmp |= value & BIT_MASK[bitOffset];
+                tmp &= ~BIT_MASKS[bitOffset];
+                tmp |= value & BIT_MASKS[bitOffset];
                 buffer.put(bytePos, tmp);
             } else {
                 byte tmp = buffer.get(bytePos);
-                tmp &= ~(BIT_MASK[amount] << (bitOffset - amount));
-                tmp |= (value & BIT_MASK[amount]) << (bitOffset - amount);
+                tmp &= ~(BIT_MASKS[amount] << (bitOffset - amount));
+                tmp |= (value & BIT_MASKS[amount]) << (bitOffset - amount);
                 buffer.put(bytePos, tmp);
             }
         }

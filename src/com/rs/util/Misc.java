@@ -28,7 +28,7 @@ import java.util.Date;
  *
  * @author blakeman8192
  */
-public class Misc {
+public final class Misc {
 
     public static final int LOGIN_RESPONSE_OK = 2;
     public static final int LOGIN_RESPONSE_INVALID_CREDENTIALS = 3;

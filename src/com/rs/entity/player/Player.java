@@ -163,7 +163,7 @@ public class Player extends Client implements Tickable {
         }
 
         // Sending response
-        StreamBuffer.OutBuffer resp = StreamBuffer.newOutBuffer(3);
+        StreamBuffer.WriteBuffer resp = StreamBuffer.createWriteBuffer(3);
         resp.writeByte(response);
         resp.writeByte(getAttributes().getPrivilege().toInt());
         resp.writeByte(0);

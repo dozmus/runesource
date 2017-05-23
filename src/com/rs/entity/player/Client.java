@@ -142,7 +142,7 @@ public abstract class Client {
      * @param exp     the skill experience
      */
     public void sendSkill(int skillID, int level, int exp) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1 + 1 + 4 + 1);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1 + 1 + 4 + 1);
         out.writeHeader(getEncryptor(), 134);
         out.writeByte(skillID);
         out.writeInt(exp, StreamBuffer.ByteOrder.MIDDLE);
@@ -158,7 +158,7 @@ public abstract class Client {
      * @param itemAmount the item amount
      */
     public void sendEquipment(int slot, int itemId, int itemAmount) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(13);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(13);
         out.writeVariableShortPacketHeader(getEncryptor(), 34);
         out.writeShort(1688);
         out.writeByte(slot);
@@ -178,7 +178,7 @@ public abstract class Client {
      * Sends the current full inventory.
      */
     public void sendInventory() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4 + 2 + 2 + 2 + (player.getAttributes().getInventory().length * 7) );
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4 + 2 + 2 + 2 + (player.getAttributes().getInventory().length * 7) );
         out.writeVariableShortPacketHeader(getEncryptor(), 53);
         out.writeShort(3214);
         out.writeShort(player.getAttributes().getInventory().length);
@@ -202,7 +202,7 @@ public abstract class Client {
      * @param message the message
      */
     public void sendMessage(String message) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(message.length() + 3);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(message.length() + 3);
         out.writeVariablePacketHeader(getEncryptor(), 253);
         out.writeString(message);
         out.finishVariablePacketHeader();
@@ -216,7 +216,7 @@ public abstract class Client {
      * @param form   the interface ID
      */
     public void sendSidebarInterface(int menuId, int form) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4);
         out.writeHeader(getEncryptor(), 71);
         out.writeShort(form);
         out.writeByte(menuId, StreamBuffer.ValueType.A);
@@ -229,7 +229,7 @@ public abstract class Client {
     public void sendMapRegion() {
         player.getCurrentRegion().setAs(player.getPosition());
         player.setNeedsPlacement(true);
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(5);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(5);
         out.writeHeader(getEncryptor(), 73);
         out.writeShort(player.getPosition().getRegionX() + 6, StreamBuffer.ValueType.A);
         out.writeShort(player.getPosition().getRegionY() + 6);
@@ -240,7 +240,7 @@ public abstract class Client {
      * Sends your run energy to the client.
      */
     public void sendRunEnergy() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(2);
         out.writeHeader(getEncryptor(), 110);
         out.writeByte((int)player.getAttributes().getRunEnergy());
         send(out.getBuffer());
@@ -251,14 +251,14 @@ public abstract class Client {
      * @param status 0 is loading, 1 is connecting, 2 is loaded.
      */
     public void sendFriendsListStatus(int status) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(2);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(2);
         out.writeHeader(getEncryptor(), 221);
         out.writeByte(status);
         send(out.getBuffer());
     }
 
     public void sendAddFriend(long name, int worldNo) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(10);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(10);
         out.writeHeader(getEncryptor(), 50);
         out.writeLong(name);
         out.writeByte(worldNo);
@@ -266,7 +266,7 @@ public abstract class Client {
     }
 
     public void sendAddIgnores(Collection<Long> names) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(3 + names.size()*8);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(3 + names.size()*8);
         out.writeVariableShortPacketHeader(getEncryptor(), 214);
 
         for (long name : names) {
@@ -277,7 +277,7 @@ public abstract class Client {
     }
 
     public void sendPrivateMessage(long name, int messageCounter, Player.Privilege privilege, byte[] text) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(15 + text.length);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(15 + text.length);
         out.writeVariablePacketHeader(getEncryptor(), 196);
         out.writeLong(name);
         out.writeInt(messageCounter);
@@ -293,7 +293,7 @@ public abstract class Client {
      * Shows the given interface on the client.
      */
     public void sendInterface(int interfaceId) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(3);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(3);
         out.writeHeader(getEncryptor(), 97);
         out.writeShort(interfaceId);
         send(out.getBuffer());
@@ -303,7 +303,7 @@ public abstract class Client {
      * Closes all interfaces open in the client.
      */
     public void sendClearScreen() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1);
         out.writeHeader(getEncryptor(), 219);
         send(out.getBuffer());
     }
@@ -312,7 +312,7 @@ public abstract class Client {
      * Sends a packet that tells the client to forcibly modify the current and default value of a setting.
      */
     public void sendClientSetting(int settingId, int value) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(4);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4);
         out.writeHeader(getEncryptor(), 36);
         out.writeShort(settingId, StreamBuffer.ByteOrder.LITTLE);
         out.writeByte(value);
@@ -323,13 +323,13 @@ public abstract class Client {
      * Sends a packet that tells the client to log out.
      */
     public void sendLogout() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1);
         out.writeHeader(getEncryptor(), 109);
         send(out.getBuffer());
     }
 
     public void sendInterfaceText(int interfaceId, String text) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(6 + text.length());
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(6 + text.length());
         out.writeVariableShortPacketHeader(getEncryptor(), 126);
         out.writeString(text);
         out.writeShort(interfaceId, StreamBuffer.ValueType.A);
@@ -338,7 +338,7 @@ public abstract class Client {
     }
 
     public void sendInterfaceItem(int interfaceId, int itemId, int zoom) {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(7);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(7);
         out.writeHeader(getEncryptor(), 246);
         out.writeShort(interfaceId, StreamBuffer.ByteOrder.LITTLE);
         out.writeShort(zoom);
@@ -350,7 +350,7 @@ public abstract class Client {
      * Sends a packet that tells the client to reset all button states.
      */
     public void sendResetAllButtonStates() {
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1);
         out.writeHeader(getEncryptor(), 68);
         send(out.getBuffer());
     }
@@ -401,7 +401,7 @@ public abstract class Client {
     private void handlePacket() {
         timeoutStopwatch.reset();
         int positionBefore = inData.position();
-        StreamBuffer.InBuffer in = StreamBuffer.newInBuffer(inData);
+        StreamBuffer.ReadBuffer in = StreamBuffer.createReadBuffer(inData);
 
         // Handle the packet.
         try {
@@ -647,7 +647,7 @@ public abstract class Client {
                 }
 
                 // Write the response.
-                StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(17);
+                StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(17);
                 out.writeLong(0); // First 8 bytes are ignored by the client.
                 out.writeByte(0); // The response opcode, 0 for logging in.
                 out.writeLong(new SecureRandom().nextLong()); // SSK.
@@ -679,7 +679,7 @@ public abstract class Client {
                 }
 
                 // Read the login block.
-                StreamBuffer.InBuffer in = StreamBuffer.newInBuffer(inData);
+                StreamBuffer.ReadBuffer in = StreamBuffer.createReadBuffer(inData);
                 in.readByte(); // Skip the magic ID value 255.
 
                 // Validate the client version.

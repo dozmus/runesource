@@ -80,8 +80,8 @@ public final class PlayerUpdating {
         }
 
         // XXX: The buffer sizes may need to be tuned.
-        StreamBuffer.OutBuffer out = StreamBuffer.newOutBuffer(1024 + blockSize);
-        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(blockSize);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1024 + blockSize);
+        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(blockSize);
 
         // Initialize the update packet.
         out.writeVariableShortPacketHeader(player.getEncryptor(), 81);
@@ -143,8 +143,8 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the buffer
      */
-    public static void appendAppearance(Player player, StreamBuffer.OutBuffer out) {
-        StreamBuffer.OutBuffer block = StreamBuffer.newOutBuffer(APPEARANCE_BUFFER_SIZE);
+    public static void appendAppearance(Player player, StreamBuffer.WriteBuffer out) {
+        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(APPEARANCE_BUFFER_SIZE);
 
         block.writeByte(player.getAttributes().getGender()); // Gender
         block.writeByte(0); // Skull icon
@@ -266,7 +266,7 @@ public final class PlayerUpdating {
      * @param player the host player
      * @param other  the player being added
      */
-    public static void addPlayer(StreamBuffer.OutBuffer out, Player player, Player other) {
+    public static void addPlayer(StreamBuffer.WriteBuffer out, Player player, Player other) {
         out.writeBits(11, other.getSlot()); // Server slot.
         out.writeBit(true); // Yes, an update is required.
         out.writeBit(true); // Discard walking queue(?)
@@ -287,7 +287,7 @@ public final class PlayerUpdating {
      * @param player
      * @param out
      */
-    public static void updateLocalPlayerMovement(Player player, StreamBuffer.OutBuffer out) {
+    public static void updateLocalPlayerMovement(Player player, StreamBuffer.WriteBuffer out) {
         boolean updateRequired = player.isUpdateRequired();
 
         if (player.needsPlacement()) { // Do they need placement?
@@ -308,14 +308,14 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the packet
      */
-    public static void updateOtherPlayerMovement(Player player, StreamBuffer.OutBuffer out) {
+    public static void updateOtherPlayerMovement(Player player, StreamBuffer.WriteBuffer out) {
         boolean updateRequired = player.isUpdateRequired();
         int pDir = player.getPrimaryDirection();
         int sDir = player.getSecondaryDirection();
         updateMovement(out, pDir, sDir, updateRequired);
     }
 
-    private static void updateMovement(StreamBuffer.OutBuffer out, int pDir, int sDir, boolean updateRequired) {
+    private static void updateMovement(StreamBuffer.WriteBuffer out, int pDir, int sDir, boolean updateRequired) {
         if (pDir != -1) { // If they moved.
             out.writeBit(true); // Yes, there is an update.
 
@@ -340,7 +340,7 @@ public final class PlayerUpdating {
      * @param player the player
      * @param block  the block
      */
-    public static void updateState(Player player, StreamBuffer.OutBuffer block, boolean forceAppearance, boolean noChat) {
+    public static void updateState(Player player, StreamBuffer.WriteBuffer block, boolean forceAppearance, boolean noChat) {
         // First we must prepare the mask.
         int mask = 0x0;
 
@@ -402,7 +402,7 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the buffer
      */
-    public static void appendForceChat(Player player, StreamBuffer.OutBuffer out) {
+    public static void appendForceChat(Player player, StreamBuffer.WriteBuffer out) {
         out.writeString(player.getForceChatText());
     }
 
@@ -412,7 +412,7 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the buffer
      */
-    public static void appendChat(Player player, StreamBuffer.OutBuffer out) {
+    public static void appendChat(Player player, StreamBuffer.WriteBuffer out) {
         out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
         out.writeByte(player.getAttributes().getPrivilege().toInt());
         out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
@@ -425,7 +425,7 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the buffer
      */
-    public static void appendGraphic(Player player, StreamBuffer.OutBuffer out) {
+    public static void appendGraphic(Player player, StreamBuffer.WriteBuffer out) {
         out.writeShort(player.getGraphic().getId(), StreamBuffer.ByteOrder.LITTLE);
         out.writeInt(player.getGraphic().getDelay());
     }
@@ -436,7 +436,7 @@ public final class PlayerUpdating {
      * @param player the player
      * @param out    the buffer
      */
-    public static void appendAnimation(Player player, StreamBuffer.OutBuffer out) {
+    public static void appendAnimation(Player player, StreamBuffer.WriteBuffer out) {
         out.writeShort(player.getAnimation().getId(), StreamBuffer.ByteOrder.LITTLE);
         out.writeByte(player.getAnimation().getDelay(), StreamBuffer.ValueType.C);
     }
@@ -448,7 +448,7 @@ public final class PlayerUpdating {
      *
      * @param out the buffer to append to
      */
-    public static void appendStand(StreamBuffer.OutBuffer out) {
+    public static void appendStand(StreamBuffer.WriteBuffer out) {
         out.writeBits(2, 0); // 0 - no movement.
     }
 
@@ -460,7 +460,7 @@ public final class PlayerUpdating {
      * @param direction        the walking direction
      * @param attributesUpdate whether or not a player attributes update is required
      */
-    public static void appendWalk(StreamBuffer.OutBuffer out, int direction, boolean attributesUpdate) {
+    public static void appendWalk(StreamBuffer.WriteBuffer out, int direction, boolean attributesUpdate) {
         out.writeBits(2, 1); // 1 - walking.
 
         // Append the actual sector.
@@ -477,7 +477,7 @@ public final class PlayerUpdating {
      * @param direction2       the running direction
      * @param attributesUpdate whether or not a player attributes update is required
      */
-    public static void appendRun(StreamBuffer.OutBuffer out, int direction, int direction2, boolean attributesUpdate) {
+    public static void appendRun(StreamBuffer.WriteBuffer out, int direction, int direction2, boolean attributesUpdate) {
         out.writeBits(2, 2); // 2 - running.
 
         // Append the actual sector.
@@ -498,7 +498,7 @@ public final class PlayerUpdating {
      * @param discardMovementQueue whether or not the client should discard the movement queue
      * @param attributesUpdate     whether or not a plater attributes update is required
      */
-    public static void appendPlacement(StreamBuffer.OutBuffer out, int localX, int localY, int z, boolean discardMovementQueue, boolean attributesUpdate) {
+    public static void appendPlacement(StreamBuffer.WriteBuffer out, int localX, int localY, int z, boolean discardMovementQueue, boolean attributesUpdate) {
         out.writeBits(2, 3); // 3 - placement.
 
         // Append the actual sector.

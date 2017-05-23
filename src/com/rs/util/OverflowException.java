@@ -16,7 +16,7 @@ package com.rs.util;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public class OverflowException extends RuntimeException {
+public final class OverflowException extends RuntimeException {
 
     private final int remainder;
 
