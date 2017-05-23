@@ -43,7 +43,7 @@ public final class HostGateway {
         // If the host was not in the map, they're clear to go.
         // Otherwise, replace the key with the next value if it was present.
         if (amount != null) {
-            map.replace(host, amount + 1);
+            map.put(host, map.get(host) + 1);
         }
     }
 
@@ -62,13 +62,13 @@ public final class HostGateway {
         }
 
         // Otherwise decrement the amount of connections stored.
-        map.replace(host, amount - 1);
+        map.put(host, amount - 1);
     }
 
     /**
      * @return The number of connections from the given host.
      */
     public static int count(String host) {
-        return map.getOrDefault(host, 0);
+        return map.containsKey(host) ? map.get(host) : 0;
     }
 }

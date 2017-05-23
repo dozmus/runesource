@@ -31,14 +31,14 @@ public final class ConnectionThrottle {
 
     public static void enter(String host) {
         if (map.containsKey(host)) {
-            map.replace(host, map.get(host) + 1);
+            map.put(host, map.get(host) + 1);
         } else {
             map.put(host, 1);
         }
     }
 
     public static boolean throttled(String host) {
-        return map.getOrDefault(host, 0) >= MAX_ATTEMPTS;
+        return map.containsKey(host) && map.get(host) >= MAX_ATTEMPTS;
     }
 
     public static void clear() {
