@@ -63,7 +63,9 @@ class PrivateMessaging extends Plugin {
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
                 return
 
-            if (other.getAttributes().isFriend(playerName)) {
+            otherName = Misc.encodeBase37(other.getAttributes().getUsername())
+
+            if (other.getAttributes().isFriend(playerName) && !player.getAttributes().isIgnored(otherName)) {
                 other.sendAddFriend(playerName, 10)
             }
         }
