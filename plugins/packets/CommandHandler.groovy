@@ -14,7 +14,10 @@
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
+import com.rs.WorldHandler
 import com.rs.entity.Position
+import com.rs.entity.npc.Npc
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 import com.rs.entity.player.obj.Animation
@@ -102,6 +105,21 @@ class CommandHandler extends Plugin {
             int y = args[1].toInteger()
             int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ()
             player.teleport new Position(x, y, z)
+        }
+
+        if (commandName == "npc") {
+            Npc npc = new Npc(args[0].toInteger())
+            npc.getPosition().setAs(player.getPosition())
+
+            if (args.length >= 3) {
+                npc.getPosition().setX(args[1].toInteger())
+                npc.getPosition().setY(args[2].toInteger())
+            }
+
+            if (args.length >= 4) {
+                npc.getPosition().setZ(args[3].toInteger())
+            }
+            WorldHandler.getInstance().register(npc)
         }
 
         if (commandName == "mypos") {
