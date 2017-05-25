@@ -26,7 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Represents all player attributes that are persistent.
+ * All {@link Player} attributes that are persistent.
  *
  * @author Pure_
  */
@@ -488,5 +488,13 @@ public class PlayerAttributes {
 
     public PlayerSettings getSettings() {
         return settings;
+    }
+
+    public int getCombatLevel() {
+        return 3;
+    }
+
+    public int getTotalLevel() {
+        return 0;
     }
 }

@@ -47,7 +47,7 @@ public class Server implements Runnable, Tickable {
     private static Server instance;
     private final String host;
     private final int port;
-    private final int cycleRate;
+    private final int tickRate;
 
     private Settings settings;
     private PlayerFileHandler playerFileHandler;
@@ -62,12 +62,12 @@ public class Server implements Runnable, Tickable {
      *
      * @param host      the host
      * @param port      the port
-     * @param cycleRate the tick rate
+     * @param tickRate the tick rate
      */
-    private Server(String host, int port, int cycleRate) {
+    private Server(String host, int port, int tickRate) {
         this.host = host;
         this.port = port;
-        this.cycleRate = cycleRate;
+        this.tickRate = tickRate;
     }
 
     /**
@@ -254,18 +254,16 @@ public class Server implements Runnable, Tickable {
     }
 
     /**
-     * Sleeps for the tick delay.
-     *
-     * @throws InterruptedException
+     * Sleeps for the remainder of the tick time slice.
      */
     private void sleep() throws InterruptedException {
-        long sleepTime = cycleRate - cycleTimer.elapsed();
+        long sleepTime = tickRate - cycleTimer.elapsed();
 
         if (sleepTime > 0) {
             Thread.sleep(sleepTime);
         } else {
             // The server has reached maximum load, players may now lag.
-            System.out.println("[WARNING]: Server load: " + (100 + (Math.abs(sleepTime) / (cycleRate / 100))) + "%!");
+            System.out.println("[WARNING]: Server load: " + (100 + (Math.abs(sleepTime) / (tickRate / 100))) + "%!");
         }
         cycleTimer.reset();
     }

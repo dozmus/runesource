@@ -34,17 +34,15 @@ public interface PlayerFileHandler {
     /**
      * Loads a player's attributes.
      *
-     * @param player the player to load.
+     * @param player the player to load
      * @return login response
      */
     LoadResponse load(Player player) throws Exception;
 
     /**
      * The directory to store player files.
-     *
-     * @return player file directory
      */
-    String getDirectory();
+    String getStorageDirectory();
 
     /**
      * A collection of possible load responses.

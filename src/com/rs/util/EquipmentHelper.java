@@ -246,7 +246,7 @@ public final class EquipmentHelper {
     }
 
     @SuppressWarnings("unchecked")
-    public static void loadWeaponDefinitions(String fileName) throws Exception {
+    public static void loadWeaponDefinitions(String fileName) throws FileNotFoundException {
         // Checking if file exists
         File file = new File(fileName);
 

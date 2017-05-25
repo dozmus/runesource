@@ -71,6 +71,7 @@ public class Player extends Client implements Tickable {
     private boolean resetMovementQueue = false;
     private Animation animation = new Animation();
     private Graphic graphic = new Graphic();
+    private long username;
 
     /**
      * Creates a new Player.
@@ -175,6 +176,7 @@ public class Player extends Client implements Tickable {
         }
 
         // Initialising player session
+        this.username = Misc.encodeBase37(attributes.getUsername());
         WorldHandler.getInstance().register(this);
         sendMapRegion();
         sendInventory();
@@ -214,8 +216,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets the player's Position.
-     *
-     * @return the position
      */
     public Position getPosition() {
         return getAttributes().getPosition();
@@ -236,26 +236,13 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets the MovementHandler.
-     *
-     * @return the movement handler
      */
     public MovementHandler getMovementHandler() {
         return movementHandler;
     }
 
     /**
-     * Sets the MovementHandler.
-     *
-     * @param movementHandler the movement handler
-     */
-    public void setMovementHandler(MovementHandler movementHandler) {
-        this.movementHandler = movementHandler;
-    }
-
-    /**
      * Gets the player's primary movement direction.
-     *
-     * @return the direction
      */
     public int getPrimaryDirection() {
         return primaryDirection;
@@ -263,8 +250,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Sets the player's primary movement direction.
-     *
-     * @param primaryDirection the direction
      */
     public void setPrimaryDirection(int primaryDirection) {
         this.primaryDirection = primaryDirection;
@@ -272,8 +257,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets the player's secondary movement direction.
-     *
-     * @return the direction
      */
     public int getSecondaryDirection() {
         return secondaryDirection;
@@ -281,8 +264,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Sets the player's secondary movement direction.
-     *
-     * @param secondaryDirection the direction
      */
     public void setSecondaryDirection(int secondaryDirection) {
         this.secondaryDirection = secondaryDirection;
@@ -290,8 +271,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets the current region.
-     *
-     * @return the region
      */
     public Position getCurrentRegion() {
         return currentRegion;
@@ -299,8 +278,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Sets the current region.
-     *
-     * @param currentRegion the region
      */
     public void setCurrentRegion(Position currentRegion) {
         this.currentRegion = currentRegion;
@@ -308,8 +285,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Sets the needsPlacement boolean.
-     *
-     * @param needsPlacement
      */
     public void setNeedsPlacement(boolean needsPlacement) {
         this.needsPlacement = needsPlacement;
@@ -317,8 +292,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets whether or not the player needs to be placed.
-     *
-     * @return the needsPlacement boolean
      */
     public boolean needsPlacement() {
         return needsPlacement;
@@ -326,8 +299,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Gets the player slot.
-     *
-     * @return the slot
      */
     public int getSlot() {
         return slot;
@@ -335,8 +306,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Sets the player slot.
-     *
-     * @param slot the slot
      */
     public void setSlot(int slot) {
         this.slot = slot;
@@ -518,6 +487,10 @@ public class Player extends Client implements Tickable {
 
     public void setCurrentInterfaceId(int currentInterfaceId) {
         this.currentInterfaceId = currentInterfaceId;
+    }
+
+    public long getUsername() {
+        return username;
     }
 
     public enum Privilege {

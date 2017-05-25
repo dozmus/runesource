@@ -37,7 +37,7 @@ public final class JsonFileHandler implements PlayerFileHandler {
     @Override
     public void save(Player player) throws Exception {
         // Checking if file exists
-        File file = new File(getDirectory() + player.getAttributes().getUsername() + ".json");
+        File file = new File(getStorageDirectory() + player.getAttributes().getUsername() + ".json");
 
         if (!file.exists()) {
             file.createNewFile();
@@ -60,7 +60,7 @@ public final class JsonFileHandler implements PlayerFileHandler {
     @Override
     public LoadResponse load(Player player) throws Exception {
         // Checking if file exists
-        File file = new File(getDirectory() + player.getAttributes().getUsername() + ".json");
+        File file = new File(getStorageDirectory() + player.getAttributes().getUsername() + ".json");
 
         if (!file.exists()) {
             return LoadResponse.NOT_FOUND;
@@ -80,7 +80,7 @@ public final class JsonFileHandler implements PlayerFileHandler {
     }
 
     @Override
-    public String getDirectory() {
+    public String getStorageDirectory() {
         return "./data/characters/";
     }
 }

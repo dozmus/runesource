@@ -19,8 +19,7 @@ package com.rs.entity.npc;
 import com.rs.entity.player.Player;
 
 /**
- * A non-player-character. Extends Player so that we can share the many
- * attributes.
+ * A non-player-character. Extends Player so that we can share the many attributes.
  *
  * @author blakeman8192
  */

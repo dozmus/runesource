@@ -17,7 +17,7 @@ package com.rs.entity.player;
  */
 
 /**
- * Created by pure on 21/04/2017.
+ * A {@link Player}'s in-game settings.
  */
 public class PlayerSettings {
 
