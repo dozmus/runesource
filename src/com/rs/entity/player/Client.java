@@ -450,7 +450,7 @@ public abstract class Client {
                     System.arraycopy(appearance, 0, player.getAttributes().getAppearance(), 0, appearance.length);
 
                     // Set update flags
-                    player.getUpdateFlags().setAppearanceUpdateRequired();
+                    player.getUpdateContext().setAppearanceUpdateRequired();
                     break;
                 case 185: // Button clicking.
                     PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
@@ -490,7 +490,7 @@ public abstract class Client {
                     chatLength = (packetLength - 2);
                     text = in.readBytesReverse(chatLength, StreamBuffer.ValueType.A);
                     player.setPublicChat(new PublicChat(color, effects, text));
-                    player.getUpdateFlags().setPublicChatUpdateRequired();
+                    player.getUpdateContext().setPublicChatUpdateRequired();
                     break;
                 case 103: // Player command.
                     String command = in.readString();

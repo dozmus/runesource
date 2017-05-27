@@ -82,7 +82,7 @@ public class PlayerAttributes {
         return equipmentN;
     }
 
-    public void reset() {
+    public void init() {
         // Setting the default position
         position.setAs(Server.getInstance().getSettings().getStartPosition());
 
@@ -366,7 +366,7 @@ public class PlayerAttributes {
         // Send update
         player.sendEquipment(slot, getEquipment()[slot], getEquipmentN()[slot]);
         player.sendInventory();
-        player.getUpdateFlags().setAppearanceUpdateRequired();
+        player.getUpdateContext().setAppearanceUpdateRequired();
 
         if (slot == EquipmentHelper.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
             player.sendWeaponInterface();
@@ -414,7 +414,7 @@ public class PlayerAttributes {
             getEquipment()[slotId] = id;
             player.sendEquipment(slotId, id, getEquipmentN()[slotId]);
             player.sendInventory();
-            player.getUpdateFlags().setAppearanceUpdateRequired();
+            player.getUpdateContext().setAppearanceUpdateRequired();
 
             // Send new weapon interface, if necessary
             player.sendWeaponInterface();

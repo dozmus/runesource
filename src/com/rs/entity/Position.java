@@ -26,11 +26,11 @@ public class Position {
     /**
      * Difference in X coordinates for directions array.
      */
-    public static final byte[] DIRECTION_DELTA_X = new byte[] {-1, 0, 1, -1, 1, -1, 0, 1};
+    static final byte[] DIRECTION_DELTA_X = new byte[] {-1, 0, 1, -1, 1, -1, 0, 1};
     /**
      * Difference in Y coordinates for directions array.
      */
-    public static final byte[] DIRECTION_DELTA_Y = new byte[] {1, 1, 1, 0, 0, -1, -1, -1};
+    static final byte[] DIRECTION_DELTA_Y = new byte[] {1, 1, 1, 0, 0, -1, -1, -1};
     private int x;
     private int y;
     private int z;
@@ -79,7 +79,7 @@ public class Position {
      * @param dy the second coordinate
      * @return the direction
      */
-    public static int direction(int dx, int dy) {
+    static int direction(int dx, int dy) {
         if (dx < 0) {
             if (dy < 0) {
                 return 5;

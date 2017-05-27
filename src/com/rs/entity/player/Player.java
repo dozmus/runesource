@@ -17,6 +17,7 @@ package com.rs.entity.player;
  */
 
 import com.rs.Server;
+import com.rs.Settings;
 import com.rs.WorldHandler;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
@@ -57,7 +58,7 @@ public class Player extends Client implements Tickable {
     private int currentInterfaceId = -1;
     private int slot = -1;
     // Various player update flags.
-    private PlayerUpdateFlags updateFlags = new PlayerUpdateFlags();
+    private PlayerUpdateContext updateContext = new PlayerUpdateContext();
     private boolean needsPlacement = false;
     private boolean resetMovementQueue = false;
     private String forceChatText;
@@ -78,8 +79,8 @@ public class Player extends Client implements Tickable {
     public Player(SelectionKey key) {
         super(key);
 
-        // Resetting attributes
-        attributes.reset();
+        // Set default attributes
+        attributes.init();
     }
 
     /**
@@ -118,16 +119,17 @@ public class Player extends Client implements Tickable {
         setSecondaryDirection(-1);
         setResetMovementQueue(false);
         setNeedsPlacement(false);
-        updateFlags.reset();
+        updateContext.resetFlags();
     }
 
     @Override
     public void login(String username, String password) throws Exception {
+        Settings settings = Server.getInstance().getSettings();
         int response = Misc.LOGIN_RESPONSE_OK;
 
         // Updating credentials
         getAttributes().setUsername(username);
-        getAttributes().setPassword(Server.getInstance().getSettings().isHashingPasswords() ? Misc.hashSha256(password) : password);
+        getAttributes().setPassword(settings.isHashingPasswords() ? Misc.hashSha256(password) : password);
 
         // Check if the player is already logged in.
         if (WorldHandler.getInstance().isPlayerOnline(username)) {
@@ -146,7 +148,7 @@ public class Player extends Client implements Tickable {
         }
 
         // Check if connection limit is exceeded
-        if (HostGateway.count(getHost()) >= Server.getInstance().getSettings().getMaxConsPerHost() + 1) {
+        if (HostGateway.count(getHost()) >= settings.getMaxConsPerHost() + 1) {
             response = Misc.LOGIN_RESPONSE_LOGIN_LIMIT_EXCEEDED;
         }
 
@@ -175,8 +177,8 @@ public class Player extends Client implements Tickable {
         sendSkills();
         sendEquipment();
         sendWeaponInterface();
-        updateFlags.setUpdateRequired();
-        updateFlags.setAppearanceUpdateRequired();
+        updateContext.setUpdateRequired();
+        updateContext.setAppearanceUpdateRequired();
 
         // Send sidebar interfaces
         for (int i = 1; i < SIDEBAR_INTERFACE_IDS.length; i++) {
@@ -184,7 +186,7 @@ public class Player extends Client implements Tickable {
         }
         sendRunEnergy();
         sendResetAllButtonStates();
-        sendMessage("Welcome to " + Server.getInstance().getSettings().getServerName() + "!");
+        sendMessage("Welcome to " + settings.getServerName() + "!");
         System.out.println(this + " has logged in.");
         PluginEventDispatcher.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
     }
@@ -303,8 +305,8 @@ public class Player extends Client implements Tickable {
         this.slot = slot;
     }
 
-    public PlayerUpdateFlags getUpdateFlags() {
-        return updateFlags;
+    public PlayerUpdateContext getUpdateContext() {
+        return updateContext;
     }
 
     public boolean isResetMovementQueue() {
@@ -365,7 +367,7 @@ public class Player extends Client implements Tickable {
 
     public void startAnimation(Animation animation) {
         setAnimation(animation);
-        updateFlags.setAnimationUpdateRequired();
+        updateContext.setAnimationUpdateRequired();
     }
 
     public void startAnimation(int animationId, int delay) {
@@ -378,7 +380,7 @@ public class Player extends Client implements Tickable {
 
     public void startGraphic(Graphics graphics) {
         setGraphics(graphics);
-        updateFlags.setGraphicsUpdateRequired();
+        updateContext.setGraphicsUpdateRequired();
     }
 
     public void startGraphic(int graphicId, int delay) {
@@ -453,8 +455,19 @@ public class Player extends Client implements Tickable {
         this.currentInterfaceId = currentInterfaceId;
     }
 
+    /**
+     * @return The username of the player as a RS2 hash.
+     */
     public long getUsername() {
         return username;
+    }
+
+    /**
+     * @return If the other player should be updated for this player.
+     */
+    boolean updatableForPlayer(Player other) {
+        return other.getPosition().isViewableFrom(getPosition()) && !other.needsPlacement()
+                && other.getStage() == Client.Stage.LOGGED_IN;
     }
 
     public enum Privilege {

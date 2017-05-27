@@ -19,8 +19,9 @@ package com.rs.entity.player;
 /**
  * The update flags for a {@link Player}.
  */
-public final class PlayerUpdateFlags {
+public final class PlayerUpdateContext {
 
+    // TODO put buffers here to cache
     private boolean updateRequired = false;
     private boolean asyncMovementUpdateRequired = false;
     private boolean graphicsUpdateRequired = false;
@@ -176,7 +177,10 @@ public final class PlayerUpdateFlags {
         return secondaryHitUpdateRequired;
     }
 
-    public void reset() {
+    /**
+     * Resets all update flags.
+     */
+    public void resetFlags() {
         updateRequired = false;
         asyncMovementUpdateRequired = false;
         graphicsUpdateRequired = false;

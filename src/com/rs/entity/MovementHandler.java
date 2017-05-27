@@ -28,7 +28,7 @@ import java.util.LinkedList;
  *
  * @author blakeman8192
  */
-public class MovementHandler implements Tickable {
+public final class MovementHandler implements Tickable {
 
     private final Player player;
     private final Deque<Point> waypoints = new LinkedList<>();
