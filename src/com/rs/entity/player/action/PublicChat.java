@@ -1,4 +1,4 @@
-package com.rs.entity.player.obj;
+package com.rs.entity.player.action;
 /*
  * This file is part of RuneSource.
  *
@@ -16,43 +16,27 @@ package com.rs.entity.player.obj;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * A representation of a game graphic.
- *
- * @author Pure_
- */
-public class Graphic {
+public final class PublicChat {
 
-    private int id;
-    private int delay;
+    private final int color; // XXX document color
+    private final int effects; // XXX document effects
+    private final byte[] text;
 
-    public Graphic() {
-        this(-1, -1);
+    public PublicChat(int color, int effects, byte[] text) {
+        this.color = color;
+        this.effects = effects;
+        this.text = text;
     }
 
-    public Graphic(int id, int delay) {
-        this.id = id;
-        this.delay = delay;
+    public int getColor() {
+        return color;
     }
 
-    public int getId() {
-        return id;
+    public int getEffects() {
+        return effects;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public byte[] getText() {
+        return text;
     }
-
-    public int getDelay() {
-        return delay;
-    }
-
-    public void setDelay(int delay) {
-        this.delay = delay;
-    }
-
-    public boolean isValid() {
-            return id != -1 && delay != -1;
-    }
-
 }

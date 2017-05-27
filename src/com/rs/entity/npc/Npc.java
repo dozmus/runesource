@@ -33,7 +33,7 @@ public class Npc extends Player {
     /**
      * Whether or not the NPC is visible.
      */
-    private boolean isVisible = true;
+    private boolean visible = true;
 
     /**
      * Creates a new Npc.
@@ -76,11 +76,11 @@ public class Npc extends Player {
     }
 
     public boolean isVisible() {
-        return isVisible;
+        return visible;
     }
 
     public void setVisible(boolean isVisible) {
-        this.isVisible = isVisible;
+        this.visible = isVisible;
     }
 
 }

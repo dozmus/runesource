@@ -1,4 +1,4 @@
-package com.rs.entity.player.obj;
+package com.rs.entity.player.action;
 /*
  * This file is part of RuneSource.
  *
@@ -16,21 +16,12 @@ package com.rs.entity.player.obj;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/**
- * A representation of a game animation.
- *
- * @author Pure_
- */
-public final class Animation {
+public final class Graphics {
 
-    private int id;
-    private int delay;
+    private final int id;
+    private final int delay;
 
-    public Animation() {
-        this(-1, -1);
-    }
-
-    public Animation(int id, int delay) {
+    public Graphics(int id, int delay) {
         this.id = id;
         this.delay = delay;
     }
@@ -39,19 +30,7 @@ public final class Animation {
         return id;
     }
 
-    public void setId(int id) {
-        this.id = id;
-    }
-
     public int getDelay() {
         return delay;
-    }
-
-    public void setDelay(int delay) {
-        this.delay = delay;
-    }
-
-    public boolean isValid() {
-        return id != -1 && delay != -1;
     }
 }

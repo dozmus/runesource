@@ -21,8 +21,7 @@ import com.rs.WorldHandler;
 import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
-import com.rs.entity.player.obj.Animation;
-import com.rs.entity.player.obj.Graphic;
+import com.rs.entity.player.action.*;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
@@ -50,28 +49,26 @@ public class Player extends Client implements Tickable {
     private final List<Player> players = new LinkedList<>();
     private final List<Npc> npcs = new LinkedList<>();
     PlayerAttributes attributes = new PlayerAttributes();
+    private long username;
     private MovementHandler movementHandler = new MovementHandler(this);
     private Position currentRegion = new Position(0, 0, 0);
     private int primaryDirection = -1;
     private int secondaryDirection = -1;
     private int currentInterfaceId = -1;
     private int slot = -1;
-    private int chatColor;
-    private int chatEffects;
-    private byte[] chatText;
     // Various player update flags.
-    private boolean updateRequired = false;
-    private boolean appearanceUpdateRequired = false;
-    private boolean chatUpdateRequired = false;
-    private boolean animationUpdateRequired = false;
-    private boolean graphicUpdateRequired = false;
-    private boolean forceChatUpdateRequired = false;
-    private String forceChatText;
+    private PlayerUpdateFlags updateFlags = new PlayerUpdateFlags();
     private boolean needsPlacement = false;
     private boolean resetMovementQueue = false;
-    private Animation animation = new Animation();
-    private Graphic graphic = new Graphic();
-    private long username;
+    private String forceChatText;
+    private PublicChat publicChat;
+    private Animation animation;
+    private Graphics graphics;
+    private Hit primaryHit;
+    private Hit secondaryHit;
+    private AsyncMovement asyncMovement;
+    private Position facingPosition;
+    private Npc interactingNpc;
 
     /**
      * Creates a new Player.
@@ -119,14 +116,9 @@ public class Player extends Client implements Tickable {
     public void reset() {
         setPrimaryDirection(-1);
         setSecondaryDirection(-1);
-        setUpdateRequired(false);
-        setAppearanceUpdateRequired(false);
-        setAnimationUpdateRequired(false);
-        setGraphicUpdateRequired(false);
-        setForceChatUpdateRequired(false);
-        setChatUpdateRequired(false);
         setResetMovementQueue(false);
         setNeedsPlacement(false);
+        updateFlags.reset();
     }
 
     @Override
@@ -183,8 +175,8 @@ public class Player extends Client implements Tickable {
         sendSkills();
         sendEquipment();
         sendWeaponInterface();
-        setUpdateRequired(true);
-        setAppearanceUpdateRequired(true);
+        updateFlags.setUpdateRequired();
+        updateFlags.setAppearanceUpdateRequired();
 
         // Send sidebar interfaces
         for (int i = 1; i < SIDEBAR_INTERFACE_IDS.length; i++) {
@@ -311,23 +303,8 @@ public class Player extends Client implements Tickable {
         this.slot = slot;
     }
 
-    public boolean isUpdateRequired() {
-        return updateRequired;
-    }
-
-    public void setUpdateRequired(boolean updateRequired) {
-        this.updateRequired = updateRequired;
-    }
-
-    public boolean isAppearanceUpdateRequired() {
-        return appearanceUpdateRequired;
-    }
-
-    public void setAppearanceUpdateRequired(boolean appearanceUpdateRequired) {
-        if (appearanceUpdateRequired) {
-            setUpdateRequired(true);
-        }
-        this.appearanceUpdateRequired = appearanceUpdateRequired;
+    public PlayerUpdateFlags getUpdateFlags() {
+        return updateFlags;
     }
 
     public boolean isResetMovementQueue() {
@@ -336,41 +313,6 @@ public class Player extends Client implements Tickable {
 
     public void setResetMovementQueue(boolean resetMovementQueue) {
         this.resetMovementQueue = resetMovementQueue;
-    }
-
-    public int getChatColor() {
-        return chatColor;
-    }
-
-    public void setChatColor(int chatColor) {
-        this.chatColor = chatColor;
-    }
-
-    public int getChatEffects() {
-        return chatEffects;
-    }
-
-    public void setChatEffects(int chatEffects) {
-        this.chatEffects = chatEffects;
-    }
-
-    public byte[] getChatText() {
-        return chatText;
-    }
-
-    public void setChatText(byte[] chatText) {
-        this.chatText = chatText;
-    }
-
-    public boolean isChatUpdateRequired() {
-        return chatUpdateRequired;
-    }
-
-    public void setChatUpdateRequired(boolean chatUpdateRequired) {
-        if (chatUpdateRequired) {
-            setUpdateRequired(true);
-        }
-        this.chatUpdateRequired = chatUpdateRequired;
     }
 
     public List<Player> getPlayers() {
@@ -397,8 +339,8 @@ public class Player extends Client implements Tickable {
         return 0.6f;
     }
 
-    public Graphic getGraphic() {
-        return graphic;
+    public Graphics getGraphics() {
+        return graphics;
     }
 
     public Animation getAnimation() {
@@ -409,32 +351,8 @@ public class Player extends Client implements Tickable {
         this.animation = animation;
     }
 
-    public void setGraphic(Graphic graphic) {
-        this.graphic = graphic;
-    }
-
-    public boolean isAnimationUpdateRequired() {
-        return animationUpdateRequired;
-    }
-
-    public void setAnimationUpdateRequired(boolean animationUpdateRequired) {
-        this.animationUpdateRequired = animationUpdateRequired;
-    }
-
-    public boolean isGraphicUpdateRequired() {
-        return graphicUpdateRequired;
-    }
-
-    public void setGraphicUpdateRequired(boolean graphicUpdateRequired) {
-        this.graphicUpdateRequired = graphicUpdateRequired;
-    }
-
-    public boolean isForceChatUpdateRequired() {
-        return forceChatUpdateRequired;
-    }
-
-    public void setForceChatUpdateRequired(boolean forceChatUpdateRequired) {
-        this.forceChatUpdateRequired = forceChatUpdateRequired;
+    public void setGraphics(Graphics graphics) {
+        this.graphics = graphics;
     }
 
     public String getForceChatText() {
@@ -447,8 +365,7 @@ public class Player extends Client implements Tickable {
 
     public void startAnimation(Animation animation) {
         setAnimation(animation);
-        setAnimationUpdateRequired(true);
-        setUpdateRequired(true);
+        updateFlags.setAnimationUpdateRequired();
     }
 
     public void startAnimation(int animationId, int delay) {
@@ -459,18 +376,65 @@ public class Player extends Client implements Tickable {
         startAnimation(animationId, 0);
     }
 
-    public void startGraphic(Graphic graphic) {
-        setGraphic(graphic);
-        setGraphicUpdateRequired(true);
-        setUpdateRequired(true);
+    public void startGraphic(Graphics graphics) {
+        setGraphics(graphics);
+        updateFlags.setGraphicsUpdateRequired();
     }
 
     public void startGraphic(int graphicId, int delay) {
-        startGraphic(new Graphic(graphicId, delay));
+        startGraphic(new Graphics(graphicId, delay));
     }
 
     public void startGraphic(int graphicId) {
         startGraphic(graphicId, 0);
+    }
+
+    public void setPublicChat(PublicChat publicChat) {
+        this.publicChat = publicChat;
+    }
+
+    public PublicChat getPublicChat() {
+        return publicChat;
+    }
+
+    public Hit getPrimaryHit() {
+        return primaryHit;
+    }
+
+    public void setPrimaryHit(Hit primaryHit) {
+        this.primaryHit = primaryHit;
+    }
+
+    public Hit getSecondaryHit() {
+        return secondaryHit;
+    }
+
+    public void setSecondaryHit(Hit secondaryHit) {
+        this.secondaryHit = secondaryHit;
+    }
+
+    public Position getFacingPosition() {
+        return facingPosition;
+    }
+
+    public void setFacingPosition(Position facingPosition) {
+        this.facingPosition = facingPosition;
+    }
+
+    public Npc getInteractingNpc() {
+        return interactingNpc;
+    }
+
+    public void setInteractingNpc(Npc interactingNpc) {
+        this.interactingNpc = interactingNpc;
+    }
+
+    public AsyncMovement getAsyncMovement() {
+        return asyncMovement;
+    }
+
+    public void setAsyncMovement(AsyncMovement asyncMovement) {
+        this.asyncMovement = asyncMovement;
     }
 
     public int getCurrentWeaponInterfaceId() {

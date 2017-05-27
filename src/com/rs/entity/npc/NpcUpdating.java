@@ -53,7 +53,7 @@ public final class NpcUpdating {
             if (npc.getPosition().isViewableFrom(player.getPosition()) && npc.isVisible()) {
                 NpcUpdating.updateNpcMovement(out, npc);
 
-                if (npc.isUpdateRequired()) {
+                if (npc.getUpdateFlags().isUpdateRequired()) {
                     NpcUpdating.updateState(block, npc);
                 }
             } else {
@@ -105,7 +105,7 @@ public final class NpcUpdating {
         Position delta = Position.delta(player.getPosition(), npc.getPosition());
         out.writeBits(5, delta.getY());
         out.writeBits(5, delta.getX());
-        out.writeBit(npc.isUpdateRequired());
+        out.writeBit(npc.getUpdateFlags().isUpdateRequired());
         out.writeBits(12, npc.getNpcId());
         out.writeBit(true);
     }
@@ -118,7 +118,7 @@ public final class NpcUpdating {
      */
     private static void updateNpcMovement(StreamBuffer.WriteBuffer out, Npc npc) {
         if (npc.getPrimaryDirection() == -1) {
-            if (npc.isUpdateRequired()) {
+            if (npc.getUpdateFlags().isUpdateRequired()) {
                 out.writeBit(true);
                 out.writeBits(2, 0);
             } else {
@@ -128,7 +128,7 @@ public final class NpcUpdating {
             out.writeBit(true);
             out.writeBits(2, 1);
             out.writeBits(3, npc.getPrimaryDirection());
-            out.writeBit(npc.isUpdateRequired());
+            out.writeBit(npc.getUpdateFlags().isUpdateRequired());
         }
     }
 

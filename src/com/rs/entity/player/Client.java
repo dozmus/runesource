@@ -18,6 +18,7 @@ package com.rs.entity.player;
 
 import com.rs.Server;
 import com.rs.entity.Position;
+import com.rs.entity.player.action.PublicChat;
 import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
@@ -449,8 +450,7 @@ public abstract class Client {
                     System.arraycopy(appearance, 0, player.getAttributes().getAppearance(), 0, appearance.length);
 
                     // Set update flags
-                    player.setUpdateRequired(true);
-                    player.setAppearanceUpdateRequired(true);
+                    player.getUpdateFlags().setAppearanceUpdateRequired();
                     break;
                 case 185: // Button clicking.
                     PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
@@ -489,10 +489,8 @@ public abstract class Client {
                     int color = in.readByte(false, StreamBuffer.ValueType.S);
                     chatLength = (packetLength - 2);
                     text = in.readBytesReverse(chatLength, StreamBuffer.ValueType.A);
-                    player.setChatEffects(effects);
-                    player.setChatColor(color);
-                    player.setChatText(text);
-                    player.setChatUpdateRequired(true);
+                    player.setPublicChat(new PublicChat(color, effects, text));
+                    player.getUpdateFlags().setPublicChatUpdateRequired();
                     break;
                 case 103: // Player command.
                     String command = in.readString();

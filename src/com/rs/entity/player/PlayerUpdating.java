@@ -1,5 +1,4 @@
 package com.rs.entity.player;
-
 /*
  * This file is part of RuneSource.
  *
@@ -19,9 +18,10 @@ package com.rs.entity.player;
 
 import com.rs.WorldHandler;
 import com.rs.entity.Position;
+import com.rs.entity.player.action.AsyncMovement;
+import com.rs.entity.player.action.PublicChat;
 import com.rs.net.StreamBuffer;
 import com.rs.util.EquipmentHelper;
-import com.rs.util.Misc;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -34,37 +34,53 @@ import java.util.List;
  */
 public final class PlayerUpdating {
 
-    private static final int APPEARANCE_BUFFER_SIZE = 56;
+    /**
+     * The maximum length of the update appearance block.
+     */
+    private static final int MAX_APPEARANCE_BUFFER_SIZE = 56;
+    /**
+     * Regional player limit.
+     */
+    private static final int REGION_PLAYERS_LIMIT = 255;
 
-    private static int blockSize(Player player) {
-        if (player.getStage() != Client.Stage.LOGGED_IN)
+    private static int stateBlockSize(Player player) {
+        PlayerUpdateFlags flags = player.getUpdateFlags();
+
+        if (!flags.isUpdateRequired())
             return 0;
-        return APPEARANCE_BUFFER_SIZE + 11
-                + (player.isForceChatUpdateRequired() ? player.getForceChatText().length() : 0)
-                + (player.isChatUpdateRequired() ? 5 + player.getChatText().length : 0);
+        return 2 + MAX_APPEARANCE_BUFFER_SIZE
+                + (flags.isAsyncMovementUpdateRequired() ? 9 : 0)
+                + (flags.isGraphicsUpdateRequired() ? 6 : 0)
+                + (flags.isAnimationUpdateRequired() ? 3 : 0)
+                + (flags.isForcedChatUpdateRequired() ? player.getForceChatText().length() + 1 : 0)
+                + (flags.isPublicChatUpdateRequired() ? player.getPublicChat().getText().length + 4 : 0)
+                + (flags.isInteractingNpcUpdateRequired() ? 2 : 0)
+                + (flags.isFaceCoordinatesUpdateRequired() ? 4 : 0)
+                + (flags.isPrimaryHitUpdateRequired() ? 4 : 0)
+                + (flags.isSecondaryHitUpdateRequired() ? 4 : 0);
     }
 
     /**
      * Updates the player.
-     *
-     * @param player the player
      */
     public static void update(Player player) {
         // Calculate block buffer size
-        int blockSize = blockSize(player);
+        int baseBlockSize = 128;
+        int stateBlockSize = stateBlockSize(player);
 
         for (Player other : player.getPlayers()) {
-            if (!other.needsPlacement() && other.isUpdateRequired()
+            if (!other.needsPlacement() && other.getStage() == Client.Stage.LOGGED_IN
                     && other.getPosition().isViewableFrom(player.getPosition())) {
-                blockSize += blockSize(other);
+                baseBlockSize += 3; // up to 19 bits for movement
+                stateBlockSize += stateBlockSize(other);
             }
         }
 
         // Find other players in region
-        List<Player> othersFromRegion = new ArrayList<>();
+        List<Player> regionalPlayers = new ArrayList<>();
 
         for (int i = 0; i < WorldHandler.getInstance().getPlayers().length; i++) {
-            if (player.getPlayers().size() + othersFromRegion.size() >= 255) {
+            if (player.getPlayers().size() + regionalPlayers.size() >= REGION_PLAYERS_LIMIT) {
                 break; // Local player limit has been reached.
             }
             Player other = WorldHandler.getInstance().getPlayers()[i];
@@ -73,15 +89,16 @@ public final class PlayerUpdating {
                 continue;
             }
 
-            if (!player.getPlayers().contains(other) && other.getPosition().isViewableFrom(player.getPosition())) {
-                othersFromRegion.add(other);
-                blockSize += blockSize(other);
+            if (!player.getPlayers().contains(other) && other.getStage() == Client.Stage.LOGGED_IN
+                    && other.getPosition().isViewableFrom(player.getPosition())) {
+                regionalPlayers.add(other);
+                baseBlockSize += 3; // 23 bits for add player
+                stateBlockSize += stateBlockSize(other);
             }
         }
 
-        // XXX: The buffer sizes may need to be tuned.
-        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1024 + blockSize);
-        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(blockSize);
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(baseBlockSize + stateBlockSize);
+        StreamBuffer.WriteBuffer stateBlock = StreamBuffer.createWriteBuffer(stateBlockSize);
 
         // Initialize the update packet.
         out.writeVariableShortPacketHeader(player.getEncryptor(), 81);
@@ -90,8 +107,8 @@ public final class PlayerUpdating {
         // Update this player.
         PlayerUpdating.updateLocalPlayerMovement(player, out);
 
-        if (player.isUpdateRequired()) {
-            PlayerUpdating.updateState(player, block, false, true);
+        if (player.getUpdateFlags().isUpdateRequired()) {
+            PlayerUpdating.updateState(player, stateBlock, false, true);
         }
 
         // Update other local players.
@@ -104,9 +121,9 @@ public final class PlayerUpdating {
                     && !other.needsPlacement()) {
                 PlayerUpdating.updateOtherPlayerMovement(other, out);
 
-                if (other.isUpdateRequired()) {
-                    boolean ignored = player.getAttributes().isIgnored(Misc.encodeBase37(other.getAttributes().getUsername()));
-                    PlayerUpdating.updateState(other, block, false, ignored);
+                if (other.getUpdateFlags().isUpdateRequired()) {
+                    boolean ignored = player.getAttributes().isIgnored(other.getUsername());
+                    PlayerUpdating.updateState(other, stateBlock, false, ignored);
                 }
             } else {
                 out.writeBit(true);
@@ -116,18 +133,18 @@ public final class PlayerUpdating {
         }
 
         // Update the local player list.
-        for (Player other : othersFromRegion) {
-            boolean ignored = player.getAttributes().isIgnored(Misc.encodeBase37(other.getAttributes().getUsername()));
+        for (Player other : regionalPlayers) {
+            boolean ignored = player.getAttributes().isIgnored(other.getUsername());
             player.getPlayers().add(other);
             PlayerUpdating.addPlayer(out, player, other);
-            PlayerUpdating.updateState(other, block, true, ignored);
+            PlayerUpdating.updateState(other, stateBlock, true, ignored);
         }
 
         // Append the attributes block to the main packet.
-        if (block.getBuffer().position() > 0) {
+        if (stateBlock.getBuffer().position() > 0) {
             out.writeBits(11, 2047);
             out.setAccessType(StreamBuffer.AccessType.BYTE_ACCESS);
-            out.writeBytes(block.getBuffer());
+            out.writeBytes(stateBlock.getBuffer());
         } else {
             out.setAccessType(StreamBuffer.AccessType.BYTE_ACCESS);
         }
@@ -141,17 +158,17 @@ public final class PlayerUpdating {
      * Appends the state of a player's appearance to a buffer.
      *
      * @param player the player
-     * @param out    the buffer
      */
     public static void appendAppearance(Player player, StreamBuffer.WriteBuffer out) {
         PlayerAttributes attributes = player.getAttributes();
-        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(APPEARANCE_BUFFER_SIZE);
+        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(MAX_APPEARANCE_BUFFER_SIZE);
 
         block.writeByte(player.getAttributes().getGender()); // Gender
         block.writeByte(0); // Skull icon
 
         // Player models
         int[] e = attributes.getEquipment();
+        int[] a = attributes.getAppearance();
 
         // Hat.
         if (e[EquipmentHelper.EQUIPMENT_SLOT_HEAD] > 1) {
@@ -185,7 +202,7 @@ public final class PlayerUpdating {
         if (e[EquipmentHelper.EQUIPMENT_SLOT_CHEST] > 1) {
             block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_CHEST]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_CHEST]);
         }
 
         // Shield.
@@ -199,14 +216,14 @@ public final class PlayerUpdating {
         if (e[EquipmentHelper.EQUIPMENT_SLOT_CHEST] > 1) {
             block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_CHEST]);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_ARMS]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_ARMS]);
         }
 
         // Legs.
         if (e[EquipmentHelper.EQUIPMENT_SLOT_LEGS] > 1) {
             block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_LEGS]);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_LEGS]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_LEGS]);
         }
 
         // Head (with a hat already on).
@@ -214,21 +231,21 @@ public final class PlayerUpdating {
                 || EquipmentHelper.isFullMask(EquipmentHelper.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_HEAD]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_HEAD]);
         }
 
         // Hands.
         if (e[EquipmentHelper.EQUIPMENT_SLOT_HANDS] > 1) {
             block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_HANDS]);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_HANDS]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_HANDS]);
         }
 
         // Feet.
         if (e[EquipmentHelper.EQUIPMENT_SLOT_FEET] > 1) {
             block.writeShort(0x200 + e[EquipmentHelper.EQUIPMENT_SLOT_FEET]);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_FEET]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_FEET]);
         }
 
         // Beard.
@@ -236,12 +253,12 @@ public final class PlayerUpdating {
                 || EquipmentHelper.isFullMask(EquipmentHelper.EQUIPMENT_SLOT_HEAD)) {
             block.writeByte(0);
         } else {
-            block.writeShort(0x100 + attributes.getAppearance()[EquipmentHelper.APPEARANCE_SLOT_BEARD]);
+            block.writeShort(0x100 + a[EquipmentHelper.APPEARANCE_SLOT_BEARD]);
         }
 
         // Player colors
-        for (int i = 0; i < attributes.getColors().length; i++) {
-            block.writeByte(attributes.getColors()[i]);
+        for (int color : attributes.getColors()) {
+            block.writeByte(color);
         }
 
         // Movement animations
@@ -286,12 +303,9 @@ public final class PlayerUpdating {
      * 2,3 to place the player in a specific position while sector 2,3 is not
      * present in updating of other players (it simply flags local list removal
      * instead).
-     *
-     * @param player
-     * @param out
      */
     public static void updateLocalPlayerMovement(Player player, StreamBuffer.WriteBuffer out) {
-        boolean updateRequired = player.isUpdateRequired();
+        boolean updateRequired = player.getUpdateFlags().isUpdateRequired();
 
         if (player.needsPlacement()) { // Do they need placement?
             out.writeBit(true); // Yes, there is an update.
@@ -306,13 +320,10 @@ public final class PlayerUpdating {
     }
 
     /**
-     * Updates the movement of a player for another player (does not make use of sector 2,3).
-     *
-     * @param player the player
-     * @param out    the packet
+     * Updates the movement of a player for another player (does not make use of sector 2, 3).
      */
     public static void updateOtherPlayerMovement(Player player, StreamBuffer.WriteBuffer out) {
-        boolean updateRequired = player.isUpdateRequired();
+        boolean updateRequired = player.getUpdateFlags().isUpdateRequired();
         int pDir = player.getPrimaryDirection();
         int sDir = player.getSecondaryDirection();
         updateMovement(out, pDir, sDir, updateRequired);
@@ -338,32 +349,15 @@ public final class PlayerUpdating {
     }
 
     /**
-     * Updates the state of a player.
-     *
-     * @param player the player
-     * @param block  the block
+     * Updates the flag-based state of a player.
      */
-    public static void updateState(Player player, StreamBuffer.WriteBuffer block, boolean forceAppearance, boolean noChat) {
-        // First we must prepare the mask.
-        int mask = 0x0;
+    public static void updateState(Player player, StreamBuffer.WriteBuffer block, boolean forceAppearance,
+                                   boolean noPublicChat) {
+        PlayerUpdateFlags flags = player.getUpdateFlags();
 
-        if (player.isGraphicUpdateRequired()) {
-            mask |= 0x100;
-        }
-        if (player.isAnimationUpdateRequired()) {
-            mask |= 0x8;
-        }
-        if (player.isForceChatUpdateRequired()) {
-            mask |= 0x4;
-        }
-        if (player.isChatUpdateRequired() && !noChat) {
-            mask |= 0x80;
-        }
-        if (player.isAppearanceUpdateRequired() || forceAppearance) {
-            mask |= 0x10;
-        }
+        // First we must calculate and write the mask.
+        int mask = flags.mask(forceAppearance, noPublicChat);
 
-        // writing the actual mask.
         if (mask >= 0x100) {
             mask |= 0x40;
             block.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
@@ -373,71 +367,134 @@ public final class PlayerUpdating {
 
         // Finally, we append the attributes blocks.
         // Async. walking
+        if (flags.isAsyncMovementUpdateRequired()) {
+            appendAsyncMovement(player, block);
+        }
+
         // Graphics
-        if (player.isGraphicUpdateRequired()) {
+        if (flags.isGraphicsUpdateRequired()) {
             appendGraphic(player, block);
         }
+
         // Animation
-        if (player.isAnimationUpdateRequired()) {
+        if (flags.isAnimationUpdateRequired()) {
             appendAnimation(player, block);
         }
+
         // Forced chat
-        if (player.isForceChatUpdateRequired()) {
-            appendForceChat(player, block);
+        if (flags.isForcedChatUpdateRequired()) {
+            appendForcedChat(player, block);
         }
+
         // Chat
-        if (player.isChatUpdateRequired() && !noChat) {
-            appendChat(player, block);
+        if (flags.isPublicChatUpdateRequired() && !noPublicChat) {
+            appendPublicChat(player, block);
         }
+
         // Interacting with entity
+        if (flags.isInteractingNpcUpdateRequired()) {
+            appendInteractingNpc(player, block);
+        }
+
         // Appearance
-        if (player.isAppearanceUpdateRequired() || forceAppearance) {
+        if (flags.isAppearanceUpdateRequired() || forceAppearance) {
             appendAppearance(player, block);
         }
+
         // Face coordinates
+        if (flags.isFaceCoordinatesUpdateRequired()) {
+            appendFaceCoordinates(player, block);
+        }
+
         // Primary hit
+        if (flags.isPrimaryHitUpdateRequired()) {
+            appendPrimaryHit(player, block);
+        }
+
         // Secondary hit
+        if (flags.isSecondaryHitUpdateRequired()) {
+            appendSecondaryHit(player, block);
+        }
+    }
+
+
+    /**
+     * Append coordinates being faced to a buffer.
+     */
+    public static void appendFaceCoordinates(Player player, StreamBuffer.WriteBuffer out) {
+        out.writeShort(player.getFacingPosition().getX(), StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+        out.writeShort(player.getFacingPosition().getY(), StreamBuffer.ByteOrder.LITTLE);
     }
 
     /**
-     * Appends the state of a player's force chat to a buffer.
-     *
-     * @param player the player
-     * @param out    the buffer
+     * Append asynchronous movement to a buffer.
      */
-    public static void appendForceChat(Player player, StreamBuffer.WriteBuffer out) {
+    public static void appendAsyncMovement(Player player, StreamBuffer.WriteBuffer out) {
+        AsyncMovement asyncMovement = player.getAsyncMovement();
+        out.writeByte(asyncMovement.getStartPosition().getX(), StreamBuffer.ValueType.S);
+        out.writeByte(asyncMovement.getStartPosition().getY(), StreamBuffer.ValueType.S);
+        out.writeByte(asyncMovement.getEndPosition().getX(), StreamBuffer.ValueType.S);
+        out.writeByte(asyncMovement.getEndPosition().getY(), StreamBuffer.ValueType.S);
+        out.writeShort(asyncMovement.getStartToEndSpeed(), StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+        out.writeShort(asyncMovement.getEndToStartSpeed(), StreamBuffer.ValueType.A);
+        out.writeByte(asyncMovement.getDirection(), StreamBuffer.ValueType.S);
+    }
+
+    /**
+     * Append npc being interacted with to a buffer.
+     */
+    public static void appendInteractingNpc(Player player, StreamBuffer.WriteBuffer out) {
+        out.writeShort(player.getInteractingNpc().getNpcId(), StreamBuffer.ByteOrder.LITTLE);
+    }
+
+    /**
+     * Append primary hit to a buffer.
+     */
+    public static void appendPrimaryHit(Player player, StreamBuffer.WriteBuffer out) {
+        out.writeByte(player.getPrimaryHit().getDamage());
+        out.writeByte(player.getPrimaryHit().getType(), StreamBuffer.ValueType.A);
+        out.writeByte(player.getAttributes().getSkills()[3], StreamBuffer.ValueType.C);
+        out.writeByte(player.getAttributes().getSkills()[3]); // TODO send maximum health
+    }
+
+    /**
+     * Append secondary hit to a buffer.
+     */
+    public static void appendSecondaryHit(Player player, StreamBuffer.WriteBuffer out) {
+        out.writeByte(player.getSecondaryHit().getDamage());
+        out.writeByte(player.getSecondaryHit().getType(), StreamBuffer.ValueType.A);
+        out.writeByte(player.getAttributes().getSkills()[3], StreamBuffer.ValueType.C);
+        out.writeByte(player.getAttributes().getSkills()[3]); // TODO send maximum health
+    }
+
+    /**
+     * Appends the state of a player's forced chat to a buffer.
+     */
+    public static void appendForcedChat(Player player, StreamBuffer.WriteBuffer out) {
         out.writeString(player.getForceChatText());
     }
 
     /**
-     * Appends the state of a player's chat to a buffer.
-     *
-     * @param player the player
-     * @param out    the buffer
+     * Appends the state of a player's public chat to a buffer.
      */
-    public static void appendChat(Player player, StreamBuffer.WriteBuffer out) {
-        out.writeShort(((player.getChatColor() & 0xff) << 8) + (player.getChatEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
+    public static void appendPublicChat(Player player, StreamBuffer.WriteBuffer out) {
+        PublicChat chat = player.getPublicChat();
+        out.writeShort(((chat.getColor() & 0xff) << 8) + (chat.getEffects() & 0xff), StreamBuffer.ByteOrder.LITTLE);
         out.writeByte(player.getAttributes().getPrivilege().toInt());
-        out.writeByte(player.getChatText().length, StreamBuffer.ValueType.C);
-        out.writeBytesReverse(player.getChatText());
+        out.writeByte(chat.getText().length, StreamBuffer.ValueType.C);
+        out.writeBytesReverse(chat.getText());
     }
 
     /**
      * Appends the state of a player's attached graphics to a buffer.
-     *
-     * @param player the player
-     * @param out    the buffer
      */
     public static void appendGraphic(Player player, StreamBuffer.WriteBuffer out) {
-        out.writeShort(player.getGraphic().getId(), StreamBuffer.ByteOrder.LITTLE);
-        out.writeInt(player.getGraphic().getDelay());
+        out.writeShort(player.getGraphics().getId(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeInt(player.getGraphics().getDelay());
     }
 
     /**
      * Appends the state of a player's animation to a buffer.
-     *
-     * @param player the player
-     * @param out    the buffer
      */
     public static void appendAnimation(Player player, StreamBuffer.WriteBuffer out) {
         out.writeShort(player.getAnimation().getId(), StreamBuffer.ByteOrder.LITTLE);
@@ -448,8 +505,6 @@ public final class PlayerUpdating {
      * Appends the stand version of the movement section of the update packet
      * (sector 2,0). Appending this (instead of just a zero bit) automatically
      * assumes that there is a required attribute update afterwards.
-     *
-     * @param out the buffer to append to
      */
     public static void appendStand(StreamBuffer.WriteBuffer out) {
         out.writeBits(2, 0); // 0 - no movement.
@@ -501,7 +556,8 @@ public final class PlayerUpdating {
      * @param discardMovementQueue whether or not the client should discard the movement queue
      * @param attributesUpdate     whether or not a plater attributes update is required
      */
-    public static void appendPlacement(StreamBuffer.WriteBuffer out, int localX, int localY, int z, boolean discardMovementQueue, boolean attributesUpdate) {
+    public static void appendPlacement(StreamBuffer.WriteBuffer out, int localX, int localY, int z,
+                                       boolean discardMovementQueue, boolean attributesUpdate) {
         out.writeBits(2, 3); // 3 - placement.
 
         // Append the actual sector.

@@ -39,7 +39,7 @@ class PrivateMessaging extends Plugin {
     void onLogin(PlayerLoggedOnEvent evt) throws Exception {
         // Update this player
         Player player = evt.getPlayer()
-        long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
+        long playerName = player.getUsername()
 
         player.sendFriendsListStatus(1) // status: connecting
 
@@ -63,9 +63,7 @@ class PrivateMessaging extends Plugin {
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
                 return
 
-            otherName = Misc.encodeBase37(other.getAttributes().getUsername())
-
-            if (other.getAttributes().isFriend(playerName) && !player.getAttributes().isIgnored(otherName)) {
+            if (other.getAttributes().isFriend(playerName) && !player.getAttributes().isIgnored(other.getUsername())) {
                 other.sendAddFriend(playerName, 10)
             }
         }
@@ -73,7 +71,7 @@ class PrivateMessaging extends Plugin {
 
     void onLogout(PlayerLoggedOutEvent evt) throws Exception {
         // Update other players
-        long playerName = Misc.encodeBase37(evt.getPlayer().getAttributes().getUsername())
+        long playerName = evt.getPlayer().getUsername()
 
         WorldHandler.getInstance().getPlayers().each { other ->
             if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
@@ -87,8 +85,8 @@ class PrivateMessaging extends Plugin {
 
     void onAddIgnore(ModifyIgnoredListEvent evt) throws Exception {
         Player player = evt.getPlayer()
-        long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
-        String otherPlayerName = Misc.decodeBase37(evt.getTarget())
+        long playerName = player.getUsername()
+        String otherPlayerName = evt.getTarget().getUsername()
 
         // Ignore if trying to add self
         if (playerName == evt.getTarget())
@@ -120,7 +118,7 @@ class PrivateMessaging extends Plugin {
 
     void onRemoveIgnore(ModifyIgnoredListEvent evt) throws Exception {
         Player player = evt.getPlayer()
-        long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
+        long playerName = player.getUsername()
 
         player.getAttributes().removeIgnored(evt.getTarget())
 
@@ -136,7 +134,7 @@ class PrivateMessaging extends Plugin {
 
     void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
         Player player = evt.getPlayer()
-        long playerName = Misc.encodeBase37(player.getAttributes().getUsername())
+        long playerName = player.getUsername()
         String otherPlayerName = Misc.decodeBase37(evt.getTarget())
 
         // Ignore if trying to add self
@@ -175,9 +173,9 @@ class PrivateMessaging extends Plugin {
             Player player = evt.getPlayer()
             Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
 
-            if (!other.getAttributes().isIgnored(Misc.encodeBase37(player.getAttributes().getUsername()))) {
-                other.sendPrivateMessage(Misc.encodeBase37(player.getAttributes().getUsername()),
-                        MESSAGE_COUNTER++, player.getAttributes().getPrivilege(), evt.getText())
+            if (!other.getAttributes().isIgnored(player.getUsername())) {
+                other.sendPrivateMessage(player.getUsername(), MESSAGE_COUNTER++,
+                        player.getAttributes().getPrivilege(), evt.getText())
             }
         } catch (IndexOutOfBoundsException ex) {
             player.sendMessage("This player is not online.")

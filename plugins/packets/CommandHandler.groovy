@@ -20,8 +20,8 @@ import com.rs.entity.Position
 import com.rs.entity.npc.Npc
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
-import com.rs.entity.player.obj.Animation
-import com.rs.entity.player.obj.Graphic
+import com.rs.entity.player.action.Animation
+import com.rs.entity.player.action.Graphics
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.CommandEvent
@@ -43,7 +43,7 @@ class CommandHandler extends Plugin {
         if (commandName == "gfx") {
             if (args.length < 2)
                 return
-            player.startGraphic new Graphic(args[0].toInteger(), args[1].toInteger())
+            player.startGraphic new Graphics(args[0].toInteger(), args[1].toInteger())
         }
 
         if (commandName == "anim") {

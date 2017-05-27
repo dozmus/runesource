@@ -19,7 +19,7 @@ package com.rs.entity.player;
 /**
  * A {@link Player}'s in-game settings.
  */
-public class PlayerSettings {
+public final class PlayerSettings {
 
     private MouseButtons mouseButtons = MouseButtons.TWO;
     private Brightness brightness = Brightness.NORMAL;

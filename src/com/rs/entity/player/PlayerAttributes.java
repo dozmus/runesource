@@ -366,7 +366,7 @@ public class PlayerAttributes {
         // Send update
         player.sendEquipment(slot, getEquipment()[slot], getEquipmentN()[slot]);
         player.sendInventory();
-        player.setAppearanceUpdateRequired(true);
+        player.getUpdateFlags().setAppearanceUpdateRequired();
 
         if (slot == EquipmentHelper.EQUIPMENT_SLOT_WEAPON) { // Send new weapon interface, if necessary
             player.sendWeaponInterface();
@@ -414,7 +414,7 @@ public class PlayerAttributes {
             getEquipment()[slotId] = id;
             player.sendEquipment(slotId, id, getEquipmentN()[slotId]);
             player.sendInventory();
-            player.setAppearanceUpdateRequired(true);
+            player.getUpdateFlags().setAppearanceUpdateRequired();
 
             // Send new weapon interface, if necessary
             player.sendWeaponInterface();
