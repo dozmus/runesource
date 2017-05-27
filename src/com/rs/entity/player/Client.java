@@ -160,7 +160,7 @@ public abstract class Client {
      */
     public void sendEquipment(int slot, int itemId, int itemAmount) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(13);
-        out.writeVariableShortPacketHeader(getEncryptor(), 34);
+        out.writeVariableShortHeader(getEncryptor(), 34);
         out.writeShort(1688);
         out.writeByte(slot);
         out.writeShort(itemId + 1);
@@ -180,7 +180,7 @@ public abstract class Client {
      */
     public void sendInventory() {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4 + 2 + 2 + 2 + (player.getAttributes().getInventory().length * 7) );
-        out.writeVariableShortPacketHeader(getEncryptor(), 53);
+        out.writeVariableShortHeader(getEncryptor(), 53);
         out.writeShort(3214);
         out.writeShort(player.getAttributes().getInventory().length);
 
@@ -204,7 +204,7 @@ public abstract class Client {
      */
     public void sendMessage(String message) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(message.length() + 3);
-        out.writeVariablePacketHeader(getEncryptor(), 253);
+        out.writeVariableHeader(getEncryptor(), 253);
         out.writeString(message);
         out.finishVariablePacketHeader();
         send(out.getBuffer());
@@ -268,7 +268,7 @@ public abstract class Client {
 
     public void sendAddIgnores(Collection<Long> names) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(3 + names.size()*8);
-        out.writeVariableShortPacketHeader(getEncryptor(), 214);
+        out.writeVariableShortHeader(getEncryptor(), 214);
 
         for (long name : names) {
             out.writeLong(name);
@@ -279,7 +279,7 @@ public abstract class Client {
 
     public void sendPrivateMessage(long name, int messageCounter, Player.Privilege privilege, byte[] text) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(15 + text.length);
-        out.writeVariablePacketHeader(getEncryptor(), 196);
+        out.writeVariableHeader(getEncryptor(), 196);
         out.writeLong(name);
         out.writeInt(messageCounter);
         out.writeByte(privilege.toInt());
@@ -331,7 +331,7 @@ public abstract class Client {
 
     public void sendInterfaceText(int interfaceId, String text) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(6 + text.length());
-        out.writeVariableShortPacketHeader(getEncryptor(), 126);
+        out.writeVariableShortHeader(getEncryptor(), 126);
         out.writeString(text);
         out.writeShort(interfaceId, StreamBuffer.ValueType.A);
         out.finishVariableShortPacketHeader();

@@ -101,7 +101,7 @@ public final class PlayerUpdating {
         StreamBuffer.WriteBuffer stateBlock = StreamBuffer.createWriteBuffer(stateBlockSize);
 
         // Initialize the update packet.
-        out.writeVariableShortPacketHeader(player.getEncryptor(), 81);
+        out.writeVariableShortHeader(player.getEncryptor(), 81);
         out.setAccessType(StreamBuffer.AccessType.BIT_ACCESS);
 
         // Update this player.

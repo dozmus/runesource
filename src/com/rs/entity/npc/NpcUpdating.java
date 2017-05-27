@@ -41,7 +41,7 @@ public final class NpcUpdating {
         StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(1024);
 
         // Initialize the update packet.
-        out.writeVariableShortPacketHeader(player.getEncryptor(), 65);
+        out.writeVariableShortHeader(player.getEncryptor(), 65);
         out.setAccessType(StreamBuffer.AccessType.BIT_ACCESS);
 
         // Update the NPCs in the local list.

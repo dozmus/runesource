@@ -84,17 +84,19 @@ public abstract class StreamBuffer {
     }
 
     public static String textUnpack(byte packedData[], int size) {
-        int idx = 0, highNibble = -1;
+        int idx = 0, msn = -1;
+
         for (int i = 0; i < size * 2; i++) {
-            int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xf;
-            if (highNibble == -1) {
+            int val = packedData[i / 2] >> (4 - 4 * (i % 2)) & 0xF;
+
+            if (msn == -1) {
                 if (val < 13)
                     DECODE_BUFFER[idx++] = TEXT_UNPACK_TABLE[val];
                 else
-                    highNibble = val;
+                    msn = val;
             } else {
-                DECODE_BUFFER[idx++] = TEXT_UNPACK_TABLE[((highNibble << 4) + val) - 195];
-                highNibble = -1;
+                DECODE_BUFFER[idx++] = TEXT_UNPACK_TABLE[((msn << 4) + val) - 195];
+                msn = -1;
             }
         }
         return new String(DECODE_BUFFER, 0, idx);
@@ -672,7 +674,7 @@ public abstract class StreamBuffer {
          * @param cipher the ISAACCipher encryptor
          * @param value  the value
          */
-        public void writeVariablePacketHeader(ISAACCipher cipher, int value) {
+        public void writeVariableHeader(ISAACCipher cipher, int value) {
             writeHeader(cipher, value);
             lengthPosition = buffer.position();
             writeByte(0);
@@ -686,7 +688,7 @@ public abstract class StreamBuffer {
          * @param cipher the ISAACCipher encryptor
          * @param value  the value
          */
-        public void writeVariableShortPacketHeader(ISAACCipher cipher, int value) {
+        public void writeVariableShortHeader(ISAACCipher cipher, int value) {
             writeHeader(cipher, value);
             lengthPosition = buffer.position();
             writeShort(0);
@@ -1009,7 +1011,7 @@ public abstract class StreamBuffer {
         }
 
         /**
-         * Writes a RuneScape string value.
+         * Writes a RuneScape string value (a null-terminated ASCII string).
          *
          * @param string the string
          */
