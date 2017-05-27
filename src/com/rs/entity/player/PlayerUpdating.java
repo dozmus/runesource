@@ -122,7 +122,8 @@ public final class PlayerUpdating {
                 PlayerUpdating.updateOtherPlayerMovement(other, out);
 
                 if (other.getUpdateFlags().isUpdateRequired()) {
-                    boolean ignored = player.getAttributes().isIgnored(other.getUsername());
+                    boolean ignored = player.getAttributes().isIgnored(other.getUsername())
+                            && other.getAttributes().getPrivilege() == Player.Privilege.REGULAR;
                     PlayerUpdating.updateState(other, stateBlock, false, ignored);
                 }
             } else {
@@ -134,7 +135,8 @@ public final class PlayerUpdating {
 
         // Update the local player list.
         for (Player other : regionalPlayers) {
-            boolean ignored = player.getAttributes().isIgnored(other.getUsername());
+            boolean ignored = player.getAttributes().isIgnored(other.getUsername())
+                    && other.getAttributes().getPrivilege() == Player.Privilege.REGULAR;
             player.getPlayers().add(other);
             PlayerUpdating.addPlayer(out, player, other);
             PlayerUpdating.updateState(other, stateBlock, true, ignored);
