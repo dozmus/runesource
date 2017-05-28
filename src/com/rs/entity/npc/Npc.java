@@ -16,24 +16,20 @@ package com.rs.entity.npc;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
+import com.rs.entity.Entity;
+import com.rs.entity.Position;
 
 /**
- * A non-player-character. Extends Player so that we can share the many attributes.
+ * A non-player-character.
  *
  * @author blakeman8192
  */
-public class Npc extends Player {
+public final class Npc extends Entity {
 
-    /**
-     * The NPC ID.
-     */
-    private int npcId;
-
-    /**
-     * Whether or not the NPC is visible.
-     */
+    private final int npcId;
     private boolean visible = true;
+    private Position position = new Position(0, 0);
+    private boolean updateRequired;
 
     /**
      * Creates a new Npc.
@@ -41,46 +37,44 @@ public class Npc extends Player {
      * @param npcId the NPC ID
      */
     public Npc(int npcId) {
-        super(null); // No selection key.
-        this.setNpcId(npcId);
+        this.npcId = npcId;
     }
 
     @Override
     public void tick() {
-        // NPC-specific processing.
         getMovementHandler().tick();
     }
 
-    @Override
     public void reset() {
         super.reset();
-        // TODO: Any other NPC resetting that isn't in Player.
+        // TODO: Any NPC flag resetting
     }
 
     /**
      * Gets the NPC ID.
-     *
-     * @return the npcId
      */
     public int getNpcId() {
         return npcId;
-    }
-
-    /**
-     * Sets the NPC ID.
-     *
-     * @param npcId the npcId
-     */
-    public void setNpcId(int npcId) {
-        this.npcId = npcId;
     }
 
     public boolean isVisible() {
         return visible;
     }
 
-    public void setVisible(boolean isVisible) {
-        this.visible = isVisible;
+    public void setVisible(boolean visible) {
+        this.visible = visible;
     }
 
+    @Override
+    public Position getPosition() {
+        return position;
+    }
+
+    public boolean isUpdateRequired() {
+        return updateRequired;
+    }
+
+    public void setUpdateRequired(boolean updateRequired) {
+        this.updateRequired = updateRequired;
+    }
 }

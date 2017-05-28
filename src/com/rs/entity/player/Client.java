@@ -17,6 +17,7 @@ package com.rs.entity.player;
  */
 
 import com.rs.Server;
+import com.rs.entity.Entity;
 import com.rs.entity.Position;
 import com.rs.entity.player.action.PublicChat;
 import com.rs.net.HostGateway;
@@ -41,7 +42,7 @@ import java.util.Collection;
  *
  * @author blakeman8192
  */
-public abstract class Client {
+public abstract class Client extends Entity {
 
     /**
      * Lengths for the various packets.
@@ -103,17 +104,11 @@ public abstract class Client {
 
     /**
      * Called after the player finishes logging in.
-     *
-     * @param username
-     * @param password
-     * @throws Exception
      */
     public abstract void login(String username, String password) throws Exception;
 
     /**
      * Called before the player disconnects.
-     *
-     * @throws Exception
      */
     public abstract void logout() throws Exception;
 

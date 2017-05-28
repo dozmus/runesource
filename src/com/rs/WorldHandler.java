@@ -139,8 +139,6 @@ public final class WorldHandler implements Tickable {
 
     /**
      * Registers a player for processing.
-     *
-     * @param player the player
      */
     public void register(Player player) {
         for (int i = 1; i < players.length; i++) {
@@ -156,8 +154,6 @@ public final class WorldHandler implements Tickable {
 
     /**
      * Registers an NPC for processing.
-     *
-     * @param npc the npc
      */
     public void register(Npc npc) {
         for (int i = 1; i < npcs.length; i++) {
@@ -173,8 +169,6 @@ public final class WorldHandler implements Tickable {
 
     /**
      * Unregisters a player from processing.
-     *
-     * @param player the player
      */
     public void unregister(Player player) {
         if (player.getSlot() == -1) {
@@ -186,8 +180,6 @@ public final class WorldHandler implements Tickable {
 
     /**
      * Unregisters an NPC from processing.
-     *
-     * @param npc the npc
      */
     public void unregister(Npc npc) {
         if (npc.getSlot() == -1) {
@@ -195,20 +187,6 @@ public final class WorldHandler implements Tickable {
         }
         npcs[npc.getSlot()] = null;
         npcAmount--;
-    }
-
-    /**
-     * @return the amount of online players
-     */
-    public int playerAmount() {
-        return playerAmount;
-    }
-
-    /**
-     * @return the amount of online NPCs
-     */
-    public int npcAmount() {
-        return npcAmount;
     }
 
     public boolean isPlayerOnline(String username) {
@@ -242,9 +220,21 @@ public final class WorldHandler implements Tickable {
     }
 
     /**
+     * @return the amount of online players
+     */
+    public int playerAmount() {
+        return playerAmount;
+    }
+
+    /**
+     * @return the amount of online NPCs
+     */
+    public int npcAmount() {
+        return npcAmount;
+    }
+
+    /**
      * Gets all registered players.
-     *
-     * @return the players
      */
     public Player[] getPlayers() {
         return players;
@@ -252,8 +242,6 @@ public final class WorldHandler implements Tickable {
 
     /**
      * Gets all registered NPCs.
-     *
-     * @return the npcs
      */
     public Npc[] getNpcs() {
         return npcs;

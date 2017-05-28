@@ -16,7 +16,6 @@ package com.rs.entity;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.npc.Npc;
 import com.rs.entity.player.Player;
 import com.rs.util.Tickable;
 
@@ -24,23 +23,21 @@ import java.util.Deque;
 import java.util.LinkedList;
 
 /**
- * Handles the movement of a Player.
+ * Handles the movement of an {@link Entity}.
  *
  * @author blakeman8192
  */
 public final class MovementHandler implements Tickable {
 
-    private final Player player;
+    private final Entity entity;
     private final Deque<Point> waypoints = new LinkedList<>();
     private boolean runPath = false;
 
     /**
      * Creates a new MovementHandler.
-     *
-     * @param player the Player
      */
-    public MovementHandler(Player player) {
-        this.player = player;
+    public MovementHandler(Entity entity) {
+        this.entity = entity;
     }
 
     public void tick() {
@@ -50,47 +47,60 @@ public final class MovementHandler implements Tickable {
         // Handle the movement.
         walkPoint = waypoints.poll();
 
-        // Handling run energy
-        if (player.getAttributes().getSettings().isRunToggled() || isRunPath()) {
-            if (player.getAttributes().hasRunEnergy()) {
-                runPoint = waypoints.poll();
-            } else { // Player is out of energy
-                player.sendClientSetting(173, 0);
-                player.getAttributes().getSettings().setRunToggled(false);
-                setRunPath(false);
-                runPoint = null;
+        // Handling run toggling
+        if (entity instanceof Player) {
+            Player player = (Player)entity;
+
+            if (player.getAttributes().getSettings().isRunToggled() || isRunPath()) {
+                if (player.getAttributes().hasRunEnergy()) {
+                    runPoint = waypoints.poll();
+                } else { // Player is out of energy
+                    player.sendClientSetting(173, 0);
+                    player.getAttributes().getSettings().setRunToggled(false);
+                    setRunPath(false);
+                    runPoint = null;
+                }
             }
+        } else if (isRunPath()) {
+            runPoint = waypoints.poll();
         }
 
         // Walking
         if (walkPoint != null && walkPoint.getDirection() != -1) {
-            player.getPosition().move(Position.DIRECTION_DELTA_X[walkPoint.getDirection()], Position.DIRECTION_DELTA_Y[walkPoint.getDirection()]);
-            player.setPrimaryDirection(walkPoint.getDirection());
+            entity.getPosition().move(Position.DIRECTION_DELTA_X[walkPoint.getDirection()], Position.DIRECTION_DELTA_Y[walkPoint.getDirection()]);
+            entity.setPrimaryDirection(walkPoint.getDirection());
         }
 
         // Running
         if (runPoint != null && runPoint.getDirection() != -1) {
-            player.getPosition().move(Position.DIRECTION_DELTA_X[runPoint.getDirection()], Position.DIRECTION_DELTA_Y[runPoint.getDirection()]);
-            player.setSecondaryDirection(runPoint.getDirection());
+            entity.getPosition().move(Position.DIRECTION_DELTA_X[runPoint.getDirection()], Position.DIRECTION_DELTA_Y[runPoint.getDirection()]);
+            entity.setSecondaryDirection(runPoint.getDirection());
 
             // Reducing energy
-            player.getAttributes().decreaseRunEnergy(player.getRunEnergyDecrement());
-            player.sendRunEnergy();
+            if (entity instanceof Player) {
+                Player player = (Player)entity;
+                player.getAttributes().decreaseRunEnergy(player.getRunEnergyDecrement());
+                player.sendRunEnergy();
+            }
         } else {
             // Restoring run energy
-            if (player.getAttributes().getRunEnergy() != 100) {
-                player.getAttributes().increaseRunEnergy(player.getRunEnergyIncrement());
-                player.sendRunEnergy();
+            if (entity instanceof Player) {
+                Player player = (Player)entity;
+
+                if (player.getAttributes().getRunEnergy() != 100) {
+                    player.getAttributes().increaseRunEnergy(player.getRunEnergyIncrement());
+                    player.sendRunEnergy();
+                }
             }
         }
 
         // Check for region changes.
-        int deltaX = player.getPosition().getX() - player.getCurrentRegion().getRegionX() * 8;
-        int deltaY = player.getPosition().getY() - player.getCurrentRegion().getRegionY() * 8;
+        int deltaX = entity.getPosition().getX() - entity.getCurrentRegion().getRegionX() * 8;
+        int deltaY = entity.getPosition().getY() - entity.getCurrentRegion().getRegionY() * 8;
 
         if (deltaX < 16 || deltaX >= 88 || deltaY < 16 || deltaY > 88) {
-            if (!(player instanceof Npc)) {
-                player.sendMapRegion();
+            if (entity instanceof Player) {
+                ((Player)entity).sendMapRegion();
             }
         }
     }
@@ -103,7 +113,7 @@ public final class MovementHandler implements Tickable {
         waypoints.clear();
 
         // Set the base point as this position.
-        Position p = player.getPosition();
+        Position p = entity.getPosition();
         waypoints.add(new Point(p.getX(), p.getY(), -1));
     }
 
@@ -167,8 +177,6 @@ public final class MovementHandler implements Tickable {
 
     /**
      * Gets whether or not we're running for the current path.
-     *
-     * @return running
      */
     public boolean isRunPath() {
         return runPath;
@@ -176,8 +184,6 @@ public final class MovementHandler implements Tickable {
 
     /**
      * Toggles running for the current path only.
-     *
-     * @param runPath the flag
      */
     public void setRunPath(boolean runPath) {
         this.runPath = runPath;

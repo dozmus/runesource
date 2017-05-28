@@ -19,7 +19,6 @@ package com.rs.entity.player;
 import com.rs.Server;
 import com.rs.Settings;
 import com.rs.WorldHandler;
-import com.rs.entity.MovementHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
 import com.rs.entity.player.action.*;
@@ -41,26 +40,19 @@ import java.util.List;
  * @author blakeman8192
  * @author Pure_
  */
-public class Player extends Client implements Tickable {
+public final class Player extends Client implements Tickable {
 
     private static final int[] SIDEBAR_INTERFACE_IDS = {
             -1, 3917, 638, 3213, 1644, 5608, 1151, -1, 5065, 5715, 2449, 4445, 147, 6299
     };
-    private int currentWeaponInterfaceId = -2;
     private final List<Player> players = new LinkedList<>();
     private final List<Npc> npcs = new LinkedList<>();
     PlayerAttributes attributes = new PlayerAttributes();
     private long username;
-    private MovementHandler movementHandler = new MovementHandler(this);
-    private Position currentRegion = new Position(0, 0, 0);
-    private int primaryDirection = -1;
-    private int secondaryDirection = -1;
+    private int currentWeaponInterfaceId = -2;
     private int currentInterfaceId = -1;
-    private int slot = -1;
-    // Various player update flags.
+    // Various player update data.
     private PlayerUpdateContext updateContext = new PlayerUpdateContext();
-    private boolean needsPlacement = false;
-    private boolean resetMovementQueue = false;
     private String forceChatText;
     private PublicChat publicChat;
     private Animation animation;
@@ -85,8 +77,6 @@ public class Player extends Client implements Tickable {
 
     /**
      * Performs processing for this player.
-     *
-     * @throws Exception
      */
     public void tick() throws Exception {
         // If no is received packet for more than 5 seconds, disconnect.
@@ -95,34 +85,17 @@ public class Player extends Client implements Tickable {
             disconnect();
             return;
         }
-        movementHandler.tick();
-    }
-
-    /**
-     * Teleports the player to the desired position.
-     *
-     * @param position the position
-     */
-    public void teleport(Position position) {
-        movementHandler.reset();
-        getPosition().setAs(position);
-        setResetMovementQueue(true);
-        setNeedsPlacement(true);
-        sendMapRegion();
+        getMovementHandler().tick();
     }
 
     /**
      * Resets the player after updating.
      */
     public void reset() {
-        setPrimaryDirection(-1);
-        setSecondaryDirection(-1);
-        setResetMovementQueue(false);
-        setNeedsPlacement(false);
+        super.reset();
         updateContext.resetFlags();
     }
 
-    @Override
     public void login(String username, String password) throws Exception {
         Settings settings = Server.getInstance().getSettings();
         int response = Misc.LOGIN_RESPONSE_OK;
@@ -191,7 +164,6 @@ public class Player extends Client implements Tickable {
         PluginEventDispatcher.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
     }
 
-    @Override
     public void logout() throws Exception {
         PluginEventDispatcher.dispatchLogout(this);
         WorldHandler.getInstance().unregister(this);
@@ -206,6 +178,19 @@ public class Player extends Client implements Tickable {
     @Override
     public String toString() {
         return getAttributes().getUsername() == null ? "Client(" + getHost() + ")" : "Player(" + getAttributes().getUsername() + "@" + getHost() + ")";
+    }
+
+    /**
+     * Teleports the player to the desired position.
+     *
+     * @param position the position
+     */
+    public void teleport(Position position) {
+        getMovementHandler().reset();
+        getPosition().setAs(position);
+        setResetMovementQueue(true);
+        setNeedsPlacement(true);
+        sendMapRegion();
     }
 
     /**
@@ -228,93 +213,8 @@ public class Player extends Client implements Tickable {
         getAttributes().setPosition(position);
     }
 
-    /**
-     * Gets the MovementHandler.
-     */
-    public MovementHandler getMovementHandler() {
-        return movementHandler;
-    }
-
-    /**
-     * Gets the player's primary movement direction.
-     */
-    public int getPrimaryDirection() {
-        return primaryDirection;
-    }
-
-    /**
-     * Sets the player's primary movement direction.
-     */
-    public void setPrimaryDirection(int primaryDirection) {
-        this.primaryDirection = primaryDirection;
-    }
-
-    /**
-     * Gets the player's secondary movement direction.
-     */
-    public int getSecondaryDirection() {
-        return secondaryDirection;
-    }
-
-    /**
-     * Sets the player's secondary movement direction.
-     */
-    public void setSecondaryDirection(int secondaryDirection) {
-        this.secondaryDirection = secondaryDirection;
-    }
-
-    /**
-     * Gets the current region.
-     */
-    public Position getCurrentRegion() {
-        return currentRegion;
-    }
-
-    /**
-     * Sets the current region.
-     */
-    public void setCurrentRegion(Position currentRegion) {
-        this.currentRegion = currentRegion;
-    }
-
-    /**
-     * Sets the needsPlacement boolean.
-     */
-    public void setNeedsPlacement(boolean needsPlacement) {
-        this.needsPlacement = needsPlacement;
-    }
-
-    /**
-     * Gets whether or not the player needs to be placed.
-     */
-    public boolean needsPlacement() {
-        return needsPlacement;
-    }
-
-    /**
-     * Gets the player slot.
-     */
-    public int getSlot() {
-        return slot;
-    }
-
-    /**
-     * Sets the player slot.
-     */
-    public void setSlot(int slot) {
-        this.slot = slot;
-    }
-
     public PlayerUpdateContext getUpdateContext() {
         return updateContext;
-    }
-
-    public boolean isResetMovementQueue() {
-        return resetMovementQueue;
-    }
-
-    public void setResetMovementQueue(boolean resetMovementQueue) {
-        this.resetMovementQueue = resetMovementQueue;
     }
 
     public List<Player> getPlayers() {
