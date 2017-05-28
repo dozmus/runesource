@@ -177,25 +177,25 @@ public class PlayerAttributes {
     /**
      * Adds skill experience.
      *
-     * @param skillid the skill ID
+     * @param skillId the skill ID
      * @param exp     the experience to add
      * @param player
      */
-    public void addSkillExp(int skillid, int exp, Player player) {
-        getExperience()[skillid] += exp;
-        player.sendSkill(skillid, getSkills()[skillid], getExperience()[skillid]);
+    public void addSkillExp(int skillId, int exp, Player player) {
+        getExperience()[skillId] += exp;
+        player.sendSkill(skillId, getSkills()[skillId], getExperience()[skillId]);
     }
 
     /**
      * Removes skill experience.
      *
-     * @param skillid the skill ID
+     * @param skillId the skill ID
      * @param exp     the experience to add
      * @param player
      */
-    public void removeSkillExp(int skillid, int exp, Player player) {
-        getExperience()[skillid] -= exp;
-        player.sendSkill(skillid, getSkills()[skillid], getExperience()[skillid]);
+    public void removeSkillExp(int skillId, int exp, Player player) {
+        getExperience()[skillId] -= exp;
+        player.sendSkill(skillId, getSkills()[skillId], getExperience()[skillId]);
     }
 
     /**
@@ -275,7 +275,7 @@ public class PlayerAttributes {
             // Add the item to an existing stack if there is one.
             for (int i = 0; i < getInventory().length; i++) {
                 if (getInventory()[i] == id) {
-                    if (Misc.willAdditionOverflow(getInventoryN()[i], amount)) {
+                    if (Misc.isAdditionOverflow(getInventoryN()[i], amount)) {
                         int remainder = amount - (Integer.MAX_VALUE - getInventoryN()[i]);
                         getInventoryN()[i] = Integer.MAX_VALUE;
                         throw new OverflowException(remainder);
@@ -395,7 +395,7 @@ public class PlayerAttributes {
 
             // Check if we're merging stacks
             if (stackable && getEquipment()[slotId] == id) {
-                if (Misc.willAdditionOverflow(getEquipmentN()[slotId], amount)) {
+                if (Misc.isAdditionOverflow(getEquipmentN()[slotId], amount)) {
                     getInventory()[slot] = id;
                     getInventoryN()[slot] = amount - (Integer.MAX_VALUE - getEquipmentN()[slotId]);
                     getEquipmentN()[slotId] = Integer.MAX_VALUE;

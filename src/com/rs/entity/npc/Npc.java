@@ -26,7 +26,7 @@ import com.rs.entity.Position;
  */
 public final class Npc extends Entity {
 
-    private final int npcId;
+    private final int id;
     private boolean visible = true;
     private Position position = new Position(0, 0);
     private boolean updateRequired;
@@ -34,10 +34,10 @@ public final class Npc extends Entity {
     /**
      * Creates a new Npc.
      *
-     * @param npcId the NPC ID
+     * @param id the NPC ID
      */
-    public Npc(int npcId) {
-        this.npcId = npcId;
+    public Npc(int id) {
+        this.id = id;
     }
 
     @Override
@@ -53,8 +53,8 @@ public final class Npc extends Entity {
     /**
      * Gets the NPC ID.
      */
-    public int getNpcId() {
-        return npcId;
+    public int getId() {
+        return id;
     }
 
     public boolean isVisible() {

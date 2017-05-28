@@ -150,7 +150,6 @@ public final class Player extends Client implements Tickable {
         sendSkills();
         sendEquipment();
         sendWeaponInterface();
-        updateContext.setUpdateRequired();
         updateContext.setAppearanceUpdateRequired();
 
         // Send sidebar interfaces
@@ -167,7 +166,7 @@ public final class Player extends Client implements Tickable {
     public void logout() throws Exception {
         PluginEventDispatcher.dispatchLogout(this);
         WorldHandler.getInstance().unregister(this);
-        setStage(Client.Stage.LOGGED_OUT);
+        setConnectionStage(ConnectionStage.LOGGED_OUT);
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {
@@ -356,7 +355,7 @@ public final class Player extends Client implements Tickable {
     }
 
     /**
-     * @return The username of the player as a RS2 hash.
+     * @return The username of the player as a RS2 name hash.
      */
     public long getUsername() {
         return username;
@@ -367,7 +366,7 @@ public final class Player extends Client implements Tickable {
      */
     boolean updatableForPlayer(Player other) {
         return other.getPosition().isViewableFrom(getPosition()) && !needsPlacement()
-                && getStage() == Client.Stage.LOGGED_IN;
+                && getConnectionStage() == ConnectionStage.LOGGED_IN;
     }
 
     public enum Privilege {

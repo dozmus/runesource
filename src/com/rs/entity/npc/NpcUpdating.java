@@ -89,7 +89,7 @@ public final class NpcUpdating {
         }
 
         // Ship the packet out to the client.
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         player.send(out.getBuffer());
     }
 
@@ -106,7 +106,7 @@ public final class NpcUpdating {
         out.writeBits(5, delta.getY());
         out.writeBits(5, delta.getX());
         out.writeBit(npc.isUpdateRequired());
-        out.writeBits(12, npc.getNpcId());
+        out.writeBits(12, npc.getId());
         out.writeBit(true);
     }
 

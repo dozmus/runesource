@@ -60,7 +60,7 @@ class PrivateMessaging extends Plugin {
 
         // Update other players
         WorldHandler.getInstance().getPlayers().each { other ->
-            if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
+            if (other == null || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN)
                 return
 
             if (other.getAttributes().isFriend(playerName) && !player.getAttributes().isIgnored(other.getUsername())) {
@@ -74,7 +74,7 @@ class PrivateMessaging extends Plugin {
         long playerName = evt.getPlayer().getUsername()
 
         WorldHandler.getInstance().getPlayers().each { other ->
-            if (other == null || other.getStage() != Client.Stage.LOGGED_IN)
+            if (other == null || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN)
                 return
 
             if (other.getAttributes().isFriend(playerName)) {

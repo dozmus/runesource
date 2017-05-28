@@ -80,8 +80,7 @@ public abstract class Client extends Entity {
     private final Player player = (Player) this;
     private final Misc.Stopwatch timeoutStopwatch = new Misc.Stopwatch();
     private SocketChannel socketChannel;
-
-    private Stage stage;
+    private ConnectionStage connectionStage;
     private int packetOpcode = -1;
     private int packetLength = -1;
     private ISAACCipher encryptor;
@@ -94,7 +93,7 @@ public abstract class Client extends Entity {
      */
     public Client(SelectionKey key) {
         this.key = key;
-        setStage(Stage.CONNECTED);
+        setConnectionStage(ConnectionStage.CONNECTED);
         inData = ByteBuffer.allocateDirect(512);
 
         if (key != null) {
@@ -166,7 +165,7 @@ public abstract class Client extends Entity {
         } else {
             out.writeByte(itemAmount);
         }
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         send(out.getBuffer());
     }
 
@@ -188,7 +187,7 @@ public abstract class Client extends Entity {
             }
             out.writeShort(player.getAttributes().getInventory()[i] + 1, StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
         }
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         send(out.getBuffer());
     }
 
@@ -201,7 +200,7 @@ public abstract class Client extends Entity {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(message.length() + 3);
         out.writeVariableHeader(getEncryptor(), 253);
         out.writeString(message);
-        out.finishVariablePacketHeader();
+        out.finishVariableHeader();
         send(out.getBuffer());
     }
 
@@ -268,7 +267,7 @@ public abstract class Client extends Entity {
         for (long name : names) {
             out.writeLong(name);
         }
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         send(out.getBuffer());
     }
 
@@ -281,7 +280,7 @@ public abstract class Client extends Entity {
 
         for (byte b : text)
             out.writeByte(b);
-        out.finishVariablePacketHeader();
+        out.finishVariableHeader();
         send(out.getBuffer());
     }
 
@@ -329,7 +328,7 @@ public abstract class Client extends Entity {
         out.writeVariableShortHeader(getEncryptor(), 126);
         out.writeString(text);
         out.writeShort(interfaceId, StreamBuffer.ValueType.A);
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         send(out.getBuffer());
     }
 
@@ -552,7 +551,7 @@ public abstract class Client extends Entity {
 
             while (inData.hasRemaining()) {
                 // Handle login if we need to.
-                if (getStage() != Stage.LOGGED_IN) {
+                if (getConnectionStage() != ConnectionStage.LOGGED_IN) {
                     handleLogin();
                     break;
                 }
@@ -622,7 +621,7 @@ public abstract class Client extends Entity {
      * Handles the login process of the client.
      */
     private void handleLogin() throws Exception {
-        switch (getStage()) {
+        switch (getConnectionStage()) {
             case CONNECTED:
                 if (inData.remaining() < 2) {
                     inData.compact();
@@ -645,7 +644,7 @@ public abstract class Client extends Entity {
                 out.writeByte(0); // The response opcode, 0 for logging in.
                 out.writeLong(new SecureRandom().nextLong()); // SSK.
                 send(out.getBuffer());
-                setStage(Stage.LOGGING_IN);
+                setConnectionStage(ConnectionStage.LOGGING_IN);
                 break;
             case LOGGING_IN:
                 if (inData.remaining() < 2) {
@@ -721,7 +720,7 @@ public abstract class Client extends Entity {
 
                 // Attempting to log in
                 login(username, password);
-                setStage(Stage.LOGGED_IN);
+                setConnectionStage(ConnectionStage.LOGGED_IN);
                 break;
         }
     }
@@ -789,12 +788,12 @@ public abstract class Client extends Entity {
         return socketChannel;
     }
 
-    public Stage getStage() {
-        return stage;
+    public ConnectionStage getConnectionStage() {
+        return connectionStage;
     }
 
-    public void setStage(Stage stage) {
-        this.stage = stage;
+    public void setConnectionStage(ConnectionStage connectionStage) {
+        this.connectionStage = connectionStage;
     }
 
     public Misc.Stopwatch getTimeoutStopwatch() {
@@ -806,7 +805,7 @@ public abstract class Client extends Entity {
      *
      * @author blakeman8192
      */
-    protected enum Stage {
+    protected enum ConnectionStage {
         CONNECTED, LOGGING_IN, LOGGED_IN, LOGGED_OUT
     }
 

@@ -18,13 +18,12 @@ package com.rs.net;
 
 /**
  * <p>
- * An implementation of an ISAAC cipher. See <a
- * href="http://en.wikipedia.org/wiki/ISAAC_(cipher)">
+ * An implementation of an ISAAC cipher. See <a href="http://en.wikipedia.org/wiki/ISAAC_(cipher)">
  * http://en.wikipedia.org/wiki/ISAAC_(cipher)</a> for more information.
  * </p>
  * <p>
- * This implementation is based on the one written by Bob Jenkins, which is
- * available at <a href="http://www.burtleburtle.net/bob/java/rand/Rand.java">
+ * This implementation is based on the one written by Bob Jenkins, which is available at
+ * <a href="http://www.burtleburtle.net/bob/java/rand/Rand.java">
  * http://www.burtleburtle.net/bob/java/rand/Rand.java</a>.
  * </p>
  *

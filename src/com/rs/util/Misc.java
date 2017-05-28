@@ -189,22 +189,18 @@ public final class Misc {
      */
     public static String decodeBase37(long name) throws IllegalArgumentException {
         try {
-            if (name <= 0L || name >= 0x5b5b57f8a98a5dd1L) {
-                throw new IllegalArgumentException();
-            }
-
-            if (name % 37L == 0L) {
+            if (name <= 0L || name >= 0x5b5b57f8a98a5dd1L || name % 37L == 0L) {
                 throw new IllegalArgumentException();
             }
             int i = 0;
-            char ac[] = new char[12];
+            char letters[] = new char[12];
 
             while (name != 0L) {
                 long l1 = name;
                 name /= 37L;
-                ac[11 - i++] = VALID_CHARACTERS[(int) (l1 - name * 37L)];
+                letters[11 - i++] = VALID_CHARACTERS[(int) (l1 - name * 37L)];
             }
-            return new String(ac, 12 - i, i);
+            return new String(letters, 12 - i, i);
         } catch (RuntimeException ignored) {
         }
         throw new IllegalArgumentException();
@@ -213,9 +209,9 @@ public final class Misc {
     /**
      * Source: https://stackoverflow.com/a/3001879
      */
-    public static boolean willAdditionOverflow(int left, int right) {
+    public static boolean isAdditionOverflow(int left, int right) {
         if (right < 0 && right != Integer.MIN_VALUE) {
-            return willSubtractionOverflow(left, -right);
+            return isSubtractionOverflow(left, -right);
         } else {
             return (~(left ^ right) & (left ^ (left + right))) < 0;
         }
@@ -224,9 +220,9 @@ public final class Misc {
     /**
      * Source: https://stackoverflow.com/a/3001879
      */
-    public static boolean willSubtractionOverflow(int left, int right) {
+    public static boolean isSubtractionOverflow(int left, int right) {
         if (right < 0) {
-            return willAdditionOverflow(left, -right);
+            return isAdditionOverflow(left, -right);
         } else {
             return ((left ^ right) & (left ^ (left - right))) < 0;
         }
@@ -239,7 +235,7 @@ public final class Misc {
      */
     public static class TimestampLogger extends PrintStream {
 
-        private BufferedWriter writer;
+        private final BufferedWriter writer;
         private final DateFormat df = new SimpleDateFormat();
 
         /**
@@ -296,11 +292,8 @@ public final class Misc {
         }
 
         /**
-         * Returns the amount of time elapsed (in milliseconds) since this
-         * object was initialized, or since the last call to the "reset()"
-         * method.
-         *
-         * @return the elapsed time (in milliseconds)
+         * Returns the amount of time elapsed (in milliseconds) since this object was initialized, or since the last
+         * call to the "reset()" method.
          */
         public long elapsed() {
             return System.currentTimeMillis() - time;

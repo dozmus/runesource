@@ -67,7 +67,7 @@ public final class PlayerUpdating {
                 break; // Local player limit has been reached.
             }
 
-            if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN
+            if (other == null || other == player || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN
                     || player.getPlayers().contains(other)) {
                 continue;
             }
@@ -133,7 +133,7 @@ public final class PlayerUpdating {
         }
 
         // Finish the packet and send it.
-        out.finishVariableShortPacketHeader();
+        out.finishVariableShortHeader();
         player.send(out.getBuffer());
     }
 
@@ -447,7 +447,7 @@ public final class PlayerUpdating {
      * Append npc being interacted with to a buffer.
      */
     private static void appendInteractingNpc(Player player, StreamBuffer.WriteBuffer out) {
-        out.writeShort(player.getInteractingNpc().getNpcId(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeShort(player.getInteractingNpc().getId(), StreamBuffer.ByteOrder.LITTLE);
     }
 
     /**

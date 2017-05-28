@@ -699,7 +699,7 @@ public abstract class StreamBuffer {
          * at the length byte's position. Call this when the construction of the
          * actual variable length packet is complete.
          */
-        public void finishVariablePacketHeader() {
+        public void finishVariableHeader() {
             buffer.put(lengthPosition, (byte) (buffer.position() - lengthPosition - 1));
         }
 
@@ -708,20 +708,17 @@ public abstract class StreamBuffer {
          * at the length short's position. Call this when the construction of
          * the variable length packet is complete.
          */
-        public void finishVariableShortPacketHeader() {
+        public void finishVariableShortHeader() {
             buffer.putShort(lengthPosition, (short) (buffer.position() - lengthPosition - 2));
         }
 
         /**
-         * Writes the bytes from the argued buffer into this buffer. This method
-         * does not modify the argued buffer, and please do not flip() the
-         * buffer before hand.
-         *
-         * @param from
+         * Writes the bytes from the argued buffer into this buffer. This method does not modify the argued buffer,
+         * and please do not flip() the buffer before hand.
          */
-        public void writeBytes(ByteBuffer from) {
-            for (int i = 0; i < from.position(); i++) {
-                writeByte(from.get(i));
+        public void writeBytes(ByteBuffer src) {
+            for (int i = 0; i < src.position(); i++) {
+                writeByte(src.get(i));
             }
         }
 
