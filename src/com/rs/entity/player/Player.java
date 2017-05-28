@@ -366,8 +366,8 @@ public final class Player extends Client implements Tickable {
      * @return If the other player should be updated for this player.
      */
     boolean updatableForPlayer(Player other) {
-        return other.getPosition().isViewableFrom(getPosition()) && !other.needsPlacement()
-                && other.getStage() == Client.Stage.LOGGED_IN;
+        return other.getPosition().isViewableFrom(getPosition()) && !needsPlacement()
+                && getStage() == Client.Stage.LOGGED_IN;
     }
 
     public enum Privilege {

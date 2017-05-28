@@ -50,12 +50,12 @@ public final class PlayerUpdating {
         // TODO prioritise updating players based on distance to you
         // Calculate block buffer size
         int baseBlockSize = 128;
-        int stateBlockSize = stateBlockSize(player);
+        int stateBlockSize = stateBlockSize(player, true);
 
         for (Player other : player.getPlayers()) {
             if (player.updatableForPlayer(other)) {
                 baseBlockSize += 3; // up to 19 bits for movement
-                stateBlockSize += stateBlockSize(other);
+                stateBlockSize += stateBlockSize(other, true);
             }
         }
 
@@ -67,14 +67,15 @@ public final class PlayerUpdating {
                 break; // Local player limit has been reached.
             }
 
-            if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN) {
+            if (other == null || other == player || other.getStage() != Client.Stage.LOGGED_IN
+                    || player.getPlayers().contains(other)) {
                 continue;
             }
 
-            if (player.updatableForPlayer(other)) {
+            if (other.getPosition().isViewableFrom(player.getPosition())) {
                 regionalPlayers.add(other);
                 baseBlockSize += 3; // 23 bits for add player
-                stateBlockSize += stateBlockSize(other);
+                stateBlockSize += stateBlockSize(other, false);
             }
         }
 
@@ -139,10 +140,10 @@ public final class PlayerUpdating {
     /**
      * The size in bytes of the state block for the given player.
      */
-    private static int stateBlockSize(Player player) {
+    private static int stateBlockSize(Player player, boolean checkIfUpdateRequired) {
         PlayerUpdateContext ctx = player.getUpdateContext();
 
-        if (!ctx.isUpdateRequired())
+        if (checkIfUpdateRequired && !ctx.isUpdateRequired())
             return 0;
         return 2 + MAX_APPEARANCE_BUFFER_SIZE
                 + (ctx.isAsyncMovementUpdateRequired() ? 9 : 0)
