@@ -132,7 +132,7 @@ public final class Misc {
     /**
      * Inclusive bounds check.
      */
-    private static boolean in(int k, int a, int b) {
+    public static boolean in(int k, int a, int b) {
         return k >= a && k <= b;
     }
 

@@ -30,7 +30,7 @@ import java.util.Map;
  *
  * @author Pure_
  */
-public class PlayerAttributes {
+public final class PlayerAttributes {
 
     private String username;
     private String password;

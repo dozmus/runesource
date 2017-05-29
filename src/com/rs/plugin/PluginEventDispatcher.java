@@ -38,7 +38,7 @@ public final class PluginEventDispatcher {
      */
     public static final String PLAYER_ON_LOGIN_EVENT = "onLogin";
     /**
-     * Before the player is logged out.
+     * After the player is logged out.
      */
     public static final String PLAYER_ON_LOGOUT_EVENT = "onLogout";
     public static final String ADD_FRIEND_EVENT = "onAddFriend";
@@ -46,6 +46,10 @@ public final class PluginEventDispatcher {
     public static final String ADD_IGNORE_EVENT = "onAddIgnore";
     public static final String REMOVE_IGNORE_EVENT = "onRemoveIgnore";
     public static final String PRIVATE_MESSAGE_EVENT = "onPrivateMessage";
+    /**
+     * Before the new values are set in the {@link com.rs.entity.player.PlayerSettings}.
+     */
+    public static final String MODIFY_CHAT_MODE_EVENT = "onModifyChatMode";
 
     /**
      * Registers a binding.
@@ -167,6 +171,18 @@ public final class PluginEventDispatcher {
 
         for (String pluginName : bindings.get(PRIVATE_MESSAGE_EVENT)) {
             PluginHandler.invokeMethod(pluginName, PRIVATE_MESSAGE_EVENT, evt);
+        }
+        return true;
+    }
+
+    public static boolean dispatchModifyChatMode(Player player, int publicChatMode, int privateChatMode, int tradeMode) {
+        if (!bindings.containsKey(MODIFY_CHAT_MODE_EVENT)) {
+            return false;
+        }
+        ModifyChatModeEvent evt = new ModifyChatModeEvent(player, publicChatMode, privateChatMode, tradeMode);
+
+        for (String pluginName : bindings.get(MODIFY_CHAT_MODE_EVENT)) {
+            PluginHandler.invokeMethod(pluginName, MODIFY_CHAT_MODE_EVENT, evt);
         }
         return true;
     }

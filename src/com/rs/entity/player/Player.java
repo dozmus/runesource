@@ -164,9 +164,9 @@ public final class Player extends Client implements Tickable {
     }
 
     public void logout() throws Exception {
-        PluginEventDispatcher.dispatchLogout(this);
         WorldHandler.getInstance().unregister(this);
         setConnectionStage(ConnectionStage.LOGGED_OUT);
+        PluginEventDispatcher.dispatchLogout(this);
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {

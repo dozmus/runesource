@@ -24,7 +24,10 @@
     "splitPrivateChat":true,
     "acceptAid":false,
     "runToggled":false,
-    "autoRetaliate":false
+    "autoRetaliate":false,
+    "publicChatMode":0,
+    "privateChatMode":0,
+    "tradeMode":0
   },
   "gender":0,
   "runEnergy":100.0,

@@ -28,6 +28,9 @@ public final class PlayerSettings {
     private boolean acceptAid = false;
     private boolean runToggled = false;
     private boolean autoRetaliate = true;
+    private int publicChatMode = 0;
+    private int privateChatMode = 0;
+    private int tradeMode = 0;
 
     public MouseButtons getMouseButtons() {
         return mouseButtons;
@@ -83,6 +86,30 @@ public final class PlayerSettings {
 
     public void setAutoRetaliate(boolean autoRetaliate) {
         this.autoRetaliate = autoRetaliate;
+    }
+
+    public int getPublicChatMode() {
+        return publicChatMode;
+    }
+
+    public void setPublicChatMode(int publicChatMode) {
+        this.publicChatMode = publicChatMode;
+    }
+
+    public int getPrivateChatMode() {
+        return privateChatMode;
+    }
+
+    public void setPrivateChatMode(int privateChatMode) {
+        this.privateChatMode = privateChatMode;
+    }
+
+    public int getTradeMode() {
+        return tradeMode;
+    }
+
+    public void setTradeMode(int tradeMode) {
+        this.tradeMode = tradeMode;
     }
 
     public enum MouseButtons {

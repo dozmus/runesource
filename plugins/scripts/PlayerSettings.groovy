@@ -14,6 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
+
 import com.rs.entity.player.Player
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginEventDispatcher
@@ -34,6 +35,9 @@ class PlayerSettings extends Plugin {
         player.sendClientSetting(173, settings.isRunToggled() ? 1 : 0)
         player.sendClientSetting(287, settings.isSplitPrivateChat() ? 1 : 0)
         player.sendClientSetting(427, settings.isAcceptAid() ? 1 : 0)
+
+        // Send chat mode
+        player.sendChatModes()
     }
 
     void onActionButton(ActionButtonEvent evt) {

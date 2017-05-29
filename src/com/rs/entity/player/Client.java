@@ -371,6 +371,20 @@ public abstract class Client extends Entity {
         }
     }
 
+    public void sendChatModes(int publicChatMode, int privateChatMode, int tradeMode) {
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4);
+        out.writeHeader(getEncryptor(), 206);
+        out.writeByte(publicChatMode);
+        out.writeByte(privateChatMode);
+        out.writeByte(tradeMode);
+        send(out.getBuffer());
+    }
+
+    public void sendChatModes() {
+        PlayerSettings settings = player.getAttributes().getSettings();
+        sendChatModes(settings.getPublicChatMode(), settings.getPrivateChatMode(), settings.getTradeMode());
+    }
+
     /**
      * Disconnects the client.
      */
@@ -445,6 +459,27 @@ public abstract class Client extends Entity {
 
                     // Set update flags
                     player.getUpdateContext().setAppearanceUpdateRequired();
+                    break;
+                case 95: // Chat modes.
+                    int publicChatMode = in.readByte(); // 0-3
+                    int privateChatMode = in.readByte(); // 0-2
+                    int tradeMode = in.readByte(); // 0-2
+
+                    // Validate values
+                    if (!Misc.in(publicChatMode, 0, 3) || !Misc.in(privateChatMode, 0, 2) || !Misc.in(tradeMode, 0, 2))
+                        break;
+
+                    // Ignore if no change was made
+                    PlayerSettings settings = player.getAttributes().getSettings();
+
+                    if (publicChatMode == settings.getPublicChatMode()
+                            && privateChatMode == settings.getPrivateChatMode()
+                            && tradeMode == settings.getTradeMode())
+                        break;
+                    PluginEventDispatcher.dispatchModifyChatMode(player, publicChatMode, privateChatMode, tradeMode);
+                    settings.setPublicChatMode(publicChatMode);
+                    settings.setPrivateChatMode(privateChatMode);
+                    settings.setTradeMode(tradeMode);
                     break;
                 case 185: // Button clicking.
                     PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));

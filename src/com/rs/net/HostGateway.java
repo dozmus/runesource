@@ -38,12 +38,10 @@ public final class HostGateway {
      * amount of connections
      */
     public static void enter(String host) {
-        Integer amount = map.putIfAbsent(host, 1);
-
-        // If the host was not in the map, they're clear to go.
-        // Otherwise, replace the key with the next value if it was present.
-        if (amount != null) {
+        if (map.containsKey(host)) {
             map.put(host, map.get(host) + 1);
+        } else {
+            map.put(host, 1);
         }
     }
 
@@ -54,6 +52,9 @@ public final class HostGateway {
      */
     public static void exit(String host) {
         Integer amount = map.get(host);
+
+        if (amount == null)
+            return;
 
         // Remove the host from the map if it's at 1 connection.
         if (amount == 1) {
