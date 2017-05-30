@@ -160,6 +160,10 @@ class PrivateMessaging extends Plugin {
         try {
             Player other = WorldHandler.getInstance().getPlayer(otherPlayerName)
             sendAddFriend(player, other)
+
+            if (other.getAttributes().isFriend(playerName)) {
+                sendAddFriend(other, player)
+            }
         } catch (IndexOutOfBoundsException ex) {
             player.sendAddFriend(evt.getTarget(), WORLD_OFFLINE)
         }
@@ -181,20 +185,23 @@ class PrivateMessaging extends Plugin {
     }
 
     void onPrivateMessage(PrivateMessageEvent evt) throws Exception {
+        Player player = evt.getPlayer()
+        PlayerAttributes attributes = player.getAttributes()
+        PlayerSettings settings = attributes.getSettings()
+
         try {
-            Player player = evt.getPlayer()
-            PlayerAttributes attributes = player.getAttributes()
             Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
+            PlayerAttributes otherAttributes = other.getAttributes()
+            PlayerSettings otherSettings = otherAttributes.getSettings()
 
             // Check chat mode
-            PlayerSettings settings = attributes.getSettings()
-
             if (settings.getPrivateChatMode() == PRIVATE_CHAT_OFFLINE) { // Private chat offline
-                settings.setPrivateChatMode(attributes.isFriend(other.getUsername()) ? PRIVATE_CHAT_FRIENDS : PRIVATE_CHAT_ONLINE)
+                boolean mutualFriends = attributes.isFriend(other.getUsername()) && otherAttributes.isFriend(player.getUsername())
+                settings.setPrivateChatMode(mutualFriends ? PRIVATE_CHAT_FRIENDS : PRIVATE_CHAT_ONLINE)
                 player.sendChatModes()
                 updateOthersForPlayer(player, settings.getPrivateChatMode())
             } else if (settings.getPrivateChatMode() == PRIVATE_CHAT_FRIENDS) { // Private chat friends
-                if (!attributes.isFriend(other.getUsername())) {
+                if (!otherAttributes.isFriend(player.getUsername())) {
                     settings.setPrivateChatMode(PRIVATE_CHAT_ONLINE)
                     player.sendChatModes()
                     updateOthersForPlayer(player, settings.getPrivateChatMode())
