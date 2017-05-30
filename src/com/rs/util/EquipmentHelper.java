@@ -119,12 +119,12 @@ public final class EquipmentHelper {
     private static final int[] FULL_MASK_IDS = {1053, 1055, 1057};
     private static WeaponDefinition[] WEAPONS;
 
-    public static boolean isFullHelm(int itemID) {
-        return Arrays.binarySearch(FULL_HELM_IDS, itemID) > 0;
+    public static boolean isFullHelm(int itemId) {
+        return Arrays.binarySearch(FULL_HELM_IDS, itemId) >= 0;
     }
 
-    public static boolean isFullMask(int itemID) {
-        return Arrays.binarySearch(FULL_MASK_IDS, itemID) > 0;
+    public static boolean isFullMask(int itemId) {
+        return Arrays.binarySearch(FULL_MASK_IDS, itemId) >= 0;
     }
 
     /**
@@ -221,7 +221,7 @@ public final class EquipmentHelper {
         int high = toIndex - 1;
 
         while (low <= high) {
-            int mid = (low + high) >>> 1;
+            int mid = (low >>> 1) + (high >>> 1);
             WeaponDefinition midVal = WEAPONS[mid];
             int cmp = midVal.getId() - itemId;
 
