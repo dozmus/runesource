@@ -19,6 +19,8 @@ package com.rs.io;
 import com.rs.entity.player.Player;
 
 /**
+ * An abstract player file saving/loading description.
+ *
  * @author Pure_
  */
 public interface PlayerFileHandler {
@@ -40,7 +42,7 @@ public interface PlayerFileHandler {
     LoadResponse load(Player player) throws Exception;
 
     /**
-     * The directory to store player files.
+     * The directory to store player flat files in.
      */
     String getStorageDirectory();
 

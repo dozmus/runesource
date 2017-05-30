@@ -93,12 +93,11 @@ public abstract class Client extends Entity {
      */
     public Client(SelectionKey key) {
         this.key = key;
-        setConnectionStage(ConnectionStage.CONNECTED);
         inData = ByteBuffer.allocateDirect(512);
+        setConnectionStage(ConnectionStage.CONNECTED);
 
-        if (key != null) {
+        if (key != null)
             socketChannel = (SocketChannel) key.channel();
-        }
     }
 
     /**
@@ -132,14 +131,14 @@ public abstract class Client extends Entity {
     /**
      * Sends the skill to the client.
      *
-     * @param skillID the skill ID
+     * @param skillId the skill ID
      * @param level   the skill level
      * @param exp     the skill experience
      */
-    public void sendSkill(int skillID, int level, int exp) {
-        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1 + 1 + 4 + 1);
+    public void sendSkill(int skillId, int level, int exp) {
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(7);
         out.writeHeader(getEncryptor(), 134);
-        out.writeByte(skillID);
+        out.writeByte(skillId);
         out.writeInt(exp, StreamBuffer.ByteOrder.MIDDLE);
         out.writeByte(level);
         send(out.getBuffer());
@@ -170,22 +169,24 @@ public abstract class Client extends Entity {
     }
 
     /**
-     * Sends the current full inventory.
+     * Sends the current inventory.
      */
     public void sendInventory() {
-        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4 + 2 + 2 + 2 + (player.getAttributes().getInventory().length * 7) );
+        int[] inv = player.getAttributes().getInventory();
+        int[] invN =  player.getAttributes().getInventoryN();
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(10 + inv.length*7);
         out.writeVariableShortHeader(getEncryptor(), 53);
         out.writeShort(3214);
-        out.writeShort(player.getAttributes().getInventory().length);
+        out.writeShort(inv.length);
 
-        for (int i = 0; i < player.getAttributes().getInventory().length; i++) {
-            if (player.getAttributes().getInventoryN()[i] > 254) {
+        for (int i = 0; i < inv.length; i++) {
+            if (invN[i] > 254) {
                 out.writeByte(255);
-                out.writeInt(player.getAttributes().getInventoryN()[i], StreamBuffer.ByteOrder.INVERSE_MIDDLE);
+                out.writeInt(invN[i], StreamBuffer.ByteOrder.INVERSE_MIDDLE);
             } else {
-                out.writeByte(player.getAttributes().getInventoryN()[i]);
+                out.writeByte(invN[i]);
             }
-            out.writeShort(player.getAttributes().getInventory()[i] + 1, StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+            out.writeShort(inv[i] + 1, StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
         }
         out.finishVariableShortHeader();
         send(out.getBuffer());
@@ -219,7 +220,7 @@ public abstract class Client extends Entity {
     }
 
     /**
-     * Refreshes the map region.
+     * Sends and refreshes the map region.
      */
     public void sendMapRegion() {
         player.getCurrentRegion().setAs(player.getPosition());
@@ -252,6 +253,9 @@ public abstract class Client extends Entity {
         send(out.getBuffer());
     }
 
+    /**
+     * Sends an added friend and the world they're on (9 + N for world N or 0 for offline).
+     */
     public void sendAddFriend(long name, int worldNo) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(10);
         out.writeHeader(getEncryptor(), 50);
@@ -260,17 +264,26 @@ public abstract class Client extends Entity {
         send(out.getBuffer());
     }
 
+    /**
+     * Sends ignored friends.
+     */
     public void sendAddIgnores(Collection<Long> names) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(3 + names.size()*8);
         out.writeVariableShortHeader(getEncryptor(), 214);
 
-        for (long name : names) {
+        for (long name : names)
             out.writeLong(name);
-        }
         out.finishVariableShortHeader();
         send(out.getBuffer());
     }
 
+    /**
+     * Sends a private message.
+     * @param name The sender.
+     * @param messageCounter A server-wide count of messages sent.
+     * @param privilege The sender's privileges.
+     * @param text The message to send, encoded in ASCII.
+     */
     public void sendPrivateMessage(long name, int messageCounter, Player.Privilege privilege, byte[] text) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(15 + text.length);
         out.writeVariableHeader(getEncryptor(), 196);
@@ -286,6 +299,7 @@ public abstract class Client extends Entity {
 
     /**
      * Shows the given interface on the client.
+     * Make sure you also call {@link Player#setCurrentInterfaceId(int)} for packet injection avoiding purposes.
      */
     public void sendInterface(int interfaceId) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(3);
@@ -296,6 +310,8 @@ public abstract class Client extends Entity {
 
     /**
      * Closes all interfaces open in the client.
+     * Make sure you also call {@link Player#setCurrentInterfaceId(int)} with argument -1 for packet injection avoiding
+     * purposes.
      */
     public void sendClearScreen() {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1);
@@ -304,7 +320,7 @@ public abstract class Client extends Entity {
     }
 
     /**
-     * Sends a packet that tells the client to forcibly modify the current and default value of a setting.
+     * Changes a client-side setting to the specified value.
      */
     public void sendClientSetting(int settingId, int value) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4);
@@ -315,7 +331,7 @@ public abstract class Client extends Entity {
     }
 
     /**
-     * Sends a packet that tells the client to log out.
+     * Sends a message telling the client to log out.
      */
     public void sendLogout() {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(1);
@@ -323,6 +339,9 @@ public abstract class Client extends Entity {
         send(out.getBuffer());
     }
 
+    /**
+     * Sets the text shown on an interface.
+     */
     public void sendInterfaceText(int interfaceId, String text) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(6 + text.length());
         out.writeVariableShortHeader(getEncryptor(), 126);
@@ -332,6 +351,9 @@ public abstract class Client extends Entity {
         send(out.getBuffer());
     }
 
+    /**
+     * Sets the item shown on an interface.
+     */
     public void sendInterfaceItem(int interfaceId, int itemId, int zoom) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(7);
         out.writeHeader(getEncryptor(), 246);
@@ -371,6 +393,9 @@ public abstract class Client extends Entity {
         }
     }
 
+    /**
+     * Sends chat filter modes.
+     */
     public void sendChatModes(int publicChatMode, int privateChatMode, int tradeMode) {
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(4);
         out.writeHeader(getEncryptor(), 206);
@@ -380,6 +405,9 @@ public abstract class Client extends Entity {
         send(out.getBuffer());
     }
 
+    /**
+     * Sends the currently active chat filter modes.
+     */
     public void sendChatModes() {
         PlayerSettings settings = player.getAttributes().getSettings();
         sendChatModes(settings.getPublicChatMode(), settings.getPrivateChatMode(), settings.getTradeMode());
@@ -392,7 +420,7 @@ public abstract class Client extends Entity {
         System.out.println(this + " disconnecting.");
 
         try {
-            TaskHandler.removeTasks(player);
+            TaskHandler.remove(player);
             logout();
             getSocketChannel().close();
         } catch (Exception ex) {
@@ -637,7 +665,6 @@ public abstract class Client extends Entity {
      * Sends the buffer to the socket.
      *
      * @param buffer the buffer
-     * @throws java.io.IOException
      */
     public void send(ByteBuffer buffer) {
         // Prepare the buffer for writing.
@@ -647,7 +674,6 @@ public abstract class Client extends Entity {
             // ...and write it!
             getSocketChannel().write(buffer);
         } catch (IOException ex) {
-            // ex.printStackTrace();
             disconnect();
         }
     }
@@ -771,8 +797,6 @@ public abstract class Client extends Entity {
 
     /**
      * Gets the encryptor.
-     *
-     * @return the encryptor
      */
     public ISAACCipher getEncryptor() {
         return encryptor;
@@ -780,8 +804,6 @@ public abstract class Client extends Entity {
 
     /**
      * Sets the encryptor.
-     *
-     * @param encryptor the encryptor
      */
     public void setEncryptor(ISAACCipher encryptor) {
         this.encryptor = encryptor;
@@ -789,8 +811,6 @@ public abstract class Client extends Entity {
 
     /**
      * Gets the decryptor.
-     *
-     * @return the decryptor
      */
     public ISAACCipher getDecryptor() {
         return decryptor;
@@ -798,39 +818,42 @@ public abstract class Client extends Entity {
 
     /**
      * Sets the decryptor.
-     *
-     * @param decryptor the decryptor.
      */
     public void setDecryptor(ISAACCipher decryptor) {
         this.decryptor = decryptor;
     }
 
     /**
-     * Gets the Player subclass implementation of this superclass.
-     *
-     * @return the player
+     * Gets the {@link Player} implementation of this superclass.
      */
     public Player getPlayer() {
         return player;
     }
 
     /**
-     * Gets the SocketChannel.
-     *
-     * @return the SocketChannel
+     * Gets the {@link SocketChannel}.
      */
     public SocketChannel getSocketChannel() {
         return socketChannel;
     }
 
+    /**
+     * Gets the {@link ConnectionStage}.
+     */
     public ConnectionStage getConnectionStage() {
         return connectionStage;
     }
 
+    /**
+     * Sets the {@link ConnectionStage}.
+     */
     public void setConnectionStage(ConnectionStage connectionStage) {
         this.connectionStage = connectionStage;
     }
 
+    /**
+     * Gets the {@link Misc.Stopwatch} used to time-out the client if they're inactive for too long.
+     */
     public Misc.Stopwatch getTimeoutStopwatch() {
         return timeoutStopwatch;
     }

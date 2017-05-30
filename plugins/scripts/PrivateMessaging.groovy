@@ -31,9 +31,15 @@ import com.rs.util.Misc
 
 class PrivateMessaging extends Plugin {
 
-    // TODO eliminate magic numbers in friends list status and chat modes values
+    private static final int WORLD_1 = 10
+    private static final int WORLD_OFFLINE = 0
+    private static final int PRIVATE_CHAT_ONLINE = 0
+    private static final int PRIVATE_CHAT_FRIENDS = 1
+    private static final int PRIVATE_CHAT_OFFLINE = 2
     private static final int MAX_FRIENDS_LIST = 100
     private static final int MAX_IGNORED_LIST = 100
+    private static final int FRIENDS_LIST_CONNECTING = 1
+    private static final int FRIENDS_LIST_CONNECTED = 2
     private int MESSAGE_COUNTER = 1_000_000 * Math.random()
 
     @Override
@@ -43,28 +49,25 @@ class PrivateMessaging extends Plugin {
     void onLogin(PlayerLoggedOnEvent evt) throws Exception {
         // Update this player
         Player player = evt.getPlayer()
-        long playerName = player.getUsername()
 
-        player.sendFriendsListStatus(1) // status: connecting
+        player.sendFriendsListStatus(FRIENDS_LIST_CONNECTING) // status: connecting
 
         // Send friends
         player.getAttributes().getFriends().each { Map.Entry<Long, String> entry ->
             try {
                 Player other = WorldHandler.getInstance().getPlayer(entry.value)
-                PlayerSettings otherSettings = other.getAttributes().getSettings()
-                boolean shownAsOffline = other.getAttributes().isIgnored(playerName) || otherSettings.getPrivateChatMode() == 2 || (otherSettings.getPrivateChatMode() == 1 && !other.getAttributes().isFriend(player.getUsername()))
-                player.sendAddFriend(entry.key, shownAsOffline ? 0 : 10)
+                sendAddFriend(player, other)
             } catch (IndexOutOfBoundsException ex) {
-                player.sendAddFriend(entry.key, 0)
+                player.sendAddFriend(entry.key, WORLD_OFFLINE)
             }
         }
 
         // Send ignores
         player.sendAddIgnores(player.getAttributes().getIgnored().keySet())
 
-        player.sendFriendsListStatus(2) // status: connected
+        player.sendFriendsListStatus(FRIENDS_LIST_CONNECTED) // status: connected
 
-        // Update other players
+        // Update other players friends lists
         updateOthersForPlayer(player, player.getAttributes().getSettings().getPrivateChatMode())
     }
 
@@ -77,7 +80,7 @@ class PrivateMessaging extends Plugin {
                 return
 
             if (other.getAttributes().isFriend(playerName)) {
-                other.sendAddFriend(playerName, 0)
+                other.sendAddFriend(playerName, WORLD_OFFLINE)
             }
         }
     }
@@ -109,7 +112,7 @@ class PrivateMessaging extends Plugin {
             Player other = WorldHandler.getInstance().getPlayer(otherPlayerName)
 
             if (other.getAttributes().isFriend(playerName)) {
-                other.sendAddFriend(playerName, 0)
+                other.sendAddFriend(playerName, WORLD_OFFLINE)
             }
         } catch (IndexOutOfBoundsException ex) {
         }
@@ -117,17 +120,14 @@ class PrivateMessaging extends Plugin {
 
     void onRemoveIgnore(ModifyIgnoredListEvent evt) throws Exception {
         Player player = evt.getPlayer()
-        PlayerSettings playerSettings = player.getAttributes().getSettings()
         long playerName = player.getUsername()
-
         player.getAttributes().removeIgnored(evt.getTarget())
 
         try {
             Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
 
             if (other.getAttributes().isFriend(playerName)) {
-                boolean shownAsOffline = playerSettings.getPrivateChatMode() == 2 || (playerSettings.getPrivateChatMode() == 1 && !player.getAttributes().isFriend(player.getUsername()))
-                other.sendAddFriend(playerName, shownAsOffline ? 0 : 10)
+                sendAddFriend(player, other)
             }
         } catch (IndexOutOfBoundsException ex) {
         }
@@ -159,11 +159,9 @@ class PrivateMessaging extends Plugin {
 
         try {
             Player other = WorldHandler.getInstance().getPlayer(otherPlayerName)
-            PlayerSettings otherSettings = other.getAttributes().getSettings()
-            boolean shownAsOffline = other.getAttributes().isIgnored(playerName) || otherSettings.getPrivateChatMode() == 2 || (otherSettings.getPrivateChatMode() == 1 && !other.getAttributes().isFriend(player.getUsername()))
-            player.sendAddFriend(evt.getTarget(), shownAsOffline ? 0 : 10)
+            sendAddFriend(player, other)
         } catch (IndexOutOfBoundsException ex) {
-            player.sendAddFriend(evt.getTarget(), 0)
+            player.sendAddFriend(evt.getTarget(), WORLD_OFFLINE)
         }
     }
 
@@ -175,8 +173,9 @@ class PrivateMessaging extends Plugin {
             Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
             PlayerSettings settings = player.getAttributes().getSettings()
 
-            if (settings.getPrivateChatMode() >= 1)
-                other.sendAddFriend(player.getUsername(), 0)
+            if (settings.getPrivateChatMode() >= PRIVATE_CHAT_FRIENDS) {
+                other.sendAddFriend(player.getUsername(), WORLD_OFFLINE)
+            }
         } catch (IndexOutOfBoundsException ex) {
         }
     }
@@ -190,17 +189,13 @@ class PrivateMessaging extends Plugin {
             // Check chat mode
             PlayerSettings settings = attributes.getSettings()
 
-            if (settings.getPrivateChatMode() == 2) { // Offline
-                if (attributes.isFriend(other.getUsername())) {
-                    settings.setPrivateChatMode(1)
-                } else {
-                    settings.setPrivateChatMode(0)
-                }
+            if (settings.getPrivateChatMode() == PRIVATE_CHAT_OFFLINE) { // Private chat offline
+                settings.setPrivateChatMode(attributes.isFriend(other.getUsername()) ? PRIVATE_CHAT_FRIENDS : PRIVATE_CHAT_ONLINE)
                 player.sendChatModes()
                 updateOthersForPlayer(player, settings.getPrivateChatMode())
-            } else if (settings.getPrivateChatMode() == 1) { // Friends
+            } else if (settings.getPrivateChatMode() == PRIVATE_CHAT_FRIENDS) { // Private chat friends
                 if (!attributes.isFriend(other.getUsername())) {
-                    settings.setPrivateChatMode(0)
+                    settings.setPrivateChatMode(PRIVATE_CHAT_ONLINE)
                     player.sendChatModes()
                     updateOthersForPlayer(player, settings.getPrivateChatMode())
                 }
@@ -217,7 +212,7 @@ class PrivateMessaging extends Plugin {
         int oldPrivateChatMode = evt.getPlayer().getAttributes().getSettings().getPrivateChatMode()
         int newPrivateChatMode = evt.getPrivateChatMode()
 
-        // Check if a change was made
+        // Check if a change was made in private chat mode
         if (newPrivateChatMode == oldPrivateChatMode)
             return
 
@@ -225,18 +220,36 @@ class PrivateMessaging extends Plugin {
         updateOthersForPlayer(evt.getPlayer(), newPrivateChatMode)
     }
 
+    /**
+     * Sends other to the player's friends list with the appropriate world number.
+     */
+    static void sendAddFriend(Player player, Player other) {
+        PlayerAttributes otherAttributes = other.getAttributes()
+        int otherPrivateChatMode = otherAttributes.getSettings().getPrivateChatMode()
+
+        boolean isIgnored = otherAttributes.isIgnored(player.getUsername())
+        boolean offlineMode = otherPrivateChatMode == PRIVATE_CHAT_OFFLINE
+        boolean friendsMode = otherPrivateChatMode == PRIVATE_CHAT_FRIENDS && !otherAttributes.isFriend(player.getUsername())
+        boolean shownAsOffline = isIgnored || offlineMode || friendsMode
+        int worldNo = shownAsOffline ? WORLD_OFFLINE : WORLD_1
+        player.sendAddFriend(other.getUsername(), worldNo)
+    }
+
+    /**
+     * Updates every other player's friends list if they contain the player, according to their new private chat mode.
+     */
     static void updateOthersForPlayer(Player player, int newPrivateChatMode) {
         WorldHandler.getInstance().getPlayers().each { other ->
             if (other == null || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN)
                 return
 
             if (other.getAttributes().isFriend(player.getUsername())) {
-                int worldNo = 10
+                int worldNo = WORLD_1
 
-                if (newPrivateChatMode == 2) { // Offline
-                    worldNo = 0
-                } else if (newPrivateChatMode == 1) { // Friends
-                    worldNo = (player.getAttributes().isFriend(other.getUsername())) ? 10 : 0
+                if (newPrivateChatMode == PRIVATE_CHAT_OFFLINE) { // Offline
+                    worldNo = WORLD_OFFLINE
+                } else if (newPrivateChatMode == PRIVATE_CHAT_FRIENDS) { // Friends
+                    worldNo = (player.getAttributes().isFriend(other.getUsername())) ? WORLD_1 : WORLD_OFFLINE
                 }
                 other.sendAddFriend(player.getUsername(), worldNo)
             }

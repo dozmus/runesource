@@ -240,8 +240,6 @@ public final class Misc {
 
         /**
          * The OutputStream to log to.
-         *
-         * @param out
          */
         public TimestampLogger(OutputStream out, String file) throws IOException {
             super(out);

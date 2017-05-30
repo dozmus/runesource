@@ -18,7 +18,7 @@ package com.rs;
 
 import com.rs.entity.player.Client;
 import com.rs.entity.player.Player;
-import com.rs.io.JsonFileHandler;
+import com.rs.io.JsonPlayerFileHandler;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
@@ -42,7 +42,7 @@ import java.util.Map;
  *
  * @author blakeman8192
  */
-public class Server implements Runnable, Tickable {
+public final class Server implements Runnable, Tickable {
 
     private static Server instance;
     private final String host;
@@ -60,8 +60,8 @@ public class Server implements Runnable, Tickable {
     /**
      * Creates a new Server.
      *
-     * @param host      the host
-     * @param port      the port
+     * @param host     the host
+     * @param port     the port
      * @param tickRate the tick rate
      */
     private Server(String host, int port, int tickRate) {
@@ -72,8 +72,6 @@ public class Server implements Runnable, Tickable {
 
     /**
      * The main method.
-     *
-     * @param args
      */
     public static void main(String[] args) {
         // Parse command line arguments
@@ -143,7 +141,7 @@ public class Server implements Runnable, Tickable {
             EquipmentHelper.loadWeaponDefinitions("./data/weapons.json");
             EquipmentHelper.sortEquipmentSlotDefinitions();
             EquipmentHelper.loadStackableItems("./data/stackable.dat");
-            playerFileHandler = new JsonFileHandler();
+            playerFileHandler = new JsonPlayerFileHandler();
             System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
 
             // Loading plugins

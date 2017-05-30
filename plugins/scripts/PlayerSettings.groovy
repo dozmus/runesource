@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.rs.entity.player.Player
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginEventDispatcher
@@ -29,15 +28,19 @@ class PlayerSettings extends Plugin {
 
         // Send initial setting states
         player.sendClientSetting(166, settings.getBrightness().settingValue())
-        player.sendClientSetting(170, settings.getMouseButtons() == com.rs.entity.player.PlayerSettings.MouseButtons.ONE ? 1 : 0)
-        player.sendClientSetting(171, settings.isChatEffects() ? 0 : 1)
-        player.sendClientSetting(172, settings.isAutoRetaliate() ? 0 : 1)
-        player.sendClientSetting(173, settings.isRunToggled() ? 1 : 0)
-        player.sendClientSetting(287, settings.isSplitPrivateChat() ? 1 : 0)
-        player.sendClientSetting(427, settings.isAcceptAid() ? 1 : 0)
+        sendSetting(player, 170, settings.getMouseButtons() == com.rs.entity.player.PlayerSettings.MouseButtons.ONE)
+        sendSetting(player, 171, settings.isChatEffects())
+        sendSetting(player, 172, settings.isAutoRetaliate())
+        sendSetting(player, 173, settings.isRunToggled())
+        sendSetting(player, 287, settings.isSplitPrivateChat())
+        sendSetting(player, 427, settings.isAcceptAid())
 
         // Send chat mode
         player.sendChatModes()
+    }
+
+    void sendSetting(Player player, int settingId, boolean condition) {
+        player.sendClientSetting(settingId, condition ? 1 : 0)
     }
 
     void onActionButton(ActionButtonEvent evt) {

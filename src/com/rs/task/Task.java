@@ -26,7 +26,7 @@ import com.rs.entity.player.Player;
  */
 public abstract class Task implements Tickable {
 
-    private boolean running;
+    private boolean active;
     private int currentDelay;
     private final int delay;
     private final boolean runOnce;
@@ -36,9 +36,6 @@ public abstract class Task implements Tickable {
 
     /**
      * Creates a new task instance which will run once with no arguments.
-     *
-     * @param delay
-     * @param player
      */
     public Task(int delay, Player player) {
         this(delay, true, player);
@@ -57,7 +54,7 @@ public abstract class Task implements Tickable {
         this.runOnce = runOnce;
         this.player = player;
         this.args = args;
-        this.running = true;
+        this.active = true;
         currentDelay = delay;
     }
 
@@ -70,39 +67,33 @@ public abstract class Task implements Tickable {
      * Performs a logic tick, this checks if the task can be executed yet.
      */
     public void tick() throws Exception {
-        if (running && currentDelay-- <= 0) {
+        if (active && currentDelay-- <= 0) {
             process();
             ticks++;
             currentDelay = delay;
 
             if (runOnce) {
-                running = false;
+                active = false;
             }
         }
     }
 
     /**
-     * Whether or not the task should be removed.
-     *
-     * @return
+     * Whether or not the task should be removed next tick.
      */
-    public boolean isRunning() {
-        return running;
+    public boolean isActive() {
+        return active;
     }
 
     /**
-     * Sets if the task should be removed next tick.
-     *
-     * @param
+     * Sets the task as inactive.
      */
-    public void setRunning(boolean running) {
-        this.running = running;
+    public void setInactive() {
+        this.active = false;
     }
 
     /**
      * Gets the array of arguments passed to the task upon creation.
-     *
-     * @return
      */
     public Object[] getArgs() {
         return args;
@@ -110,8 +101,6 @@ public abstract class Task implements Tickable {
 
     /**
      * The player this task is bound to.
-     *
-     * @return
      */
     public Player getPlayer() {
         return player;
@@ -119,8 +108,6 @@ public abstract class Task implements Tickable {
 
     /**
      * The amount of times this task has been executed.
-     *
-     * @return
      */
     public int getTicks() {
         return ticks;

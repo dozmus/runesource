@@ -129,13 +129,11 @@ public final class EquipmentHelper {
 
     /**
      * Gets the slot that the item belongs to in the player equipment. If it has
-     * no slot definition, the default slot is the weapon slot. This method is a
-     * lot faster than the traditional winterlove server approach, because it
-     * uses binary searching of the sorted equipment slot arrays instead of
-     * straight looping.
+     * no slot definition, the default slot is the weapon slot.
+     * It uses binary search, so the source arrays must be sorted.
      *
      * @param itemId the item ID
-     * @return the slot
+     * @return the equipment slot number
      */
     public static int getEquipmentSlot(int itemId) {
         if (Arrays.binarySearch(PLATEBODY_IDS, itemId) >= 0) {
@@ -216,6 +214,12 @@ public final class EquipmentHelper {
         return searchWeaponDefinitions(0, WEAPONS.length, itemId);
     }
 
+    /**
+     * Binary searching weapon definitions.
+     * @param fromIndex Inclusive lower bound of search
+     * @param toIndex Exclusive lower bound of search
+     * @return Index of item (or -ve quantity if not found).
+     */
     private static int searchWeaponDefinitions(int fromIndex, int toIndex, int itemId) {
         int low = fromIndex;
         int high = toIndex - 1;
@@ -232,7 +236,7 @@ public final class EquipmentHelper {
             else
                 return mid; // key found
         }
-        return -(low + 1);  // key not found.
+        return -(low + 1); // key not found
     }
 
     public static WeaponDefinition getWeaponDefinition(int itemId) {
@@ -241,7 +245,7 @@ public final class EquipmentHelper {
         if (idx >= 0) {
             return WEAPONS[idx];
         } else {
-            throw new IllegalArgumentException("provided item id is not a weapon id (or is unhandled)");
+            throw new IllegalArgumentException("Item id is not a weapon or is unhandled");
         }
     }
 

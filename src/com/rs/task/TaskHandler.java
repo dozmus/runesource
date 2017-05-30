@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 /**
- * A simple handler to manage tasks.
+ * A simple task handler.
  *
  * @author Pure_
  */
@@ -41,7 +41,7 @@ public final class TaskHandler {
             Task task = itr.next();
 
             // Removing completed tasks
-            if (!task.isRunning()) {
+            if (!task.isActive()) {
                 itr.remove();
                 continue;
             }
@@ -49,29 +49,25 @@ public final class TaskHandler {
             // Processing task
             try {
                 task.tick();
-            } catch (Exception e) {
-                e.printStackTrace();
+            } catch (Exception ex) {
+                ex.printStackTrace();
             }
         }
     }
 
     /**
      * Deactivates all tasks which belong to the given player.
-     *
-     * @param player
      */
-    public static void removeTasks(Player player) {
+    public static void remove(Player player) {
         for (Task task : tasks) {
             if (task.getPlayer().equals(player)) {
-                task.setRunning(false);
+                task.setInactive();
             }
         }
     }
 
     /**
      * Adds a task to the execution list.
-     *
-     * @param task
      */
     public static void submit(Task task) {
         tasks.add(task);

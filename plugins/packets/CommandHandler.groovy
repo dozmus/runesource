@@ -14,7 +14,6 @@
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 import com.rs.WorldHandler
 import com.rs.entity.Position
 import com.rs.entity.npc.Npc

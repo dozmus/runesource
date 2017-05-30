@@ -28,11 +28,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * An implementation of json player saving/loading.
+ * An {@link PlayerFileHandler} implementation for JSON player attribute saving/loading.
  *
  * @author Pure_
  */
-public final class JsonFileHandler implements PlayerFileHandler {
+public final class JsonPlayerFileHandler implements PlayerFileHandler {
 
     @Override
     public void save(Player player) throws Exception {
