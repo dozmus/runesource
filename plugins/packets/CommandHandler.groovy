@@ -35,26 +35,36 @@ class CommandHandler extends Plugin {
         String[] args = evt.getArgs()
 
         if (commandName == "fchat") {
-            player.setForceChatText args[0]
+            if (args.length < 1) {
+                player.sendMessage("Syntax: ::fchat [text]")
+                return
+            }
+            player.setForceChatText args.join(" ")
             player.setForceChatUpdateRequired true
             player.setUpdateRequired true
         }
 
         if (commandName == "gfx") {
-            if (args.length < 2)
+            if (args.length < 2) {
+                player.sendMessage("Syntax: ::gfx [id] [delay]")
                 return
+            }
             player.startGraphic new Graphics(args[0].toInteger(), args[1].toInteger())
         }
 
         if (commandName == "anim") {
-            if (args.length < 2)
+            if (args.length < 2) {
+                player.sendMessage("Syntax: ::anim [id] [delay]")
                 return
+            }
             player.startAnimation new Animation(args[0].toInteger(), args[1].toInteger())
         }
 
         if (commandName == "interface") {
-            if (args.length < 1)
+            if (args.length < 1) {
+                player.sendMessage("Syntax: ::interface [id]")
                 return
+            }
             player.sendInterface args[0].toInteger()
             player.setCurrentInterfaceId args[0].toInteger()
         }
@@ -65,8 +75,10 @@ class CommandHandler extends Plugin {
         }
 
         if (commandName == "energy") {
-            if (args.length < 1)
+            if (args.length < 1) {
+                player.sendMessage("Syntax: ::energy [amount]")
                 return
+            }
             player.getAttributes().setRunEnergy args[0].toInteger()
             player.sendRunEnergy()
         }
@@ -92,6 +104,10 @@ class CommandHandler extends Plugin {
         }
 
         if (commandName == "pickup" || commandName == "item") {
+            if (args.length < 1) {
+                player.sendMessage("Syntax: ::" + commandName + " [id] [amount]")
+                return
+            }
             int id = args[0].toInteger()
             int amount = args.length > 1 ? args[1].toInteger() : 1
             attributes.addInventoryItem id, amount, player
@@ -99,8 +115,10 @@ class CommandHandler extends Plugin {
         }
 
         if (commandName == "tele") {
-            if (args.length < 2)
+            if (args.length < 2) {
+                player.sendMessage("Syntax: ::tele [x] [y] [z]")
                 return
+            }
             int x = args[0].toInteger()
             int y = args[1].toInteger()
             int z = args.length > 2 ? args[2].toInteger() : player.getPosition().getZ()
@@ -108,6 +126,10 @@ class CommandHandler extends Plugin {
         }
 
         if (commandName == "npc") {
+            if (args.length < 1) {
+                player.sendMessage("Syntax: ::npc [id] [x] [y] [z]")
+                return
+            }
             Npc npc = new Npc(args[0].toInteger())
             npc.getPosition().setAs(player.getPosition())
 
