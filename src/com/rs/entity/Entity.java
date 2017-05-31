@@ -8,12 +8,17 @@ import com.rs.util.Tickable;
 public abstract class Entity implements Tickable {
 
     private final MovementHandler movementHandler = new MovementHandler(this);
+    private final EntityUpdateContext updateContext;
     private Position currentRegion = new Position(0, 0, 0);
     private int slot = -1;
     private int primaryDirection = -1;
     private int secondaryDirection = -1;
     private boolean needsPlacement = false;
     private boolean resetMovementQueue = false;
+
+    public Entity(EntityUpdateContext updateContext) {
+        this.updateContext = updateContext;
+    }
 
     public abstract Position getPosition();
 
@@ -25,6 +30,7 @@ public abstract class Entity implements Tickable {
         setSecondaryDirection(-1);
         setResetMovementQueue(false);
         setNeedsPlacement(false);
+        updateContext.resetFlags();
     }
 
     public MovementHandler getMovementHandler() {
@@ -92,5 +98,9 @@ public abstract class Entity implements Tickable {
 
     public void setSlot(int slot) {
         this.slot = slot;
+    }
+
+    public EntityUpdateContext getUpdateContext() {
+        return updateContext;
     }
 }

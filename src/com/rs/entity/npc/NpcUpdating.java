@@ -16,9 +16,9 @@ package com.rs.entity.npc;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.entity.player.Player;
-import com.rs.WorldHandler;
 import com.rs.net.StreamBuffer;
 
 import java.util.Iterator;
@@ -36,7 +36,7 @@ public final class NpcUpdating {
      * @param player the player
      */
     public static void update(Player player) {
-        // XXX: The buffer sizes may need to be tuned.
+        // XXX: The buffer sizes need to be tuned.
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(2048);
         StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(1024);
 
@@ -53,7 +53,7 @@ public final class NpcUpdating {
             if (npc.getPosition().isViewableFrom(player.getPosition()) && npc.isVisible()) {
                 NpcUpdating.updateNpcMovement(out, npc);
 
-                if (npc.isUpdateRequired()) {
+                if (npc.getUpdateContext().isUpdateRequired()) {
                     NpcUpdating.updateState(block, npc);
                 }
             } else {
@@ -94,9 +94,8 @@ public final class NpcUpdating {
     }
 
     /**
-     * Adds the NPC to the clientside local list.
+     * Adds the NPC to the client-side local list.
      *
-     * @param out    The buffer to write to
      * @param player The player
      * @param npc    The NPC being added
      */
@@ -105,7 +104,7 @@ public final class NpcUpdating {
         Position delta = Position.delta(player.getPosition(), npc.getPosition());
         out.writeBits(5, delta.getY());
         out.writeBits(5, delta.getX());
-        out.writeBit(npc.isUpdateRequired());
+        out.writeBit(npc.getUpdateContext().isUpdateRequired());
         out.writeBits(12, npc.getId());
         out.writeBit(true);
     }
@@ -113,12 +112,11 @@ public final class NpcUpdating {
     /**
      * Updates the movement of a NPC for this tick.
      *
-     * @param out The buffer to write to
      * @param npc The NPC to update
      */
     private static void updateNpcMovement(StreamBuffer.WriteBuffer out, Npc npc) {
         if (npc.getPrimaryDirection() == -1) {
-            if (npc.isUpdateRequired()) {
+            if (npc.getUpdateContext().isUpdateRequired()) {
                 out.writeBit(true);
                 out.writeBits(2, 0);
             } else {
@@ -128,20 +126,20 @@ public final class NpcUpdating {
             out.writeBit(true);
             out.writeBits(2, 1);
             out.writeBits(3, npc.getPrimaryDirection());
-            out.writeBit(npc.isUpdateRequired());
+            out.writeBit(npc.getUpdateContext().isUpdateRequired());
         }
     }
 
     /**
      * Updates the state of the NPC to the given update block.
      *
-     * @param block The update block to append to
      * @param npc   The NPC to update
      */
     private static void updateState(StreamBuffer.WriteBuffer block, Npc npc) {
-        int mask = 0x0;
+        NpcUpdateContext ctx = npc.getUpdateContext();
 
-        // TODO: NPC update masks.
+        // First we must calculate and write the mask.
+        int mask = ctx.mask();
 
         if (mask >= 0x100) {
             mask |= 0x40;
@@ -150,7 +148,111 @@ public final class NpcUpdating {
             block.writeByte(mask);
         }
 
-        // TODO: Append the NPC update blocks.
+        // Finally, we append the attributes blocks.
+        // Animation
+        if (ctx.isAnimationUpdateRequired()) {
+            appendAnimation(npc, block);
+        }
+
+        // Secondary hit
+        if (ctx.isSecondaryHitUpdateRequired()) {
+            appendSecondaryHit(npc, block);
+        }
+
+        // Graphics
+        if (ctx.isGraphicsUpdateRequired()) {
+            appendGraphic(npc, block);
+        }
+
+        // Interacting with npc
+        if (ctx.isInteractingNpcUpdateRequired()) {
+            appendInteractingNpc(npc, block);
+        }
+
+        // Forced chat
+        if (ctx.isForcedChatUpdateRequired()) {
+            appendForcedChat(npc, block);
+        }
+
+        // Primary hit
+        if (ctx.isPrimaryHitUpdateRequired()) {
+            appendPrimaryHit(npc, block);
+        }
+
+        // Npc definition
+        if (ctx.isNpcDefinitionUpdateRequired()) {
+            appendNpcDefinition(npc, block);
+        }
+
+        // Face coordinates
+        if (ctx.isFaceCoordinatesUpdateRequired()) {
+            appendFaceCoordinates(npc, block);
+        }
+    }
+
+    /**
+     * Appends the state of a player's animation to a buffer.
+     */
+    private static void appendAnimation(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeShort(npc.getAnimation().getId(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeByte(npc.getAnimation().getDelay());
+    }
+
+    /**
+     * Append secondary hit to a buffer.
+     */
+    private static void appendSecondaryHit(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeByte(npc.getPrimaryHit().getDamage(), StreamBuffer.ValueType.A);
+        out.writeByte(npc.getPrimaryHit().getType(), StreamBuffer.ValueType.C);
+        out.writeByte(npc.getCurrentHealth(), StreamBuffer.ValueType.A);
+        out.writeByte(npc.getMaximumHealth());
+    }
+
+    /**
+     * Appends the state of a player's attached graphics to a buffer.
+     */
+    private static void appendGraphic(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeShort(npc.getGraphics().getId());
+        out.writeInt(npc.getGraphics().getDelay());
+    }
+
+    /**
+     * Append npc being interacted with to a buffer.
+     */
+    private static void appendInteractingNpc(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeShort(npc.getInteractingNpc().getId());
+    }
+
+    /**
+     * Appends the state of a player's forced chat to a buffer.
+     */
+    private static void appendForcedChat(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeString(npc.getForceChatText());
+    }
+
+    /**
+     * Append primary hit to a buffer.
+     */
+    private static void appendPrimaryHit(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeByte(npc.getPrimaryHit().getDamage(), StreamBuffer.ValueType.C);
+        out.writeByte(npc.getPrimaryHit().getType(), StreamBuffer.ValueType.S);
+        out.writeByte(npc.getCurrentHealth(), StreamBuffer.ValueType.S);
+        out.writeByte(npc.getMaximumHealth(), StreamBuffer.ValueType.C);
+    }
+
+    /**
+     * Append npc definition to a buffer.
+     */
+    private static void appendNpcDefinition(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeShort(npc.getNpcDefinitionId(), StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
+    }
+
+    /**
+     * Append coordinates being faced to a buffer.
+     */
+    private static void appendFaceCoordinates(Npc npc, StreamBuffer.WriteBuffer out) {
+        out.writeShort(npc.getFacingPosition().getX(), StreamBuffer.ByteOrder.LITTLE);
+        out.writeShort(npc.getFacingPosition().getY(), StreamBuffer.ByteOrder.LITTLE);
     }
 
 }

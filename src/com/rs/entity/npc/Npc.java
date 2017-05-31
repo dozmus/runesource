@@ -18,9 +18,10 @@ package com.rs.entity.npc;
 
 import com.rs.entity.Entity;
 import com.rs.entity.Position;
+import com.rs.entity.action.*;
 
 /**
- * A non-player-character.
+ * A Non-Player Character.
  *
  * @author blakeman8192
  */
@@ -29,7 +30,15 @@ public final class Npc extends Entity {
     private final int id;
     private boolean visible = true;
     private Position position = new Position(0, 0);
-    private boolean updateRequired;
+    // Various npc update data.
+    private String forceChatText;
+    private Animation animation;
+    private Graphics graphics;
+    private Hit primaryHit;
+    private Hit secondaryHit;
+    private Position facingPosition;
+    private Npc interactingNpc;
+    private int npcDefinitionId;
 
     /**
      * Creates a new Npc.
@@ -37,6 +46,7 @@ public final class Npc extends Entity {
      * @param id the NPC ID
      */
     public Npc(int id) {
+        super(new NpcUpdateContext());
         this.id = id;
     }
 
@@ -47,7 +57,6 @@ public final class Npc extends Entity {
 
     public void reset() {
         super.reset();
-        // TODO: Any NPC flag resetting
     }
 
     /**
@@ -70,11 +79,79 @@ public final class Npc extends Entity {
         return position;
     }
 
-    public boolean isUpdateRequired() {
-        return updateRequired;
+    public NpcUpdateContext getUpdateContext() {
+        return (NpcUpdateContext)super.getUpdateContext();
     }
 
-    public void setUpdateRequired(boolean updateRequired) {
-        this.updateRequired = updateRequired;
+    public String getForceChatText() {
+        return forceChatText;
+    }
+
+    public void setForceChatText(String forceChatText) {
+        this.forceChatText = forceChatText;
+    }
+
+    public Animation getAnimation() {
+        return animation;
+    }
+
+    public void setAnimation(Animation animation) {
+        this.animation = animation;
+    }
+
+    public Graphics getGraphics() {
+        return graphics;
+    }
+
+    public void setGraphics(Graphics graphics) {
+        this.graphics = graphics;
+    }
+
+    public Hit getPrimaryHit() {
+        return primaryHit;
+    }
+
+    public void setPrimaryHit(Hit primaryHit) {
+        this.primaryHit = primaryHit;
+    }
+
+    public Hit getSecondaryHit() {
+        return secondaryHit;
+    }
+
+    public void setSecondaryHit(Hit secondaryHit) {
+        this.secondaryHit = secondaryHit;
+    }
+
+    public Position getFacingPosition() {
+        return facingPosition;
+    }
+
+    public void setFacingPosition(Position facingPosition) {
+        this.facingPosition = facingPosition;
+    }
+
+    public Npc getInteractingNpc() {
+        return interactingNpc;
+    }
+
+    public void setInteractingNpc(Npc interactingNpc) {
+        this.interactingNpc = interactingNpc;
+    }
+
+    public int getNpcDefinitionId() {
+        return npcDefinitionId;
+    }
+
+    public void setNpcDefinitionId(int npcDefinitionId) {
+        this.npcDefinitionId = npcDefinitionId;
+    }
+
+    public int getCurrentHealth() {
+        return 0;
+    }
+
+    public int getMaximumHealth() {
+        return 0;
     }
 }

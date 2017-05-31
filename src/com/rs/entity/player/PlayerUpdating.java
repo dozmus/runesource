@@ -18,8 +18,8 @@ package com.rs.entity.player;
 
 import com.rs.WorldHandler;
 import com.rs.entity.Position;
-import com.rs.entity.player.action.AsyncMovement;
-import com.rs.entity.player.action.PublicChat;
+import com.rs.entity.action.AsyncMovement;
+import com.rs.entity.action.PublicChat;
 import com.rs.net.StreamBuffer;
 import com.rs.util.EquipmentHelper;
 
@@ -394,7 +394,7 @@ public final class PlayerUpdating {
             appendPublicChat(player, block);
         }
 
-        // Interacting with entity
+        // Interacting with npc
         if (ctx.isInteractingNpcUpdateRequired()) {
             appendInteractingNpc(player, block);
         }

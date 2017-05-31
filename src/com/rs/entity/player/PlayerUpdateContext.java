@@ -16,23 +16,21 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.entity.EntityUpdateContext;
+
 /**
  * The update flags for a {@link Player}.
  */
-public final class PlayerUpdateContext {
+public final class PlayerUpdateContext extends EntityUpdateContext {
 
     // TODO put buffers here to cache
-    private boolean updateRequired = false;
     private boolean asyncMovementUpdateRequired = false;
-    private boolean graphicsUpdateRequired = false;
-    private boolean animationUpdateRequired = false;
-    private boolean forcedChatUpdateRequired = false;
     private boolean publicChatUpdateRequired = false;
-    private boolean interactingNpcUpdateRequired = false;
     private boolean appearanceUpdateRequired = false;
-    private boolean faceCoordinatesUpdateRequired = false;
-    private boolean primaryHitUpdateRequired = false;
-    private boolean secondaryHitUpdateRequired = false;
+
+    public int mask() {
+        return mask(false, false);
+    }
 
     public int mask(boolean forceAppearance, boolean noPublicChat) {
         int mask = 0x0;
@@ -79,118 +77,40 @@ public final class PlayerUpdateContext {
         return mask;
     }
 
-    public void setUpdateRequired() {
-        updateRequired = true;
-    }
-
     public void setAsyncMovementUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         asyncMovementUpdateRequired = true;
     }
 
-    public void setGraphicsUpdateRequired() {
-        updateRequired = true;
-        graphicsUpdateRequired = true;
-    }
-
-    public void setAnimationUpdateRequired() {
-        updateRequired = true;
-        animationUpdateRequired = true;
-    }
-
-    public void setForcedChatUpdateRequired() {
-        updateRequired = true;
-        forcedChatUpdateRequired = true;
-    }
-
     public void setPublicChatUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         publicChatUpdateRequired = true;
     }
 
-    public void setInteractingNpcUpdateRequired() {
-        updateRequired = true;
-        interactingNpcUpdateRequired = true;
-    }
-
     public void setAppearanceUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         appearanceUpdateRequired = true;
-    }
-
-    public void setFaceCoordinatesUpdateRequired() {
-        updateRequired = true;
-        faceCoordinatesUpdateRequired = true;
-    }
-
-    public void setPrimaryHitUpdateRequired() {
-        updateRequired = true;
-        primaryHitUpdateRequired = true;
-    }
-
-    public void setSecondaryHitUpdateRequired() {
-        updateRequired = true;
-        secondaryHitUpdateRequired = true;
-    }
-
-    public boolean isUpdateRequired() {
-        return updateRequired;
     }
 
     public boolean isAsyncMovementUpdateRequired() {
         return asyncMovementUpdateRequired;
     }
 
-    public boolean isGraphicsUpdateRequired() {
-        return graphicsUpdateRequired;
-    }
-
-    public boolean isAnimationUpdateRequired() {
-        return animationUpdateRequired;
-    }
-
-    public boolean isForcedChatUpdateRequired() {
-        return forcedChatUpdateRequired;
-    }
-
     public boolean isPublicChatUpdateRequired() {
         return publicChatUpdateRequired;
-    }
-
-    public boolean isInteractingNpcUpdateRequired() {
-        return interactingNpcUpdateRequired;
     }
 
     public boolean isAppearanceUpdateRequired() {
         return appearanceUpdateRequired;
     }
 
-    public boolean isFaceCoordinatesUpdateRequired() {
-        return faceCoordinatesUpdateRequired;
-    }
-
-    public boolean isPrimaryHitUpdateRequired() {
-        return primaryHitUpdateRequired;
-    }
-
-    public boolean isSecondaryHitUpdateRequired() {
-        return secondaryHitUpdateRequired;
-    }
-
     /**
      * Resets all update flags.
      */
     public void resetFlags() {
-        updateRequired = false;
+        super.resetFlags();
         asyncMovementUpdateRequired = false;
-        graphicsUpdateRequired = false;
-        animationUpdateRequired = false;
-        forcedChatUpdateRequired = false;
         publicChatUpdateRequired = false;
-        interactingNpcUpdateRequired = false;
         appearanceUpdateRequired = false;
-        faceCoordinatesUpdateRequired = false;
-        primaryHitUpdateRequired = false;
-        secondaryHitUpdateRequired = false;
     }
 }

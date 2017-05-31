@@ -19,7 +19,7 @@ package com.rs.entity.player;
 import com.rs.Server;
 import com.rs.entity.Entity;
 import com.rs.entity.Position;
-import com.rs.entity.player.action.PublicChat;
+import com.rs.entity.action.PublicChat;
 import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
@@ -92,6 +92,7 @@ public abstract class Client extends Entity {
      * @param key the SelectionKey of the client
      */
     public Client(SelectionKey key) {
+        super(new PlayerUpdateContext());
         this.key = key;
         inData = ByteBuffer.allocateDirect(512);
         setConnectionStage(ConnectionStage.CONNECTED);

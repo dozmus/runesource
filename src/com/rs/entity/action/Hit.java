@@ -1,4 +1,4 @@
-package com.rs.entity.player.action;
+package com.rs.entity.action;
 /*
  * This file is part of RuneSource.
  *
@@ -16,21 +16,21 @@ package com.rs.entity.player.action;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-public final class Graphics {
+public final class Hit {
 
-    private final int id;
-    private final int delay;
+    private final int damage;
+    private final int type; // XXX document types
 
-    public Graphics(int id, int delay) {
-        this.id = id;
-        this.delay = delay;
+    public Hit(int damage, int type) {
+        this.damage = damage;
+        this.type = type;
     }
 
-    public int getId() {
-        return id;
+    public int getDamage() {
+        return damage;
     }
 
-    public int getDelay() {
-        return delay;
+    public int getType() {
+        return type;
     }
 }

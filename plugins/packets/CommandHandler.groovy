@@ -19,8 +19,8 @@ import com.rs.entity.Position
 import com.rs.entity.npc.Npc
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
-import com.rs.entity.player.action.Animation
-import com.rs.entity.player.action.Graphics
+import com.rs.entity.action.Animation
+import com.rs.entity.action.Graphics
 import com.rs.plugin.Plugin
 import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.CommandEvent

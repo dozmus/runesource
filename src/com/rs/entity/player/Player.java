@@ -21,7 +21,7 @@ import com.rs.Settings;
 import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
-import com.rs.entity.player.action.*;
+import com.rs.entity.action.*;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
@@ -52,7 +52,6 @@ public final class Player extends Client implements Tickable {
     private int currentWeaponInterfaceId = -2;
     private int currentInterfaceId = -1;
     // Various player update data.
-    private PlayerUpdateContext updateContext = new PlayerUpdateContext();
     private String forceChatText;
     private PublicChat publicChat;
     private Animation animation;
@@ -93,7 +92,6 @@ public final class Player extends Client implements Tickable {
      */
     public void reset() {
         super.reset();
-        updateContext.resetFlags();
     }
 
     public void login(String username, String password) throws Exception {
@@ -150,7 +148,7 @@ public final class Player extends Client implements Tickable {
         sendSkills();
         sendEquipment();
         sendWeaponInterface();
-        updateContext.setAppearanceUpdateRequired();
+        getUpdateContext().setAppearanceUpdateRequired();
 
         // Send sidebar interfaces
         for (int i = 1; i < SIDEBAR_INTERFACE_IDS.length; i++) {
@@ -213,7 +211,7 @@ public final class Player extends Client implements Tickable {
     }
 
     public PlayerUpdateContext getUpdateContext() {
-        return updateContext;
+        return (PlayerUpdateContext)super.getUpdateContext();
     }
 
     public List<Player> getPlayers() {
@@ -266,7 +264,7 @@ public final class Player extends Client implements Tickable {
 
     public void startAnimation(Animation animation) {
         setAnimation(animation);
-        updateContext.setAnimationUpdateRequired();
+        getUpdateContext().setAnimationUpdateRequired();
     }
 
     public void startAnimation(int animationId, int delay) {
@@ -279,7 +277,7 @@ public final class Player extends Client implements Tickable {
 
     public void startGraphic(Graphics graphics) {
         setGraphics(graphics);
-        updateContext.setGraphicsUpdateRequired();
+        getUpdateContext().setGraphicsUpdateRequired();
     }
 
     public void startGraphic(int graphicId, int delay) {

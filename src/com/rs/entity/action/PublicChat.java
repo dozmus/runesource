@@ -1,4 +1,4 @@
-package com.rs.entity.player.action;
+package com.rs.entity.action;
 /*
  * This file is part of RuneSource.
  *
