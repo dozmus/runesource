@@ -185,56 +185,69 @@ public final class NpcUpdating {
     private static void updateState(StreamBuffer.WriteBuffer block, Npc npc) {
         NpcUpdateContext ctx = npc.getUpdateContext();
 
+        // Check if the result is cached
+        if (!ctx.isBufferOutdated()) {
+            block.writeBytes(ctx.getBuffer());
+            return;
+        }
+
+        // Create new result and cache it
+        StreamBuffer.WriteBuffer result = StreamBuffer.createWriteBuffer(stateBlockSize(null, npc, true));
+
         // First we must calculate and write the mask.
         int mask = ctx.mask();
 
         if (mask >= 0x100) {
             mask |= 0x40;
-            block.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
+            result.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
         } else {
-            block.writeByte(mask);
+            result.writeByte(mask);
         }
 
         // Finally, we append the attributes blocks.
         // Animation
         if (ctx.isAnimationUpdateRequired()) {
-            appendAnimation(npc, block);
+            appendAnimation(npc, result);
         }
 
         // Secondary hit
         if (ctx.isSecondaryHitUpdateRequired()) {
-            appendSecondaryHit(npc, block);
+            appendSecondaryHit(npc, result);
         }
 
         // Graphics
         if (ctx.isGraphicsUpdateRequired()) {
-            appendGraphic(npc, block);
+            appendGraphic(npc, result);
         }
 
         // Interacting with npc
         if (ctx.isInteractingNpcUpdateRequired()) {
-            appendInteractingNpc(npc, block);
+            appendInteractingNpc(npc, result);
         }
 
         // Forced chat
         if (ctx.isForcedChatUpdateRequired()) {
-            appendForcedChat(npc, block);
+            appendForcedChat(npc, result);
         }
 
         // Primary hit
         if (ctx.isPrimaryHitUpdateRequired()) {
-            appendPrimaryHit(npc, block);
+            appendPrimaryHit(npc, result);
         }
 
         // Npc definition
         if (ctx.isNpcDefinitionUpdateRequired()) {
-            appendNpcDefinition(npc, block);
+            appendNpcDefinition(npc, result);
         }
 
         // Face coordinates
         if (ctx.isFaceCoordinatesUpdateRequired()) {
-            appendFaceCoordinates(npc, block);
+            appendFaceCoordinates(npc, result);
         }
+
+        // Cache and write the result
+        block.writeBytes(result.getBuffer());
+        ctx.setBuffer(result);
     }
 
     /**
