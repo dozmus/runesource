@@ -63,6 +63,9 @@ public final class NpcUpdateContext extends EntityUpdateContext {
         return mask;
     }
 
+    public void setUpdateRequired() {
+        super.setUpdateRequired();
+    }
 
     public void setNpcDefintionUpdateRequired() {
         setUpdateRequired();

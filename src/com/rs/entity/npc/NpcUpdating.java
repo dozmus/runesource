@@ -21,7 +21,9 @@ import com.rs.entity.Position;
 import com.rs.entity.player.Player;
 import com.rs.net.StreamBuffer;
 
+import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Provides static utility methods for updating NPCs.
@@ -31,21 +33,55 @@ import java.util.Iterator;
 public final class NpcUpdating {
 
     /**
+     * Regional player limit.
+     */
+    private static final int REGION_NPCS_LIMIT = 255;
+
+    /**
      * Updates all NPCs for the argued Player.
      *
      * @param player the player
      */
     public static void update(Player player) {
-        // XXX: The buffer sizes need to be tuned.
-        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(2048);
-        StreamBuffer.WriteBuffer block = StreamBuffer.createWriteBuffer(1024);
+        // TODO prioritise updating NPCs based on distance to you
+        // Find other NPCs in local region
+        List<Npc> regionalNpcs = new ArrayList<>();
+
+        for (Npc npc : WorldHandler.getInstance().getNpcs()) {
+            if (player.getNpcs().size() + regionalNpcs.size() >= REGION_NPCS_LIMIT) {
+                break; // Local player limit has been reached.
+            }
+
+            if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()
+                    ||!npc.getPosition().isViewableFrom(player.getPosition())) {
+                continue;
+            }
+            regionalNpcs.add(npc);
+        }
+
+        // Calculate state block size
+        int localPlayerCount = player.getNpcs().size();
+        int stateBlockSize = 0;
+
+        for (Npc npc : player.getNpcs()) {
+            stateBlockSize += stateBlockSize(player, npc, false);
+        }
+
+        for (Npc npc : regionalNpcs) {
+            stateBlockSize += stateBlockSize(player, npc, true);
+        }
+        int totalBlockSize = 6 + stateBlockSize + 2*localPlayerCount + 5*regionalNpcs.size();
+
+        // Create write buffers
+        StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(totalBlockSize);
+        StreamBuffer.WriteBuffer stateBlock = StreamBuffer.createWriteBuffer(stateBlockSize);
 
         // Initialize the update packet.
         out.writeVariableShortHeader(player.getEncryptor(), 65);
         out.setAccessType(StreamBuffer.AccessType.BIT_ACCESS);
 
         // Update the NPCs in the local list.
-        out.writeBits(8, player.getNpcs().size());
+        out.writeBits(8, localPlayerCount);
 
         for (Iterator<Npc> i = player.getNpcs().iterator(); i.hasNext(); ) {
             Npc npc = i.next();
@@ -54,7 +90,7 @@ public final class NpcUpdating {
                 NpcUpdating.updateNpcMovement(out, npc);
 
                 if (npc.getUpdateContext().isUpdateRequired()) {
-                    NpcUpdating.updateState(block, npc);
+                    NpcUpdating.updateState(stateBlock, npc);
                 }
             } else {
                 // Remove the NPC from the local list.
@@ -65,25 +101,17 @@ public final class NpcUpdating {
         }
 
         // Update the local NPC list itself.
-        for (int i = 0; i < WorldHandler.getInstance().getNpcs().length; i++) {
-            Npc npc = WorldHandler.getInstance().getNpcs()[i];
-
-            if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()) {
-                continue;
-            }
-
-            if (npc.getPosition().isViewableFrom(player.getPosition())) {
-                player.getNpcs().add(npc);
-                addNpc(out, player, npc);
-                NpcUpdating.updateState(block, npc);
-            }
+        for (Npc npc : regionalNpcs) {
+            player.getNpcs().add(npc);
+            addNpc(out, player, npc);
+            NpcUpdating.updateState(stateBlock, npc);
         }
 
         // Append the update block to the packet if need be.
-        if (block.getBuffer().position() > 0) {
+        if (stateBlock.getBuffer().position() > 0) {
             out.writeBits(14, 16383);
             out.setAccessType(StreamBuffer.AccessType.BYTE_ACCESS);
-            out.writeBytes(block.getBuffer());
+            out.writeBytes(stateBlock.getBuffer());
         } else {
             out.setAccessType(StreamBuffer.AccessType.BYTE_ACCESS);
         }
@@ -91,6 +119,25 @@ public final class NpcUpdating {
         // Ship the packet out to the client.
         out.finishVariableShortHeader();
         player.send(out.getBuffer());
+    }
+
+    /**
+     * The size in bytes of the state block for the given npc.
+     */
+    private static int stateBlockSize(Player player, Npc npc, boolean forceAccept) {
+        NpcUpdateContext ctx = npc.getUpdateContext();
+
+        if (!forceAccept)
+            if (!ctx.isUpdateRequired() || !npc.getPosition().isViewableFrom(player.getPosition()) || npc.isVisible())
+                return 0;
+        return 2 + (ctx.isGraphicsUpdateRequired() ? 4 : 0)
+                + (ctx.isAnimationUpdateRequired() ? 3 : 0)
+                + (ctx.isForcedChatUpdateRequired() ? npc.getForceChatText().length() + 1 : 0)
+                + (ctx.isInteractingNpcUpdateRequired() ? 2 : 0)
+                + (ctx.isFaceCoordinatesUpdateRequired() ? 4 : 0)
+                + (ctx.isPrimaryHitUpdateRequired() ? 4 : 0)
+                + (ctx.isSecondaryHitUpdateRequired() ? 4 : 0)
+                + (ctx.isNpcDefinitionUpdateRequired() ? 2 : 0);
     }
 
     /**
