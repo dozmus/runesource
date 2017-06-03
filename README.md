@@ -2,37 +2,50 @@ RuneSource
 =======================
 
 ### What is RuneSource?
-Hey there, thanks for checking out RuneSource. RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](runescape.com), written in the Java programming language. It is important to note that RuneSource is in no way endorsed or affiliated with RuneScape or its creator company, Jagex. Use of RuneSource is also against the RuneScape Terms of Service (which you may or may not be bound by). RuneSource is licensed via the GNU General Public License Version 3. Please note that this server is not ready for production - it has minimal content implemented.
+RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](runescape.com),
+written in the Java programming language.
+It is important to note that RuneSource is in no way endorsed or affiliated with RuneScape or its creator company,
+Jagex. Use of RuneSource is also against the RuneScape Terms of Service (which you may be bound by).
+RuneSource is licensed via the GNU General Public License Version 3.
+Please note that this server is not ready for production - it has minimal content implemented.
 
 ### Why was RuneSource made?
-RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the general RuneScape emulation community, which is spread across many internet forums and IRC channels. The purpose of RuneSource is to provide a stable, high-performance, and simple RuneScape server emulator for people to use. At the current time of release (late 2010), all existing RuneScape server emulators are either very unstable and slow, or very complicated and hard to work with. RuneSource aims to solve these problems by being a stable and efficient server, and above all, by being simple and easy to use.
+RuneSource was made by [blakeman8192](https://github.com/blakeman8192) for the general RuneScape emulation community,
+which is spread across many internet forums and IRC channels.
+The purpose of RuneSource is to provide a stable, high-performance, and simple RuneScape server emulator for people to
+use.
+At the current time of release (late 2010), all existing RuneScape server emulators are either very unstable and slow,
+or very complicated and hard to work with.
+RuneSource aims to solve these problems by being a stable and efficient server, and above all, by being simple and
+easy to use.
 
 ### New Features
-* Improved plugin system (uses Groovy)
-* Task system
-* More player updating
-* Friends list and Private Messaging
-* JSON data serialization (optional: passwords are hashed using SHA-256)
+* Improved Plugin System (uses Groovy)
+* Task System
+* Full Player Support
+* Full Npc Support
+* Friends List and Private Messaging
+* JSON Data Serialization (optional: passwords are hashed using SHA-256)
 * Lots of misc. stuff (emotes, running, etc.)
 * [More planned...](https://github.com/PureCS/runesource/issues)
 
 ### F.A.Q.
-#### What is the 'mopar' account's password
+#### What is the 'mopar' account's password?
 `test`
 
-#### Change server name/starting position/maximum connections per host/whether or not to hash password
+#### How to change server name/starting position/maximum connections per host/whether or not to hash password?
 Edit the server config file in /data/settings.json.
 Note: If you change the hash passwords variable any existing accounts will be rendered inaccessible, unless if you change it back.
 
-#### Save a new variable in a player file
+#### How to save a new variable in a player file?
 Add a new variable into the PlayerAttributes class (under com.rs.entity.player), the order of variables in that file
 dictates the order of the corresponding JSON output. The order should not matter when being parsed though.
 So if you change the format the next time a player logs in and out it should be updated with no problems!
 
-#### Add a new command
+#### How to add a new command?
 Add any commands into the Groovy script in the CommandHandler class (under /plugins/bindings/packets/).
 
-#### Add a new plugin
+#### How to add a new plugin?
 Create a Groovy class file extending `Plugin` under /plugins/scripts/. Type its relative file name (without extension) in the `data/plugins.ini` file.  
 The next time you start the server it should be available. You can also have your script inherit further behaviours by registering a binding in its `onEnable` method (see the other files for examples).
 
