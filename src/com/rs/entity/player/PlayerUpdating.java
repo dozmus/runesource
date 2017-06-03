@@ -358,65 +358,104 @@ public final class PlayerUpdating {
                                    boolean noPublicChat) {
         PlayerUpdateContext ctx = player.getUpdateContext();
 
+        // Check if the result is cached
+        if (!forceAppearance && !noPublicChat) {
+            if (!ctx.isRegularBufferOutdated()) {
+                block.writeBytes(ctx.getRegularBuffer());
+                return;
+            }
+        } else if (forceAppearance && !noPublicChat) {
+            if (!ctx.isForcedAppearanceBufferOutdated()) {
+                block.writeBytes(ctx.getForcedAppearanceBuffer());
+                return;
+            }
+        } else if (!forceAppearance && noPublicChat) {
+            if (!ctx.isNoChatBufferOutdated()) {
+                block.writeBytes(ctx.getNoChatBuffer());
+                return;
+            }
+        } else {
+            if (!ctx.isForcedAppearanceAndNoChatBufferOutdated()) {
+                block.writeBytes(ctx.getForcedAppearanceAndNoChatBuffer());
+                return;
+            }
+        }
+
+        // Create new result and cache it
+        StreamBuffer.WriteBuffer result = StreamBuffer.createWriteBuffer(stateBlockSize(player, false));
+
         // First we must calculate and write the mask.
         int mask = ctx.mask(forceAppearance, noPublicChat);
 
         if (mask >= 0x100) {
             mask |= 0x40;
-            block.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
+            result.writeShort(mask, StreamBuffer.ByteOrder.LITTLE);
         } else {
-            block.writeByte(mask);
+            result.writeByte(mask);
         }
 
         // Finally, we append the attributes blocks.
         // Async. walking
         if (ctx.isAsyncMovementUpdateRequired()) {
-            appendAsyncMovement(player, block);
+            appendAsyncMovement(player, result);
         }
 
         // Graphics
         if (ctx.isGraphicsUpdateRequired()) {
-            appendGraphic(player, block);
+            appendGraphic(player, result);
         }
 
         // Animation
         if (ctx.isAnimationUpdateRequired()) {
-            appendAnimation(player, block);
+            appendAnimation(player, result);
         }
 
         // Forced chat
         if (ctx.isForcedChatUpdateRequired()) {
-            appendForcedChat(player, block);
+            appendForcedChat(player, result);
         }
 
         // Chat
         if (ctx.isPublicChatUpdateRequired() && !noPublicChat) {
-            appendPublicChat(player, block);
+            appendPublicChat(player, result);
         }
 
         // Interacting with npc
         if (ctx.isInteractingNpcUpdateRequired()) {
-            appendInteractingNpc(player, block);
+            appendInteractingNpc(player, result);
         }
 
         // Appearance
         if (ctx.isAppearanceUpdateRequired() || forceAppearance) {
-            appendAppearance(player, block);
+            appendAppearance(player, result);
         }
 
         // Face coordinates
         if (ctx.isFaceCoordinatesUpdateRequired()) {
-            appendFaceCoordinates(player, block);
+            appendFaceCoordinates(player, result);
         }
 
         // Primary hit
         if (ctx.isPrimaryHitUpdateRequired()) {
-            appendPrimaryHit(player, block);
+            appendPrimaryHit(player, result);
         }
 
         // Secondary hit
         if (ctx.isSecondaryHitUpdateRequired()) {
-            appendSecondaryHit(player, block);
+            appendSecondaryHit(player, result);
+        }
+
+        // Cache and write the result
+        block.writeBytes(result.getBuffer());
+
+        if (!forceAppearance && !noPublicChat) {
+            ctx.setRegularBuffer(result.getBuffer());
+        } else if (forceAppearance && !noPublicChat) {
+            ctx.setForcedAppearanceBuffer(result.getBuffer());
+        } else if (!forceAppearance && noPublicChat) {
+            ctx.setNoChatBuffer(result.getBuffer());
+        } else {
+            ctx.setForcedAppearanceAndNoChatBuffer(result.getBuffer());
         }
     }
 

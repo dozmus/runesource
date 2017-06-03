@@ -18,15 +18,24 @@ package com.rs.entity.player;
 
 import com.rs.entity.EntityUpdateContext;
 
+import java.nio.ByteBuffer;
+
 /**
- * The update flags for a {@link Player}.
+ * The update flags and buffer caches for a {@link Player}.
  */
 public final class PlayerUpdateContext extends EntityUpdateContext {
 
-    // TODO put buffers here to cache
+    private boolean regularBufferOutdated = true;
+    private boolean forcedAppearanceBufferOutdated = true;
+    private boolean noChatBufferOutdated = true;
+    private boolean forcedAppearanceAndNoChatBufferOutdated = true;
     private boolean asyncMovementUpdateRequired = false;
     private boolean publicChatUpdateRequired = false;
     private boolean appearanceUpdateRequired = false;
+    private ByteBuffer regularBuffer;
+    private ByteBuffer forcedAppearanceBuffer;
+    private ByteBuffer noChatBuffer;
+    private ByteBuffer forcedAppearanceAndNoChatBuffer;
 
     public int mask() {
         return mask(false, false);
@@ -77,6 +86,14 @@ public final class PlayerUpdateContext extends EntityUpdateContext {
         return mask;
     }
 
+    public void setUpdateRequired() {
+        super.setUpdateRequired();
+        regularBufferOutdated = true;
+        forcedAppearanceBufferOutdated = true;
+        noChatBufferOutdated = true;
+        forcedAppearanceAndNoChatBufferOutdated = true;
+    }
+
     public void setAsyncMovementUpdateRequired() {
         setUpdateRequired();
         asyncMovementUpdateRequired = true;
@@ -112,5 +129,61 @@ public final class PlayerUpdateContext extends EntityUpdateContext {
         asyncMovementUpdateRequired = false;
         publicChatUpdateRequired = false;
         appearanceUpdateRequired = false;
+        regularBufferOutdated = true;
+        forcedAppearanceBufferOutdated = true;
+        noChatBufferOutdated = true;
+        forcedAppearanceAndNoChatBufferOutdated = true;
+    }
+
+    public void setRegularBuffer(ByteBuffer regularBuffer) {
+        this.regularBuffer = regularBuffer;
+        regularBufferOutdated = false;
+    }
+
+    public void setForcedAppearanceBuffer(ByteBuffer forcedAppearanceBuffer) {
+        this.forcedAppearanceBuffer = forcedAppearanceBuffer;
+        forcedAppearanceBufferOutdated = false;
+    }
+
+    public void setNoChatBuffer(ByteBuffer noChatBuffer) {
+        this.noChatBuffer = noChatBuffer;
+        noChatBufferOutdated = false;
+    }
+
+    public void setForcedAppearanceAndNoChatBuffer(ByteBuffer forcedAppearanceAndNoChatBuffer) {
+        this.forcedAppearanceAndNoChatBuffer = forcedAppearanceAndNoChatBuffer;
+        forcedAppearanceAndNoChatBufferOutdated = false;
+    }
+
+    public ByteBuffer getRegularBuffer() {
+        return regularBuffer;
+    }
+
+    public ByteBuffer getForcedAppearanceBuffer() {
+        return forcedAppearanceBuffer;
+    }
+
+    public ByteBuffer getNoChatBuffer() {
+        return noChatBuffer;
+    }
+
+    public ByteBuffer getForcedAppearanceAndNoChatBuffer() {
+        return forcedAppearanceAndNoChatBuffer;
+    }
+
+    public boolean isRegularBufferOutdated() {
+        return regularBufferOutdated;
+    }
+
+    public boolean isForcedAppearanceBufferOutdated() {
+        return forcedAppearanceBufferOutdated;
+    }
+
+    public boolean isNoChatBufferOutdated() {
+        return noChatBufferOutdated;
+    }
+
+    public boolean isForcedAppearanceAndNoChatBufferOutdated() {
+        return forcedAppearanceAndNoChatBufferOutdated;
     }
 }
