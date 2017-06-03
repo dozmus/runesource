@@ -37,37 +37,37 @@ public abstract class EntityUpdateContext {
     }
 
     public void setGraphicsUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         graphicsUpdateRequired = true;
     }
 
     public void setAnimationUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         animationUpdateRequired = true;
     }
 
     public void setForcedChatUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         forcedChatUpdateRequired = true;
     }
 
     public void setInteractingNpcUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         interactingNpcUpdateRequired = true;
     }
 
     public void setFaceCoordinatesUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         faceCoordinatesUpdateRequired = true;
     }
 
     public void setPrimaryHitUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         primaryHitUpdateRequired = true;
     }
 
     public void setSecondaryHitUpdateRequired() {
-        updateRequired = true;
+        setUpdateRequired();
         secondaryHitUpdateRequired = true;
     }
 
