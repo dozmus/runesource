@@ -157,20 +157,4 @@ public final class PlayerUpdateContext extends EntityUpdateContext {
         noChatBufferCache.setOutdated();
         forcedAppearanceNoChatBufferCache.setOutdated();
     }
-
-    public StreamBuffer.BufferCache getRegularBufferCache() {
-        return regularBufferCache;
-    }
-
-    public StreamBuffer.BufferCache getForcedAppearanceBufferCache() {
-        return forcedAppearanceBufferCache;
-    }
-
-    public StreamBuffer.BufferCache getNoChatBufferCache() {
-        return noChatBufferCache;
-    }
-
-    public StreamBuffer.BufferCache getForcedAppearanceNoChatBufferCache() {
-        return forcedAppearanceNoChatBufferCache;
-    }
 }
