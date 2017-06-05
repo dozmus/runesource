@@ -19,16 +19,13 @@ package com.rs.entity.npc;
 import com.rs.entity.EntityUpdateContext;
 import com.rs.net.StreamBuffer;
 
-import java.nio.ByteBuffer;
-
 /**
  * The update flags and buffer caches for a {@link Npc}.
  */
 public final class NpcUpdateContext extends EntityUpdateContext {
 
-    private boolean bufferOutdated = true;
+    private final StreamBuffer.BufferCache bufferCache = new StreamBuffer.BufferCache();
     private boolean npcDefinitionUpdateRequired = false;
-    private ByteBuffer buffer;
 
     public int mask() {
         int mask = 0x0;
@@ -69,12 +66,7 @@ public final class NpcUpdateContext extends EntityUpdateContext {
 
     public void setUpdateRequired() {
         super.setUpdateRequired();
-        bufferOutdated = true;
-    }
-
-    public void setBuffer(StreamBuffer.WriteBuffer buffer) {
-        this.buffer = buffer.getBuffer();
-        bufferOutdated = false;
+        bufferCache.setOutdated();
     }
 
     public void setNpcDefintionUpdateRequired() {
@@ -84,18 +76,14 @@ public final class NpcUpdateContext extends EntityUpdateContext {
 
     public void resetFlags() {
         super.resetFlags();
-        bufferOutdated = true;
+        bufferCache.setOutdated();
     }
 
     public boolean isNpcDefinitionUpdateRequired() {
         return npcDefinitionUpdateRequired;
     }
 
-    public boolean isBufferOutdated() {
-        return bufferOutdated;
-    }
-
-    public ByteBuffer getBuffer() {
-        return buffer;
+    public StreamBuffer.BufferCache getBufferCache() {
+        return bufferCache;
     }
 }

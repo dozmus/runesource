@@ -1030,4 +1030,30 @@ public abstract class StreamBuffer {
 
     }
 
+    /**
+     * A single buffer cache.
+     */
+    public static final class BufferCache {
+
+        private ByteBuffer buffer;
+        private boolean outdated = true;
+
+        public void setBuffer(ByteBuffer buffer) {
+            this.buffer = buffer;
+            outdated = false;
+        }
+
+        public ByteBuffer getBuffer() {
+            return buffer;
+        }
+
+        public void setOutdated() {
+            this.outdated = true;
+        }
+
+        public boolean isOutdated() {
+            return outdated;
+        }
+    }
+
 }

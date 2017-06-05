@@ -23,6 +23,7 @@ import com.rs.entity.action.PublicChat;
 import com.rs.net.StreamBuffer;
 import com.rs.util.EquipmentHelper;
 
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -48,35 +49,23 @@ public final class PlayerUpdating {
      */
     public static void update(Player player) {
         // TODO prioritise updating players based on distance to you
+        // Find other players in local region
+        List<Player> regionalPlayers = PlayerUpdating.updateLocalPlayers(player);
+
         // Calculate block buffer size
         int baseBlockSize = 128;
-        int stateBlockSize = stateBlockSize(player, true);
+        int stateBlockSize = PlayerUpdating.stateBlockSize(player, true);
 
         for (Player other : player.getPlayers()) {
             if (player.updatableForPlayer(other)) {
                 baseBlockSize += 3; // up to 19 bits for movement
-                stateBlockSize += stateBlockSize(other, true);
+                stateBlockSize += PlayerUpdating.stateBlockSize(other, true);
             }
         }
 
-        // Find other players in region
-        List<Player> regionalPlayers = new ArrayList<>();
-
-        for (Player other : WorldHandler.getInstance().getPlayers()) {
-            if (player.getPlayers().size() + regionalPlayers.size() >= REGION_PLAYERS_LIMIT) {
-                break; // Local player limit has been reached.
-            }
-
-            if (other == null || other == player || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN
-                    || player.getPlayers().contains(other)) {
-                continue;
-            }
-
-            if (other.getPosition().isViewableFrom(player.getPosition())) {
-                regionalPlayers.add(other);
-                baseBlockSize += 3; // 23 bits for add player
-                stateBlockSize += stateBlockSize(other, false);
-            }
+        for (Player other : regionalPlayers) {
+            baseBlockSize += 3; // 23 bits for add player
+            stateBlockSize += PlayerUpdating.stateBlockSize(other, false);
         }
 
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(baseBlockSize + stateBlockSize);
@@ -135,6 +124,29 @@ public final class PlayerUpdating {
         // Finish the packet and send it.
         out.finishVariableShortHeader();
         player.send(out.getBuffer());
+    }
+
+    /**
+     * Update local player list for the given player.
+     */
+    private static List<Player> updateLocalPlayers(Player player) {
+        List<Player> players = new ArrayList<>();
+
+        for (Player other : WorldHandler.getInstance().getPlayers()) {
+            if (player.getPlayers().size() + players.size() >= REGION_PLAYERS_LIMIT) {
+                break; // Local player limit has been reached.
+            }
+
+            if (other == null || other == player || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN
+                    || player.getPlayers().contains(other)) {
+                continue;
+            }
+
+            if (other.getPosition().isViewableFrom(player.getPosition())) {
+                players.add(other);
+            }
+        }
+        return players;
     }
 
     /**
@@ -359,26 +371,11 @@ public final class PlayerUpdating {
         PlayerUpdateContext ctx = player.getUpdateContext();
 
         // Check if the result is cached
-        if (!forceAppearance && !noPublicChat) {
-            if (!ctx.isRegularBufferOutdated()) {
-                block.writeBytes(ctx.getRegularBuffer());
-                return;
-            }
-        } else if (forceAppearance && !noPublicChat) {
-            if (!ctx.isForcedAppearanceBufferOutdated()) {
-                block.writeBytes(ctx.getForcedAppearanceBuffer());
-                return;
-            }
-        } else if (!forceAppearance && noPublicChat) {
-            if (!ctx.isNoChatBufferOutdated()) {
-                block.writeBytes(ctx.getNoChatBuffer());
-                return;
-            }
-        } else {
-            if (!ctx.isForcedAppearanceAndNoChatBufferOutdated()) {
-                block.writeBytes(ctx.getForcedAppearanceAndNoChatBuffer());
-                return;
-            }
+        ByteBuffer buffer = ctx.getBuffer(forceAppearance, noPublicChat);
+
+        if (buffer != null) {
+            block.writeBytes(buffer);
+            return;
         }
 
         // Create new result and cache it
@@ -447,16 +444,7 @@ public final class PlayerUpdating {
 
         // Cache and write the result
         block.writeBytes(result.getBuffer());
-
-        if (!forceAppearance && !noPublicChat) {
-            ctx.setRegularBuffer(result.getBuffer());
-        } else if (forceAppearance && !noPublicChat) {
-            ctx.setForcedAppearanceBuffer(result.getBuffer());
-        } else if (!forceAppearance && noPublicChat) {
-            ctx.setNoChatBuffer(result.getBuffer());
-        } else {
-            ctx.setForcedAppearanceAndNoChatBuffer(result.getBuffer());
-        }
+        ctx.setBuffer(forceAppearance, noPublicChat, result.getBuffer());
     }
 
 

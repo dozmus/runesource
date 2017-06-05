@@ -38,39 +38,17 @@ public final class NpcUpdating {
     private static final int REGION_NPCS_LIMIT = 255;
 
     /**
-     * Updates all NPCs for the argued Player.
-     *
-     * @param player the player
+     * Updates all NPCs for the given Player.
      */
     public static void update(Player player) {
         // TODO prioritise updating NPCs based on distance to you
         // Find other NPCs in local region
-        List<Npc> regionalNpcs = new ArrayList<>();
-
-        for (Npc npc : WorldHandler.getInstance().getNpcs()) {
-            if (player.getNpcs().size() + regionalNpcs.size() >= REGION_NPCS_LIMIT) {
-                break; // Local player limit has been reached.
-            }
-
-            if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()
-                    ||!npc.getPosition().isViewableFrom(player.getPosition())) {
-                continue;
-            }
-            regionalNpcs.add(npc);
-        }
+        List<Npc> regionalNpcs = NpcUpdating.updateLocalNpcs(player);
 
         // Calculate state block size
-        int localPlayerCount = player.getNpcs().size();
-        int stateBlockSize = 0;
-
-        for (Npc npc : player.getNpcs()) {
-            stateBlockSize += stateBlockSize(player, npc, false);
-        }
-
-        for (Npc npc : regionalNpcs) {
-            stateBlockSize += stateBlockSize(player, npc, true);
-        }
-        int totalBlockSize = 6 + stateBlockSize + 2*localPlayerCount + 5*regionalNpcs.size();
+        int localNpcCount = player.getNpcs().size();
+        int stateBlockSize = NpcUpdating.totalStateBlockSize(player, regionalNpcs);
+        int totalBlockSize = 6 + stateBlockSize + 2*localNpcCount + 5*regionalNpcs.size();
 
         // Create write buffers
         StreamBuffer.WriteBuffer out = StreamBuffer.createWriteBuffer(totalBlockSize);
@@ -81,7 +59,7 @@ public final class NpcUpdating {
         out.setAccessType(StreamBuffer.AccessType.BIT_ACCESS);
 
         // Update the NPCs in the local list.
-        out.writeBits(8, localPlayerCount);
+        out.writeBits(8, localNpcCount);
 
         for (Iterator<Npc> i = player.getNpcs().iterator(); i.hasNext(); ) {
             Npc npc = i.next();
@@ -122,7 +100,43 @@ public final class NpcUpdating {
     }
 
     /**
-     * The size in bytes of the state block for the given npc.
+     * Update local NPC list for the given player.
+     */
+    private static List<Npc> updateLocalNpcs(Player player) {
+        List<Npc> npcs = new ArrayList<>();
+
+        for (Npc npc : WorldHandler.getInstance().getNpcs()) {
+            if (player.getNpcs().size() + npcs.size() >= REGION_NPCS_LIMIT) {
+                break; // Local player limit has been reached.
+            }
+
+            if (npc == null || player.getNpcs().contains(npc) || !npc.isVisible()
+                    ||!npc.getPosition().isViewableFrom(player.getPosition())) {
+                continue;
+            }
+            npcs.add(npc);
+        }
+        return npcs;
+    }
+
+    /**
+     * The total size in bytes of the state block for the given player.
+     */
+    private static int totalStateBlockSize(Player player, List<Npc> regionalNpcs) {
+        int stateBlockSize = 0;
+
+        for (Npc npc : player.getNpcs()) {
+            stateBlockSize += NpcUpdating.stateBlockSize(player, npc, false);
+        }
+
+        for (Npc npc : regionalNpcs) {
+            stateBlockSize += NpcUpdating.stateBlockSize(player, npc, true);
+        }
+        return stateBlockSize;
+    }
+
+    /**
+     * The size in bytes of the state block for the given npc, with respect to the given player.
      */
     private static int stateBlockSize(Player player, Npc npc, boolean forceAccept) {
         NpcUpdateContext ctx = npc.getUpdateContext();
@@ -186,8 +200,8 @@ public final class NpcUpdating {
         NpcUpdateContext ctx = npc.getUpdateContext();
 
         // Check if the result is cached
-        if (!ctx.isBufferOutdated()) {
-            block.writeBytes(ctx.getBuffer());
+        if (!ctx.getBufferCache().isOutdated()) {
+            block.writeBytes(ctx.getBufferCache().getBuffer());
             return;
         }
 
@@ -247,7 +261,7 @@ public final class NpcUpdating {
 
         // Cache and write the result
         block.writeBytes(result.getBuffer());
-        ctx.setBuffer(result);
+        ctx.getBufferCache().setBuffer(result.getBuffer());
     }
 
     /**
