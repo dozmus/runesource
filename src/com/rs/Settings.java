@@ -63,5 +63,4 @@ public final class Settings {
     public boolean isHashingPasswords() {
         return hashPasswords;
     }
-
 }
