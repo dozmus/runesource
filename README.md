@@ -2,7 +2,7 @@ RuneSource
 =======================
 
 ### What is RuneSource?
-RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](runescape.com),
+RuneSource is an [open-source](http://www.opensource.org/) server for the popular game [RuneScape](https://runescape.com),
 written in the Java programming language.
 It is important to note that RuneSource is in no way endorsed or affiliated with RuneScape or its creator company,
 Jagex. Use of RuneSource is also against the RuneScape Terms of Service (which you may be bound by).
@@ -33,21 +33,25 @@ easy to use.
 #### What is the 'mopar' account's password?
 `test`
 
-#### How to change server name/starting position/maximum connections per host/whether or not to hash password?
+#### How to change server name?
+#### How to change starting position?
+#### How to change maximum connections per host?
+#### How to change whether passwords are hashed?
 Edit the server config file in /data/settings.json.
 Note: If you change the hash passwords variable any existing accounts will be rendered inaccessible, unless if you change it back.
 
 #### How to save a new variable in a player file?
-Add a new variable into the PlayerAttributes class (under com.rs.entity.player), the order of variables in that file
-dictates the order of the corresponding JSON output. The order should not matter when being parsed though.
-So if you change the format the next time a player logs in and out it should be updated with no problems!
+Add a new variable into the PlayerAttributes class (under com.rs.entity.player).
+The next time a player logs in and out it their save file will be updated with no problems!
 
 #### How to add a new command?
 Add any commands into the Groovy script in the CommandHandler class (under /plugins/bindings/packets/).
 
 #### How to add a new plugin?
-Create a Groovy class file extending `Plugin` under /plugins/scripts/. Type its relative file name (without extension) in the `data/plugins.ini` file.  
-The next time you start the server it should be available. You can also have your script inherit further behaviours by registering a binding in its `onEnable` method (see the other files for examples).
+Create a Groovy class file extending `Plugin` under `/plugins/scripts/`.
+Type its relative file name (without extension) in the `data/plugins.ini` file.  
+The next time you start the server it should be active.
+You can also have your script inherit further behaviours by registering a binding in its `onEnable` method (see the other plugins for examples).
 
 ### Dependencies
 * Groovy (v2.4.3)
