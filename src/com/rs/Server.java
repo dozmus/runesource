@@ -44,6 +44,11 @@ import java.util.Map;
  */
 public final class Server implements Runnable, Tickable {
 
+
+    /**
+     * The amount of CPU processors available.
+     */
+    public static final int CPU_CORES = Runtime.getRuntime().availableProcessors();
     private static Server instance;
     private final String host;
     private final int port;

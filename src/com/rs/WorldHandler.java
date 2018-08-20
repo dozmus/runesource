@@ -24,6 +24,10 @@ import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
 import com.rs.util.Tickable;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Phaser;
+
 /**
  * Handles all logged in players.
  *
@@ -35,6 +39,8 @@ public final class WorldHandler implements Tickable {
      * Singleton instance.
      */
     private static final WorldHandler instance = new WorldHandler();
+
+
     /**
      * All registered players.
      */
@@ -43,12 +49,25 @@ public final class WorldHandler implements Tickable {
      * All registered NPCs.
      */
     private final Npc[] npcs = new Npc[8192];
+
+    /**
+     * A thread pool that allows tasks to be executed in parallel.
+     */
+    private final ExecutorService threadPool = Executors.newFixedThreadPool(Server.CPU_CORES);
+
+    /**
+     * A synchronization barrier that allows a group of threads to wait for each other to
+     * arrive at a certain point. This is needed so the world can be concurrently updated in phases.
+     */
+    private final Phaser barrier = new Phaser(1);
+
     private int playerAmount = 0;
     private int npcAmount = 0;
 
     /**
      * @return Singleton instance.
      */
+
     public static WorldHandler getInstance() {
         return instance;
     }
@@ -94,19 +113,27 @@ public final class WorldHandler implements Tickable {
         TaskHandler.tick();
 
         // Update all players.
+        barrier.bulkRegister(playerAmount);
         for (Player player : players) {
             if (player == null) {
                 continue;
             }
+            threadPool.execute(() -> {
+                synchronized (player) {
+                    try {
+                        PlayerUpdating.update(player);
+                        NpcUpdating.update(player);
+                    } catch (Exception ex) {
+                        ex.printStackTrace();
+                    } finally {
+                        barrier.arriveAndDeregister();
+                    }
+                }
+            });
 
-            try {
-                PlayerUpdating.update(player);
-                NpcUpdating.update(player);
-            } catch (Exception ex) {
-                ex.printStackTrace();
-                player.disconnect();
-            }
         }
+        barrier.arriveAndAwaitAdvance();
+
 
         // Reset all players after tick.
         for (Player player : players) {
