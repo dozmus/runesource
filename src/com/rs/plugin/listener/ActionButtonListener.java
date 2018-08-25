@@ -1,4 +1,4 @@
-package com.rs.plugin.event;
+package com.rs.plugin.listener;
 /*
  * This file is part of RuneSource.
  *
@@ -16,22 +16,10 @@ package com.rs.plugin.event;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
-import com.rs.plugin.PlayerEvent;
+import com.rs.plugin.EventListener;
+import com.rs.plugin.event.ActionButtonEvent;
 
-/**
- * Player logged on event.
- */
-public final class PlayerLoggedOnEvent extends PlayerEvent {
+public interface ActionButtonListener extends EventListener {
 
-    private final boolean newPlayer;
-
-    public PlayerLoggedOnEvent(Player player, boolean newPlayer) {
-        super(player);
-        this.newPlayer = newPlayer;
-    }
-
-    public boolean isNewPlayer() {
-        return newPlayer;
-    }
+    void actionButton(ActionButtonEvent e);
 }

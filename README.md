@@ -20,7 +20,7 @@ RuneSource aims to solve these problems by being a stable and efficient server, 
 easy to use.
 
 ### New Features
-* Improved Plugin System (uses Groovy)
+* Powerful Plugins using Groovy
 * Task System
 * Full Player Support
 * Full Npc Support

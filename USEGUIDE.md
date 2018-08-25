@@ -23,7 +23,15 @@ The next time a player logs in and out it their save file will be updated with n
 Add any commands into the Groovy script in the CommandHandler class (under /plugins/bindings/packets/).
 
 ## How to add a new plugin?
-Create a Groovy class file extending `Plugin` under `/plugins/scripts/`.
-Type its relative file name (without extension) in the `data/plugins.ini` file.  
-The next time you start the server it should be active.
-You can also have your script inherit further behaviours by registering a binding in its `onEnable` method (see the other plugins for examples).
+Create a Groovy class file (i.e. something `.groovy`) extending an `EventListener` (or multiple) under `/plugins/`.
+You can find a full list of listeners under `com.rs.plugin.listener`.
+Each listener will give your script some information regarding the server.
+
+## How to create a new listener?
+Firstly, create a new subclass of `EventListener` in `com.rs.plugin.listener`.
+
+Next, add this interface to the `Bootstrap` interface.
+Make sure you implement and handle this method, analogously to the others in `GroovyBootstrap`.
+
+Finally, create a corresponding static `dispatch*` in `PluginHandler`.
+Make sure that this dispatch method is called whenever this event occurs.

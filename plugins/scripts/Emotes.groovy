@@ -15,13 +15,12 @@
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 import com.rs.entity.player.Player
-import com.rs.plugin.Plugin
-import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.ActionButtonEvent
+import com.rs.plugin.listener.ActionButtonListener
 
-class Emotes extends Plugin {
+class Emotes implements ActionButtonListener {
 
-    void onActionButton(ActionButtonEvent evt) {
+    void actionButton(ActionButtonEvent evt) {
         Player player = evt.getPlayer()
 
         switch (evt.getActionButtonId()) {
@@ -110,18 +109,5 @@ class Emotes extends Plugin {
                 player.startAnimation 2128
                 break
         }
-    }
-
-    @Override
-    void tick() throws Exception {
-    }
-
-    @Override
-    void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.register PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
-    }
-
-    @Override
-    void onDisable() throws Exception {
     }
 }

@@ -1,4 +1,4 @@
-package com.rs.plugin.event;
+package com.rs.plugin.listener;
 /*
  * This file is part of RuneSource.
  *
@@ -16,27 +16,9 @@ package com.rs.plugin.event;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
+import com.rs.plugin.EventListener;
+import com.rs.util.Tickable;
 
-/**
- * A player command event.
- */
-public final class CommandEvent extends PlayerEvent {
+public interface TickListener extends Tickable, EventListener {
 
-    private final String commandName;
-    private final String[] args;
-
-    public CommandEvent(Player player, String commandName, String[] args) {
-        super(player);
-        this.commandName = commandName;
-        this.args = args;
-    }
-
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public String[] getArgs() {
-        return args;
-    }
 }

@@ -1,4 +1,4 @@
-package com.rs.plugin.event;
+package com.rs.plugin;
 /*
  * This file is part of RuneSource.
  *
@@ -16,27 +16,18 @@ package com.rs.plugin.event;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
+import com.rs.plugin.listener.*;
 
 /**
- * A player command event.
+ * A bootstrap, which dispatches events from the core of the server to third-party plugins.
+ *
+ * @author Pure_
  */
-public final class CommandEvent extends PlayerEvent {
+public interface Bootstrap extends ActionButtonListener, CommandListener, MessageConfigListener,
+        MessageListener, PlayerConnectivityListener, PluginStateListener, TickListener {
 
-    private final String commandName;
-    private final String[] args;
-
-    public CommandEvent(Player player, String commandName, String[] args) {
-        super(player);
-        this.commandName = commandName;
-        this.args = args;
-    }
-
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public String[] getArgs() {
-        return args;
-    }
+    /**
+     * Loads its dependencies.
+     */
+    void load();
 }

@@ -19,30 +19,21 @@ package com.rs.plugin.event;
 import com.rs.entity.player.Player;
 
 /**
- * An event representing a change in chat mode.
+ * An event representing a username in hashed format.
  */
-public final class ModifyChatModeEvent extends PlayerEvent {
+public final class ModifyPlayerListEvent extends PlayerEvent {
 
-    private int publicChatMode;
-    private int privateChatMode;
-    private int tradeMode;
+    private final long target;
 
-    public ModifyChatModeEvent(Player player, int publicChatMode, int privateChatMode, int tradeMode) {
+    public ModifyPlayerListEvent(Player player, long target) {
         super(player);
-        this.publicChatMode = publicChatMode;
-        this.privateChatMode = privateChatMode;
-        this.tradeMode = tradeMode;
+        this.target = target;
     }
 
-    public int getPublicChatMode() {
-        return publicChatMode;
-    }
-
-    public int getPrivateChatMode() {
-        return privateChatMode;
-    }
-
-    public int getTradeMode() {
-        return tradeMode;
+    /**
+     * The player's username id who was added or removed from the friends list.
+     */
+    public long getTarget() {
+        return target;
     }
 }

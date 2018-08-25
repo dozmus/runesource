@@ -1,4 +1,4 @@
-package com.rs.plugin;
+package com.rs.plugin.event;
 /*
  * This file is part of RuneSource.
  *
@@ -16,20 +16,22 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.entity.action.PublicChat;
 import com.rs.entity.player.Player;
 
 /**
- * An {@link Event} triggered by a {@link Player}.
+ * Public message event.
  */
-public abstract class PlayerEvent implements Event {
+public final class PublicMessageEvent extends PlayerEvent {
 
-    protected final Player player;
+    private final PublicChat publicChat;
 
-    public PlayerEvent(Player player) {
-        this.player = player;
+    public PublicMessageEvent(Player player, PublicChat publicChat) {
+        super(player);
+        this.publicChat = publicChat;
     }
 
-    public Player getPlayer() {
-        return player;
+    public PublicChat getPublicChat() {
+        return publicChat;
     }
 }

@@ -15,14 +15,15 @@
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 import com.rs.entity.player.Player
-import com.rs.plugin.Plugin
-import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.ActionButtonEvent
-import com.rs.plugin.event.PlayerLoggedOnEvent
+import com.rs.plugin.event.PlayerLoggedInEvent
+import com.rs.plugin.event.PlayerLoggedOutEvent
+import com.rs.plugin.listener.ActionButtonListener
+import com.rs.plugin.listener.PlayerConnectivityListener
 
-class CharacterDesign extends Plugin {
+class CharacterDesign implements PlayerConnectivityListener, ActionButtonListener {
 
-    void onActionButton(ActionButtonEvent evt) {
+    void actionButton(ActionButtonEvent evt) {
         Player player = evt.getPlayer()
 
         if (evt.getActionButtonId() == 14067) { // Design character interface accept button
@@ -31,7 +32,7 @@ class CharacterDesign extends Plugin {
         }
     }
 
-    void onLogin(PlayerLoggedOnEvent evt) {
+    void logIn(PlayerLoggedInEvent evt) {
         Player player = evt.getPlayer()
 
         if (evt.isNewPlayer()) {
@@ -40,17 +41,6 @@ class CharacterDesign extends Plugin {
         }
     }
 
-    @Override
-    void tick() throws Exception {
-    }
-
-    @Override
-    void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.register PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
-    }
-
-    @Override
-    void onDisable() throws Exception {
+    void logOut(PlayerLoggedOutEvent evt) {
     }
 }

@@ -17,34 +17,20 @@ package com.rs.plugin.event;
  */
 
 import com.rs.entity.player.Player;
-import com.rs.plugin.PlayerEvent;
 
 /**
- * An event representing either the addition, or the removal of a friend.
+ * Player logged in event.
  */
-public final class ModifyFriendsListEvent extends PlayerEvent {
+public final class PlayerLoggedInEvent extends PlayerEvent {
 
-    private final long target;
-    private final Type type;
+    private final boolean newPlayer;
 
-    public ModifyFriendsListEvent(Player player, long target, Type type) {
+    public PlayerLoggedInEvent(Player player, boolean newPlayer) {
         super(player);
-        this.target = target;
-        this.type = type;
+        this.newPlayer = newPlayer;
     }
 
-    /**
-     * The player's username id who was added or removed from the friends list.
-     */
-    public long getTarget() {
-        return target;
-    }
-
-    public Type getType() {
-        return type;
-    }
-
-    public enum Type {
-        ADD, REMOVE
+    public boolean isNewPlayer() {
+        return newPlayer;
     }
 }

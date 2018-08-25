@@ -19,17 +19,19 @@ import com.rs.entity.player.Client
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 import com.rs.entity.player.PlayerSettings
-import com.rs.plugin.Plugin
-import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.ModifyChatModeEvent
-import com.rs.plugin.event.ModifyFriendsListEvent
-import com.rs.plugin.event.ModifyIgnoredListEvent
-import com.rs.plugin.event.PlayerLoggedOnEvent
+import com.rs.plugin.event.ModifyPlayerListEvent
+
+import com.rs.plugin.event.PlayerLoggedInEvent
 import com.rs.plugin.event.PlayerLoggedOutEvent
 import com.rs.plugin.event.PrivateMessageEvent
+import com.rs.plugin.event.PublicMessageEvent
+import com.rs.plugin.listener.MessageConfigListener
+import com.rs.plugin.listener.MessageListener
+import com.rs.plugin.listener.PlayerConnectivityListener
 import com.rs.util.Misc
 
-class PrivateMessaging extends Plugin {
+class PrivateMessaging implements PlayerConnectivityListener, MessageConfigListener, MessageListener {
 
     private static final int WORLD_1 = 10
     private static final int WORLD_OFFLINE = 0
@@ -42,11 +44,7 @@ class PrivateMessaging extends Plugin {
     private static final int FRIENDS_LIST_CONNECTED = 2
     private int MESSAGE_COUNTER = 1_000_000 * Math.random()
 
-    @Override
-    void tick() throws Exception {
-    }
-
-    void onLogin(PlayerLoggedOnEvent evt) throws Exception {
+    void logIn(PlayerLoggedInEvent evt) throws Exception {
         // Update this player
         Player player = evt.getPlayer()
 
@@ -71,7 +69,7 @@ class PrivateMessaging extends Plugin {
         updateOthersForPlayer(player, player.getAttributes().getSettings().getPrivateChatMode())
     }
 
-    void onLogout(PlayerLoggedOutEvent evt) throws Exception {
+    void logOut(PlayerLoggedOutEvent evt) throws Exception {
         long playerName = evt.getPlayer().getUsername()
 
         // Update other players
@@ -85,7 +83,7 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onAddIgnore(ModifyIgnoredListEvent evt) throws Exception {
+    void addIgnore(ModifyPlayerListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         long playerName = player.getUsername()
         String otherPlayerName = Misc.decodeBase37(evt.getTarget())
@@ -118,7 +116,7 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onRemoveIgnore(ModifyIgnoredListEvent evt) throws Exception {
+    void removeIgnore(ModifyPlayerListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         long playerName = player.getUsername()
         player.getAttributes().removeIgnored(evt.getTarget())
@@ -133,7 +131,7 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onAddFriend(ModifyFriendsListEvent evt) throws Exception {
+    void addFriend(ModifyPlayerListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         long playerName = player.getUsername()
         String otherPlayerName = Misc.decodeBase37(evt.getTarget())
@@ -169,7 +167,7 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onRemoveFriend(ModifyFriendsListEvent evt) throws Exception {
+    void removeFriend(ModifyPlayerListEvent evt) throws Exception {
         Player player = evt.getPlayer()
         player.getAttributes().removeFriend(evt.getTarget())
 
@@ -184,7 +182,7 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onPrivateMessage(PrivateMessageEvent evt) throws Exception {
+    void privateMessage(PrivateMessageEvent evt) throws Exception {
         Player player = evt.getPlayer()
         PlayerAttributes attributes = player.getAttributes()
         PlayerSettings settings = attributes.getSettings()
@@ -215,7 +213,10 @@ class PrivateMessaging extends Plugin {
         }
     }
 
-    void onModifyChatMode(ModifyChatModeEvent evt) throws Exception {
+    void publicMessage(PublicMessageEvent e) {
+    }
+
+    void modifyChatMode(ModifyChatModeEvent evt) throws Exception {
         int oldPrivateChatMode = evt.getPlayer().getAttributes().getSettings().getPrivateChatMode()
         int newPrivateChatMode = evt.getPrivateChatMode()
 
@@ -261,22 +262,5 @@ class PrivateMessaging extends Plugin {
                 other.sendAddFriend(player.getUsername(), worldNo)
             }
         }
-    }
-
-    @Override
-    void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGOUT_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.ADD_FRIEND_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.REMOVE_FRIEND_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.ADD_IGNORE_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.REMOVE_IGNORE_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.PRIVATE_MESSAGE_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.MODIFY_CHAT_MODE_EVENT, pluginName
-    }
-
-    @Override
-    void onDisable() throws Exception {
-
     }
 }

@@ -88,7 +88,7 @@ public final class WorldHandler implements Tickable {
         }
 
         // Process all plugins.
-        PluginHandler.tick();
+        PluginHandler.dispatchTick();
 
         // Process all tasks
         TaskHandler.tick();

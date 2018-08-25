@@ -146,7 +146,7 @@ public final class Server implements Runnable, Tickable {
 
             // Loading plugins
             timer.reset();
-            PluginHandler.loadPlugins("./data/plugins.ini");
+            PluginHandler.load();
             System.out.println("Loaded all plugins in " + timer.elapsed() + "ms");
 
             // Starting the server

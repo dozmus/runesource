@@ -16,158 +16,139 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.entity.action.PublicChat;
+import com.rs.entity.player.Player;
+import com.rs.plugin.event.*;
 import groovy.lang.GroovyClassLoader;
-import groovy.lang.GroovyObject;
 
-import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileReader;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.*;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A simple class that provides methods to register, unregister, and run
  * execution for all registered plugins.
  *
- * @author Blake Beaupain
+ * @author Pure_
  */
 public final class PluginHandler {
+
+    // TODO dispatch loaded() + unloaded()
 
     /**
      * The base directory of all plugins.
      */
-    private static final String PLUGIN_DIRECTORY = "./plugins/";
+    public static final String PLUGINS_DIRECTORY = "./plugins/";
     private static final GroovyClassLoader classLoader = new GroovyClassLoader();
-    private static String loadedPluginFile = "";
+    /**
+     * All registered bootstraps.
+     */
+    private static final List<Bootstrap> bootstraps = new ArrayList<>();
 
     /**
-     * All registered plugins.
+     * Loads all bootstraps.
      */
-    private static final HashMap<String, Plugin> plugins = new HashMap<>();
+    public static void load() throws Exception {
+        boolean foundBootstrap = false;
 
-    /**
-     * Processes execution for all registered plugins.
-     */
-    public static void tick() throws Exception {
-        for (Plugin plugin : plugins.values()) {
-            plugin.tick();
-        }
-    }
+        try (Stream<Path> paths = Files.walk(Paths.get(PLUGINS_DIRECTORY))) {
+            for (File f : paths.filter(p -> !Files.isDirectory(p) && p.getFileName().toString().endsWith(".groovy"))
+                    .map(Path::toFile)
+                    .collect(Collectors.toList())) {
+                Class cls = classLoader.parseClass(f);
 
-    /**
-     * Invokes a method from the given plugin.
-     *
-     * @param pluginName plugin name
-     * @param method     method name
-     * @param args       arguments
-     */
-    public static void invokeMethod(String pluginName, String method, Object... args) {
-        // Attempting to fetch the plugin
-        Plugin plugin = plugins.get(pluginName);
-
-        if (plugin == null) {
-            return;
-        }
-
-        // Invoking the method
-        plugin.getInstance().invokeMethod(method, args);
-    }
-
-    /**
-     * Loads all plugins.
-     *
-     * @param pluginsFile a text file containing a list of plugins to load
-     * @throws Exception
-     */
-    public static void loadPlugins(String pluginsFile) throws Exception {
-        loadedPluginFile = pluginsFile;
-        File file = new File(pluginsFile);
-        BufferedReader reader = new BufferedReader(new FileReader(file));
-        String pluginName;
-
-        while ((pluginName = reader.readLine()) != null) {
-            if (pluginName.trim().length() == 0)
-                continue;
-
-            // Loading the plugin instance
-            Class cls = classLoader.parseClass(new File(PLUGIN_DIRECTORY + pluginName + ".groovy"));
-            GroovyObject obj = (GroovyObject) cls.newInstance();
-            Plugin plugin = (Plugin) obj;
-            plugin.setInstance(obj);
-            register(pluginName.replace('/', '.'), plugin);
-        }
-    }
-
-    /**
-     * Unregisters all plugins.
-     */
-    public static void unregisterAll() {
-        try {
-            for (Iterator<String> it = plugins.keySet().iterator(); it.hasNext();) {
-                plugins.get(it.next()).onDisable();
-                it.remove();
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Reloads all plugins, based on the argument to the last call of {@link #loadPlugins(String)}.
-     */
-    public static void reloadAll() throws Exception {
-        unregisterAll();
-        loadPlugins(loadedPluginFile);
-    }
-
-    /**
-     * Registers a plugin and calls the plugin's onEnable method.
-     *
-     * @param name   The plugin name
-     * @param plugin The plugin to register
-     */
-    public static void register(String name, Plugin plugin) {
-        try {
-            plugin.onEnable(name);
-            plugins.put(name, plugin);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
-
-    /**
-     * Unregisters a plugin and calls the plugin's onDisable method.
-     *
-     * @param plugin The plugin to unregister
-     */
-    public static void unregister(Plugin plugin) {
-        String targetKey = null;
-
-        for (Map.Entry<String, Plugin> entry : plugins.entrySet()) {
-            if (entry.getValue().equals(plugin)) {
-                targetKey = entry.getKey();
-                break;
+                if (Arrays.asList(cls.getInterfaces()).contains(Bootstrap.class)) {
+                    Bootstrap b = (Bootstrap) cls.newInstance();
+                    b.load();
+                    bootstraps.add(b);
+                    foundBootstrap = true;
+                }
             }
         }
 
-        if (targetKey != null) {
-            unregister(targetKey);
+        if (!foundBootstrap) {
+            System.err.println("Unable to find a suitable bootstrap!");
         }
     }
 
     /**
-     * Unregisters a plugin and calls the plugin's onDisable method.
-     *
-     * @param name The plugin name to unregister
+     * Reloads all plugins, by calling {@link Bootstrap#load()}.
      */
-    public static void unregister(String name) {
-        try {
-            plugins.get(name).onDisable();
-            plugins.remove(name);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    public static void reload() {
+        bootstraps.forEach(Bootstrap::load);
     }
 
+    /**
+     * Performs an action on each registered bootstrap.
+     * @param action
+     */
+    public static void forEach(Consumer<? super Bootstrap> action) {
+        bootstraps.forEach(action);
+    }
+
+    public static void dispatchLogin(Player player, boolean newPlayer) {
+        PlayerLoggedInEvent e = new PlayerLoggedInEvent(player, newPlayer);
+        forEach(b -> b.logIn(e));
+    }
+
+    public static void dispatchLogout(Player player) {
+        PlayerLoggedOutEvent e = new PlayerLoggedOutEvent(player);
+        forEach(b -> b.logOut(e));
+    }
+
+    public static void dispatchModifyChatMode(Player player, int publicChatMode, int privateChatMode, int tradeMode) {
+        ModifyChatModeEvent e = new ModifyChatModeEvent(player, publicChatMode, privateChatMode, tradeMode);
+        forEach(b -> b.modifyChatMode(e));
+    }
+
+    public static void dispatchActionButton(Player player, int actionButtonId) {
+        ActionButtonEvent e = new ActionButtonEvent(player, actionButtonId);
+        forEach(b -> b.actionButton(e));
+    }
+
+    public static void dispatchAddIgnore(Player player, long target) {
+        ModifyPlayerListEvent e = new ModifyPlayerListEvent(player, target);
+        forEach(b -> b.addIgnore(e));
+    }
+
+    public static void dispatchRemoveIgnore(Player player, long target) {
+        ModifyPlayerListEvent e = new ModifyPlayerListEvent(player, target);
+        forEach(b -> b.removeIgnore(e));
+    }
+
+    public static void dispatchAddFriend(Player player, long target) {
+        ModifyPlayerListEvent e = new ModifyPlayerListEvent(player, target);
+        forEach(b -> b.addFriend(e));
+    }
+
+    public static void dispatchRemoveFriend(Player player, long target) {
+        ModifyPlayerListEvent e = new ModifyPlayerListEvent(player, target);
+        forEach(b -> b.removeFriend(e));
+    }
+
+    public static void dispatchPrivateMessage(Player player, long target, byte[] text) {
+        PrivateMessageEvent e = new PrivateMessageEvent(player, target, text);
+        forEach(b -> b.privateMessage(e));
+    }
+
+    public static void dispatchCommand(Player player, String commandName, String[] args) {
+        CommandEvent e = new CommandEvent(player, commandName, args);
+        forEach(b -> b.command(e));
+    }
+
+    public static void dispatchPublicMessage(Player player, PublicChat publicChat) {
+        PublicMessageEvent e = new PublicMessageEvent(player, publicChat);
+        forEach(b -> b.publicMessage(e));
+    }
+
+    public static void dispatchTick() throws Exception {
+        for (Bootstrap b : bootstraps) {
+            b.tick();
+        }
+    }
 }

@@ -23,7 +23,8 @@ import com.rs.entity.action.PublicChat;
 import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.PluginEventDispatcher;
+import com.rs.plugin.Bootstrap;
+import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
@@ -505,25 +506,25 @@ public abstract class Client extends Entity {
                             && privateChatMode == settings.getPrivateChatMode()
                             && tradeMode == settings.getTradeMode())
                         break;
-                    PluginEventDispatcher.dispatchModifyChatMode(player, publicChatMode, privateChatMode, tradeMode);
+                    PluginHandler.dispatchModifyChatMode(player, publicChatMode, privateChatMode, tradeMode);
                     settings.setPublicChatMode(publicChatMode);
                     settings.setPrivateChatMode(privateChatMode);
                     settings.setTradeMode(tradeMode);
                     break;
                 case 185: // Button clicking.
-                    PluginEventDispatcher.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
+                    PluginHandler.dispatchActionButton(player, StreamBuffer.hexToInt(in.readBytes(2)));
                     break;
                 case 133: // Add ignore.
-                    PluginEventDispatcher.dispatchAddIgnore(player, in.readLong());
+                    PluginHandler.dispatchAddIgnore(player, in.readLong());
                     break;
                 case 74: // Remove ignore.
-                    PluginEventDispatcher.dispatchRemoveIgnore(player, in.readLong());
+                    PluginHandler.dispatchRemoveIgnore(player, in.readLong());
                     break;
                 case 188: // Add friend.
-                    PluginEventDispatcher.dispatchAddFriend(player, in.readLong());
+                    PluginHandler.dispatchAddFriend(player, in.readLong());
                     break;
                 case 215: // Remove friend.
-                    PluginEventDispatcher.dispatchRemoveFriend(player, in.readLong());
+                    PluginHandler.dispatchRemoveFriend(player, in.readLong());
                     break;
                 case 214: // Move item.
                     int frameId = in.readShort(StreamBuffer.ValueType.A, StreamBuffer.ByteOrder.LITTLE);
@@ -540,21 +541,20 @@ public abstract class Client extends Entity {
                     long username = in.readLong();
                     int chatLength = (packetLength - 8);
                     byte[] text = in.readBytes(chatLength);
-                    PluginEventDispatcher.dispatchPrivateMessage(player, username, text);
+                    PluginHandler.dispatchPrivateMessage(player, username, text);
                     break;
                 case 4: // Player chat.
                     int effects = in.readByte(false, StreamBuffer.ValueType.S);
                     int color = in.readByte(false, StreamBuffer.ValueType.S);
                     chatLength = (packetLength - 2);
                     text = in.readBytesReverse(chatLength, StreamBuffer.ValueType.A);
-                    player.setPublicChat(new PublicChat(color, effects, text));
-                    player.getUpdateContext().setPublicChatUpdateRequired();
+                    PluginHandler.dispatchPublicMessage(player, new PublicChat(color, effects, text));
                     break;
                 case 103: // Player command.
                     String command = in.readString();
                     String[] split = command.split(" ");
                     String[] args = Arrays.copyOfRange(split, 1, split.length);
-                    PluginEventDispatcher.dispatchCommand(player, split[0].toLowerCase(), args);
+                    PluginHandler.dispatchCommand(player, split[0].toLowerCase(), args);
                     break;
                 case 248: // Movement.
                 case 164: // ^

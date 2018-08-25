@@ -15,14 +15,15 @@
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 import com.rs.entity.player.Player
-import com.rs.plugin.Plugin
-import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.ActionButtonEvent
-import com.rs.plugin.event.PlayerLoggedOnEvent
+import com.rs.plugin.event.PlayerLoggedInEvent
+import com.rs.plugin.event.PlayerLoggedOutEvent
+import com.rs.plugin.listener.ActionButtonListener
+import com.rs.plugin.listener.PlayerConnectivityListener
 
-class PlayerSettings extends Plugin {
+class PlayerSettings implements PlayerConnectivityListener, ActionButtonListener {
 
-    void onLogin(PlayerLoggedOnEvent evt) throws Exception {
+    void logIn(PlayerLoggedInEvent evt) throws Exception {
         Player player = evt.getPlayer()
         com.rs.entity.player.PlayerSettings settings = player.getAttributes().getSettings()
 
@@ -39,11 +40,14 @@ class PlayerSettings extends Plugin {
         player.sendChatModes()
     }
 
+    void logOut(PlayerLoggedOutEvent evt) {
+    }
+
     void sendSetting(Player player, int settingId, boolean condition) {
         player.sendClientSetting(settingId, condition ? 1 : 0)
     }
 
-    void onActionButton(ActionButtonEvent evt) {
+    void actionButton(ActionButtonEvent evt) {
         Player player = evt.getPlayer()
         com.rs.entity.player.PlayerSettings settings = player.getAttributes().getSettings()
 
@@ -97,19 +101,5 @@ class PlayerSettings extends Plugin {
                 settings.setAcceptAid false
                 break
         }
-    }
-
-    @Override
-    void tick() throws Exception {
-    }
-
-    @Override
-    void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.register PluginEventDispatcher.ACTION_BUTTON_HANDLER_EVENT, pluginName
-        PluginEventDispatcher.register PluginEventDispatcher.PLAYER_ON_LOGIN_EVENT, pluginName
-    }
-
-    @Override
-    void onDisable() throws Exception {
     }
 }

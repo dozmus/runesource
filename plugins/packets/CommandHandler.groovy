@@ -21,13 +21,12 @@ import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 import com.rs.entity.action.Animation
 import com.rs.entity.action.Graphics
-import com.rs.plugin.Plugin
-import com.rs.plugin.PluginEventDispatcher
 import com.rs.plugin.event.CommandEvent
+import com.rs.plugin.listener.CommandListener
 
-class CommandHandler extends Plugin {
+class CommandHandler implements CommandListener {
 
-    void onCommand(CommandEvent evt) {
+    void command(CommandEvent evt) {
         Player player = evt.getPlayer()
         PlayerAttributes attributes = player.getAttributes()
         String commandName = evt.getCommandName()
@@ -146,18 +145,5 @@ class CommandHandler extends Plugin {
         if (commandName == "mypos") {
             player.sendMessage "You are at: ${player.getPosition()}"
         }
-    }
-
-    @Override
-    void tick() throws Exception {
-    }
-
-    @Override
-    void onEnable(String pluginName) throws Exception {
-        PluginEventDispatcher.register PluginEventDispatcher.COMMAND_HANDLER_EVENT, pluginName
-    }
-
-    @Override
-    void onDisable() throws Exception {
     }
 }

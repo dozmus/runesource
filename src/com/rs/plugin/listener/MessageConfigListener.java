@@ -1,4 +1,4 @@
-package com.rs.plugin.event;
+package com.rs.plugin.listener;
 /*
  * This file is part of RuneSource.
  *
@@ -16,27 +16,19 @@ package com.rs.plugin.event;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
+import com.rs.plugin.EventListener;
+import com.rs.plugin.event.ModifyChatModeEvent;
+import com.rs.plugin.event.ModifyPlayerListEvent;
 
-/**
- * A player command event.
- */
-public final class CommandEvent extends PlayerEvent {
+public interface MessageConfigListener extends EventListener {
 
-    private final String commandName;
-    private final String[] args;
+    void modifyChatMode(ModifyChatModeEvent e);
 
-    public CommandEvent(Player player, String commandName, String[] args) {
-        super(player);
-        this.commandName = commandName;
-        this.args = args;
-    }
+    void addFriend(ModifyPlayerListEvent e);
 
-    public String getCommandName() {
-        return commandName;
-    }
+    void removeFriend(ModifyPlayerListEvent e);
 
-    public String[] getArgs() {
-        return args;
-    }
+    void addIgnore(ModifyPlayerListEvent e);
+
+    void removeIgnore(ModifyPlayerListEvent e);
 }

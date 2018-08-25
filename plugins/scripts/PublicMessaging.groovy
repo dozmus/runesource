@@ -1,4 +1,8 @@
-package com.rs.plugin.event;
+import com.rs.entity.player.Player
+import com.rs.plugin.event.PrivateMessageEvent
+import com.rs.plugin.event.PublicMessageEvent
+import com.rs.plugin.listener.MessageListener
+
 /*
  * This file is part of RuneSource.
  *
@@ -16,27 +20,14 @@ package com.rs.plugin.event;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.entity.player.Player;
+class PublicMessaging implements MessageListener {
 
-/**
- * A player command event.
- */
-public final class CommandEvent extends PlayerEvent {
-
-    private final String commandName;
-    private final String[] args;
-
-    public CommandEvent(Player player, String commandName, String[] args) {
-        super(player);
-        this.commandName = commandName;
-        this.args = args;
+    void publicMessage(PublicMessageEvent e) {
+        Player player = e.getPlayer()
+        player.setPublicChat e.getPublicChat()
+        player.getUpdateContext().setPublicChatUpdateRequired()
     }
 
-    public String getCommandName() {
-        return commandName;
-    }
-
-    public String[] getArgs() {
-        return args;
+    void privateMessage(PrivateMessageEvent e) {
     }
 }

@@ -26,7 +26,8 @@ import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.PluginEventDispatcher;
+import com.rs.plugin.Bootstrap;
+import com.rs.plugin.PluginHandler;
 import com.rs.util.Misc;
 import com.rs.util.Tickable;
 
@@ -158,13 +159,13 @@ public final class Player extends Client implements Tickable {
         sendResetAllButtonStates();
         sendMessage("Welcome to " + settings.getServerName() + "!");
         System.out.println(this + " has logged in.");
-        PluginEventDispatcher.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
+        PluginHandler.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
     }
 
     public void logout() throws Exception {
         WorldHandler.getInstance().unregister(this);
         setConnectionStage(ConnectionStage.LOGGED_OUT);
-        PluginEventDispatcher.dispatchLogout(this);
+        PluginHandler.dispatchLogout(this);
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {
