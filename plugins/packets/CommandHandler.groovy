@@ -38,8 +38,7 @@ class CommandHandler implements CommandListener {
                 return
             }
             player.setForceChatText args.join(" ")
-            player.setForceChatUpdateRequired true
-            player.setUpdateRequired true
+            player.getUpdateContext().setForcedChatUpdateRequired()
         }
 
         if (commandName == "gfx") {
