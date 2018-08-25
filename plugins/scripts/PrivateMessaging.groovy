@@ -192,7 +192,7 @@ class PrivateMessaging implements PlayerConnectivityListener, MessageConfigListe
             PlayerAttributes otherAttributes = other.getAttributes()
             PlayerSettings otherSettings = otherAttributes.getSettings()
 
-            // Check chat mode
+            // Check our chat mode
             if (settings.getPrivateChatMode() == PRIVATE_CHAT_OFFLINE) { // Private chat offline
                 boolean mutualFriends = attributes.isFriend(other.getUsername()) && otherAttributes.isFriend(player.getUsername())
                 settings.setPrivateChatMode(mutualFriends ? PRIVATE_CHAT_FRIENDS : PRIVATE_CHAT_ONLINE)
@@ -206,7 +206,7 @@ class PrivateMessaging implements PlayerConnectivityListener, MessageConfigListe
                 }
             }
 
-            // Send message
+            // Send message - the client will filter it out depending on the other player's chat mode
             other.sendPrivateMessage(player.getUsername(), MESSAGE_COUNTER++, attributes.getPrivilege(), evt.getText())
         } catch (IndexOutOfBoundsException ex) {
             player.sendMessage("This player is not online.")
