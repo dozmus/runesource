@@ -29,12 +29,12 @@ class PlayerSettings implements PlayerConnectivityListener, ActionButtonListener
 
         // Send initial setting states
         player.sendClientSetting(166, settings.getBrightness().settingValue())
-        sendSetting(player, 170, settings.getMouseButtons() == com.rs.entity.player.PlayerSettings.MouseButtons.ONE)
-        sendSetting(player, 171, settings.isChatEffects())
-        sendSetting(player, 172, settings.isAutoRetaliate())
-        sendSetting(player, 173, settings.isRunToggled())
-        sendSetting(player, 287, settings.isSplitPrivateChat())
-        sendSetting(player, 427, settings.isAcceptAid())
+        sendBooleanSetting(player, 170, settings.getMouseButtons() == com.rs.entity.player.PlayerSettings.MouseButtons.ONE)
+        sendBooleanSetting(player, 171, settings.isChatEffects())
+        sendBooleanSetting(player, 172, settings.isAutoRetaliate())
+        sendBooleanSetting(player, 173, settings.isRunToggled())
+        sendBooleanSetting(player, 287, settings.isSplitPrivateChat())
+        sendBooleanSetting(player, 427, settings.isAcceptAid())
 
         // Send chat mode
         player.sendChatModes()
@@ -43,7 +43,7 @@ class PlayerSettings implements PlayerConnectivityListener, ActionButtonListener
     void logOut(PlayerLoggedOutEvent evt) {
     }
 
-    void sendSetting(Player player, int settingId, boolean condition) {
+    void sendBooleanSetting(Player player, int settingId, boolean condition) {
         player.sendClientSetting(settingId, condition ? 1 : 0)
     }
 
