@@ -49,6 +49,7 @@ public final class PlayerAttributes {
     private final int[] equipmentN = new int[14];
     private final Map<Long, String> friends = new HashMap<>();
     private final Map<Long, String> ignored = new HashMap<>();
+    private final PlayerInfractions infractions = new PlayerInfractions();
 
     public int[] getColors() {
         return colors;
@@ -80,6 +81,10 @@ public final class PlayerAttributes {
 
     public int[] getEquipmentN() {
         return equipmentN;
+    }
+
+    public PlayerInfractions getInfractions() {
+        return infractions;
     }
 
     public void init() {

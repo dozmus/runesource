@@ -26,6 +26,7 @@ easy to use.
 * Full Npc Support
 * Friends List and Private Messaging (with privacy settings)
 * JSON Data Serialization (optional: passwords are hashed using SHA-256)
+* Banning and muting with expiration dates
 * Misc stuff
   * Validate equipped items
   * Emotes

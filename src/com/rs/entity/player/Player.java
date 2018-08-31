@@ -26,7 +26,6 @@ import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.Bootstrap;
 import com.rs.plugin.PluginHandler;
 import com.rs.util.Misc;
 import com.rs.util.Tickable;
@@ -100,8 +99,8 @@ public final class Player extends Client implements Tickable {
         int response = Misc.LOGIN_RESPONSE_OK;
 
         // Updating credentials
-        getAttributes().setUsername(username);
-        getAttributes().setPassword(settings.isHashingPasswords() ? Misc.hashSha256(password) : password);
+        attributes.setUsername(username);
+        attributes.setPassword(settings.isHashingPasswords() ? Misc.hashSha256(password) : password);
 
         // Check if the player is already logged in.
         if (WorldHandler.getInstance().isPlayerOnline(username)) {
@@ -117,6 +116,11 @@ public final class Player extends Client implements Tickable {
                 || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
             ConnectionThrottle.enter(getHost());
+        }
+
+        // Check if banned
+        if (status == PlayerFileHandler.LoadResponse.BANNED) {
+            response = Misc.LOGIN_RESPONSE_ACCOUNT_DISABLED;
         }
 
         // Check if connection limit is exceeded
@@ -169,7 +173,7 @@ public final class Player extends Client implements Tickable {
         System.out.println(this + " has logged out.");
 
         if (getSlot() != -1) {
-            Server.getInstance().getPlayerFileHandler().save(this);
+            Server.getInstance().getPlayerFileHandler().save(attributes);
         }
     }
 
@@ -372,6 +376,10 @@ public final class Player extends Client implements Tickable {
         REGULAR,
         MODERATOR,
         ADMINISTRATOR;
+
+        public boolean gte(Privilege other) {
+            return toInt() >= other.toInt();
+        }
 
         public int toInt() {
             return ordinal();

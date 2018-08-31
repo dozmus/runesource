@@ -187,6 +187,10 @@ class PrivateMessaging implements PlayerConnectivityListener, MessageConfigListe
         PlayerAttributes attributes = player.getAttributes()
         PlayerSettings settings = attributes.getSettings()
 
+        if (attributes.getInfractions().isMuted()) {
+            return
+        }
+
         try {
             Player other = WorldHandler.getInstance().getPlayer(Misc.decodeBase37(evt.getTarget()))
             PlayerAttributes otherAttributes = other.getAttributes()

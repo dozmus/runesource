@@ -16,6 +16,8 @@ package com.rs.util;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.rs.Server;
+
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -91,6 +93,15 @@ public final class Misc {
     private static boolean contains(char[] src, char key) {
         for (char c : src) {
             if (c == key) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public static <T> boolean contains(T[] source, T target) {
+        for (T t : source) {
+            if (t.equals(target)) {
                 return true;
             }
         }
@@ -236,7 +247,7 @@ public final class Misc {
     public static class TimestampLogger extends PrintStream {
 
         private final BufferedWriter writer;
-        private final DateFormat df = new SimpleDateFormat();
+        private final DateFormat df = new SimpleDateFormat(Server.getInstance().getSettings().getDateFormat());
 
         /**
          * The OutputStream to log to.

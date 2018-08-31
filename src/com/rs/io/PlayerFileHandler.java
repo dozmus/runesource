@@ -17,6 +17,7 @@ package com.rs.io;
  */
 
 import com.rs.entity.player.Player;
+import com.rs.entity.player.PlayerAttributes;
 
 /**
  * An abstract player file saving/loading description.
@@ -27,14 +28,12 @@ public interface PlayerFileHandler {
 
     /**
      * Saves a player's attributes.
-     *
-     * @param player the player to save
      */
-    void save(Player player) throws Exception;
+    void save(PlayerAttributes attributes) throws Exception;
 
 
     /**
-     * Loads a player's attributes.
+     * Loads a player's attributes into the argument instance.
      *
      * @param player the player to load
      * @return login response
@@ -42,7 +41,12 @@ public interface PlayerFileHandler {
     LoadResponse load(Player player) throws Exception;
 
     /**
-     * The directory to store player flat files in.
+     * Returns the player attributes associated with the argument username.
+     */
+    PlayerAttributes load(String username) throws Exception;
+
+    /**
+     * Returns the directory to store player flat files in.
      */
     String getStorageDirectory();
 
@@ -52,6 +56,6 @@ public interface PlayerFileHandler {
      * @author Pure_
      */
     enum LoadResponse {
-        SUCCESS, NOT_FOUND, INVALID_CREDENTIALS
+        SUCCESS, NOT_FOUND, INVALID_CREDENTIALS, BANNED
     }
 }

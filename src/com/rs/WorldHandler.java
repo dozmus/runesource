@@ -219,6 +219,14 @@ public final class WorldHandler implements Tickable {
         throw new IndexOutOfBoundsException();
     }
 
+    public static void trySendMessage(String username, String message) {
+        try {
+            Player p = WorldHandler.getInstance().getPlayer(username);
+            p.sendMessage(message);
+        } catch (IndexOutOfBoundsException e) {
+        }
+    }
+
     /**
      * @return the amount of online players
      */

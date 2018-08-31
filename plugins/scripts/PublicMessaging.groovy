@@ -24,8 +24,11 @@ class PublicMessaging implements MessageListener {
 
     void publicMessage(PublicMessageEvent e) {
         Player player = e.getPlayer()
-        player.setPublicChat e.getPublicChat()
-        player.getUpdateContext().setPublicChatUpdateRequired()
+
+        if (!player.getAttributes().getInfractions().isMuted()) {
+            player.setPublicChat e.getPublicChat()
+            player.getUpdateContext().setPublicChatUpdateRequired()
+        }
     }
 
     void privateMessage(PrivateMessageEvent e) {

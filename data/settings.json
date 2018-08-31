@@ -7,5 +7,6 @@
     "z":0
   },
   "maxConsPerHost": 2,
-  "hashPasswords": false
+  "hashPasswords": false,
+  "dateFormat": "dd-MM-yyyy HH:mm:ss"
 }

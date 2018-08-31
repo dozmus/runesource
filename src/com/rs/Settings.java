@@ -32,6 +32,7 @@ public final class Settings {
     private Position startPosition;
     private int maxConsPerHost;
     private boolean hashPasswords;
+    private String dateFormat;
 
     public static Settings load(String fileName) throws Exception {
         // Checking if file exists
@@ -62,5 +63,9 @@ public final class Settings {
 
     public boolean isHashingPasswords() {
         return hashPasswords;
+    }
+
+    public String getDateFormat() {
+        return dateFormat;
     }
 }

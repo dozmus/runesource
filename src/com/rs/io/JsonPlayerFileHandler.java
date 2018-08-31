@@ -24,6 +24,7 @@ import com.rs.entity.player.PlayerAttributes;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
+import java.nio.file.NoSuchFileException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,48 +36,49 @@ import java.util.Map;
 public final class JsonPlayerFileHandler implements PlayerFileHandler {
 
     @Override
-    public void save(Player player) throws Exception {
-        // Checking if file exists
-        File file = new File(getStorageDirectory() + player.getAttributes().getUsername() + ".json");
-
-        if (!file.exists()) {
-            file.createNewFile();
-        } else {
-            file.delete();
-        }
-
-        // Generating pretty json
-        Map<String, Object> args = new HashMap<>();
-        args.put("JsonWriter.PRETTY_PRINT", true);
-        String json = JsonWriter.objectToJson(player.getAttributes(), args);
-        json = JsonWriter.formatJson(json);
-
-        // Writing json
-        FileWriter writer = new FileWriter(file);
-        writer.write(json);
-        writer.close();
+    public void save(PlayerAttributes attributes) throws Exception {
+        String fileName = getStorageDirectory() + attributes.getUsername() + ".json";
+        JsonUtils.write(fileName, true, attributes);
     }
 
     @Override
     public LoadResponse load(Player player) throws Exception {
-        // Checking if file exists
-        File file = new File(getStorageDirectory() + player.getAttributes().getUsername() + ".json");
+        // Reading file
+        PlayerAttributes attributes;
 
-        if (!file.exists()) {
+        try {
+            attributes = load(player.getAttributes().getUsername());
+        } catch (NoSuchFileException e) {
             return LoadResponse.NOT_FOUND;
         }
-
-        // Reading file
-        JsonReader reader = new JsonReader(new FileInputStream(file));
-        PlayerAttributes attributes = (PlayerAttributes) reader.readObject();
-        reader.close();
 
         // Checking password
         if (!attributes.getPassword().equals(player.getAttributes().getPassword())) {
             return LoadResponse.INVALID_CREDENTIALS;
         }
         player.setAttributes(attributes);
+
+        // Check ban status
+        if (attributes.getInfractions().isBanned()) {
+            return LoadResponse.BANNED;
+        }
         return LoadResponse.SUCCESS;
+    }
+
+    @Override
+    public PlayerAttributes load(String username) throws Exception {
+        // Checking if file exists
+        File file = new File(getStorageDirectory() + username + ".json");
+
+        if (!file.exists()) {
+            throw new NoSuchFileException(file.getAbsolutePath());
+        }
+
+        // Reading file
+        JsonReader reader = new JsonReader(new FileInputStream(file));
+        PlayerAttributes attributes = (PlayerAttributes) reader.readObject();
+        reader.close();
+        return attributes;
     }
 
     @Override

@@ -128,16 +128,18 @@ public final class Server implements Runnable, Tickable {
     @Override
     public void run() {
         try {
+            address = new InetSocketAddress(host, port);
+
+            // Set up out, err redirection
+            settings = Settings.load("./data/settings.json");
             new File("./data/logs").mkdir();
             System.setOut(new Misc.TimestampLogger(System.out, "./data/logs/out.log"));
             System.setErr(new Misc.TimestampLogger(System.err, "./data/logs/err.log"));
 
-            address = new InetSocketAddress(host, port);
             System.out.println("Starting RuneSource on " + address + "...");
 
             // Loading configuration
             Misc.Stopwatch timer = new Misc.Stopwatch();
-            settings = Settings.load("./data/settings.json");
             EquipmentHelper.loadWeaponDefinitions("./data/weapons.json");
             EquipmentHelper.sortEquipmentSlotDefinitions();
             EquipmentHelper.loadStackableItems("./data/stackable.dat");
@@ -267,9 +269,7 @@ public final class Server implements Runnable, Tickable {
     }
 
     /**
-     * Gets the client map.
-     *
-     * @return the client map
+     * Returns the client map.
      */
     public Map<SelectionKey, Client> getClientMap() {
         return clientMap;
