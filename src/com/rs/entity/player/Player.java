@@ -61,6 +61,10 @@ public final class Player extends Client implements Tickable {
     private AsyncMovement asyncMovement;
     private Position facingPosition;
     private Npc interactingNpc;
+    /**
+     * If other players cannot see this player.
+     */
+    private boolean hidden;
 
     /**
      * Creates a new Player.
@@ -362,6 +366,14 @@ public final class Player extends Client implements Tickable {
      */
     public long getUsername() {
         return username;
+    }
+
+    public boolean isHidden() {
+        return hidden;
+    }
+
+    public void setHidden(boolean hidden) {
+        this.hidden = hidden;
     }
 
     /**

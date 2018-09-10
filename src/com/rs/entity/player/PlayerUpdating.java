@@ -53,7 +53,9 @@ public final class PlayerUpdating {
         Iterator<Player> others = player.getPlayers().iterator();
 
         while (others.hasNext()) {
-            if (others.next().getConnectionStage() == Client.ConnectionStage.LOGGED_OUT) {
+            Player next = others.next();
+
+            if (next.getConnectionStage() == Client.ConnectionStage.LOGGED_OUT || next.isHidden()) {
                 others.remove();
             }
         }
@@ -147,7 +149,7 @@ public final class PlayerUpdating {
             }
 
             if (other == null || other == player || other.getConnectionStage() != Client.ConnectionStage.LOGGED_IN
-                    || player.getPlayers().contains(other)) {
+                    || player.getPlayers().contains(other) || other.isHidden()) {
                 continue;
             }
 

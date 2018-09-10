@@ -32,6 +32,14 @@ class CommandHandler implements CommandListener {
         String commandName = evt.getCommandName()
         String[] args = evt.getArgs()
 
+        if (commandName == "hide") {
+            player.setHidden true
+        }
+
+        if (commandName == "unhide") {
+            player.setHidden false
+        }
+
         if (commandName == "fchat") {
             if (args.length < 1) {
                 player.sendMessage("Syntax: ::fchat [text]")
