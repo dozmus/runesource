@@ -14,7 +14,7 @@
  * You should have received a copy of the GNU General Public License
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
-package com.rs.entity.player;
+package com.rs.entity.player.infractions;
 
 import com.rs.Server;
 

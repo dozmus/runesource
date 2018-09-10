@@ -1,4 +1,4 @@
-package com.rs.plugin;
+package com.rs.entity.player.infractions;
 /*
  * This file is part of RuneSource.
  *
@@ -16,18 +16,27 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.plugin.listener.*;
+public final class ReportAbuse {
 
-/**
- * A bootstrap, which dispatches events from the core of the server to third-party plugins.
- *
- * @author Pure_
- */
-public interface Bootstrap extends ActionButtonListener, CommandListener, MessageConfigListener,
-        MessageListener, PlayerConnectivityListener, PluginStateListener, ReportAbuseListener, TickListener {
+    private final String username;
+    private final ReportAbuseRule rule;
+    private final boolean muteFor48Hours;
 
-    /**
-     * Loads its dependencies.
-     */
-    void load();
+    public ReportAbuse(String username, ReportAbuseRule rule, boolean muteFor48Hours) {
+        this.username = username;
+        this.rule = rule;
+        this.muteFor48Hours = muteFor48Hours;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public ReportAbuseRule getRule() {
+        return rule;
+    }
+
+    public boolean isMuteFor48Hours() {
+        return muteFor48Hours;
+    }
 }

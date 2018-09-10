@@ -18,6 +18,7 @@ package com.rs.plugin;
 
 import com.rs.entity.action.PublicChat;
 import com.rs.entity.player.Player;
+import com.rs.entity.player.infractions.ReportAbuse;
 import com.rs.plugin.event.*;
 import groovy.lang.GroovyClassLoader;
 
@@ -144,6 +145,11 @@ public final class PluginHandler {
     public static void dispatchPublicMessage(Player player, PublicChat publicChat) {
         PublicMessageEvent e = new PublicMessageEvent(player, publicChat);
         forEach(b -> b.publicMessage(e));
+    }
+
+    public static void dispatchReportAbuse(Player player, ReportAbuse reportAbuse) {
+        ReportAbuseEvent e = new ReportAbuseEvent(player, reportAbuse);
+        forEach(b -> b.reportAbuse(e));
     }
 
     public static void dispatchTick() throws Exception {

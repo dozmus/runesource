@@ -142,6 +142,10 @@ class GroovyBootstrap implements Bootstrap {
         getPlugins(PlayerConnectivityListener.class).forEach { l -> l.logOut e }
     }
 
+    void reportAbuse(ReportAbuseEvent e) {
+        getPlugins(ReportAbuseListener.class).forEach { l -> l.reportAbuse e }
+    }
+
     void loaded() {
         getPlugins(PluginStateListener.class).forEach { l -> l.loaded() }
     }

@@ -19,7 +19,7 @@ import com.rs.WorldHandler
 import com.rs.entity.player.Player
 import com.rs.entity.player.PlayerAttributes
 
-import com.rs.entity.player.PlayerInfractions
+import com.rs.entity.player.infractions.PlayerInfractions
 
 import com.rs.plugin.event.CommandEvent
 import com.rs.plugin.event.PlayerLoggedInEvent
@@ -165,6 +165,7 @@ class Infractions implements PlayerConnectivityListener, CommandListener {
 
         FileWriter writer = new FileWriter(logFile, true)
         writer.write(log + System.lineSeparator())
+        writer.flush()
         writer.close()
     }
 

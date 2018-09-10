@@ -36,6 +36,7 @@ easy to use.
   * Buffer caching
   * Weapon stack merging (i.e. if you have 10 arrows equipped, and equip 5 more they combine into 15)
   * Login attempt throttling
+  * Report abuse interface
 * [More planned...](https://github.com/PureCS/runesource/issues)
 
 ### Configuration

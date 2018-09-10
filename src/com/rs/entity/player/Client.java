@@ -20,14 +20,15 @@ import com.rs.Server;
 import com.rs.entity.Entity;
 import com.rs.entity.Position;
 import com.rs.entity.action.PublicChat;
+import com.rs.entity.player.infractions.ReportAbuse;
 import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
-import com.rs.plugin.Bootstrap;
 import com.rs.plugin.PluginHandler;
 import com.rs.task.TaskHandler;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
+import com.rs.entity.player.infractions.ReportAbuseRule;
 import com.rs.util.WeaponDefinition;
 
 import java.io.IOException;
@@ -555,6 +556,14 @@ public abstract class Client extends Entity {
                     String[] split = command.split(" ");
                     String[] args = Arrays.copyOfRange(split, 1, split.length);
                     PluginHandler.dispatchCommand(player, split[0].toLowerCase(), args);
+                    break;
+                case 218: // Report abuse.
+                    username = in.readLong();
+                    int ruleId = in.readByte();
+                    boolean muteFor48Hours = in.readByte() == 1;
+                    ReportAbuse reportAbuse = new ReportAbuse(Misc.decodeBase37(username), ReportAbuseRule.ofId(ruleId),
+                            muteFor48Hours);
+                    PluginHandler.dispatchReportAbuse(player, reportAbuse);
                     break;
                 case 248: // Movement.
                 case 164: // ^

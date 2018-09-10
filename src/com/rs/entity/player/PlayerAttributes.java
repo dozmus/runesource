@@ -18,6 +18,7 @@ package com.rs.entity.player;
 
 import com.rs.Server;
 import com.rs.entity.Position;
+import com.rs.entity.player.infractions.PlayerInfractions;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 import com.rs.util.OverflowException;

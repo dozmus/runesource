@@ -1,4 +1,4 @@
-package com.rs.plugin;
+package com.rs.plugin.listener;
 /*
  * This file is part of RuneSource.
  *
@@ -16,18 +16,10 @@ package com.rs.plugin;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.plugin.listener.*;
+import com.rs.plugin.EventListener;
+import com.rs.plugin.event.ReportAbuseEvent;
 
-/**
- * A bootstrap, which dispatches events from the core of the server to third-party plugins.
- *
- * @author Pure_
- */
-public interface Bootstrap extends ActionButtonListener, CommandListener, MessageConfigListener,
-        MessageListener, PlayerConnectivityListener, PluginStateListener, ReportAbuseListener, TickListener {
+public interface ReportAbuseListener extends EventListener {
 
-    /**
-     * Loads its dependencies.
-     */
-    void load();
+    void reportAbuse(ReportAbuseEvent e);
 }
