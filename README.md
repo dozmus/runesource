@@ -37,6 +37,7 @@ easy to use.
   * Weapon stack merging (i.e. if you have 10 arrows equipped, and equip 5 more they combine into 15)
   * Login attempt throttling
   * Report abuse interface
+  * Saves all players on shutdown (e.g. if you use Ctrl+C)
 * [More planned...](https://github.com/PureCS/runesource/issues)
 
 ### Configuration

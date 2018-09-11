@@ -873,7 +873,7 @@ public abstract class Client extends Entity {
      *
      * @author blakeman8192
      */
-    protected enum ConnectionStage {
+    public enum ConnectionStage {
         CONNECTED, LOGGING_IN, LOGGED_IN, LOGGED_OUT
     }
 

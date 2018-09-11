@@ -182,6 +182,16 @@ public final class Server implements Runnable, Tickable {
         // Finally, initialize whatever else we need.
         cycleTimer = new Misc.Stopwatch();
         clientMap = new HashMap<>();
+
+        // Set shutdown hook - to save players on shutdown
+        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+            Map<SelectionKey, Client> client = new HashMap<>(clientMap);
+            client.forEach((k, v) -> {
+                if (v.getConnectionStage() != Client.ConnectionStage.LOGGED_OUT) {
+                    v.disconnect();
+                }
+            });
+        }));
     }
 
     /**
