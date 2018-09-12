@@ -8,17 +8,14 @@
     "z":0
   },
   "privilege":{
-    "name":"REGULAR",
-    "ordinal":0
+    "name":"REGULAR"
   },
   "settings":{
     "mouseButtons":{
-      "name":"TWO",
-      "ordinal":1
+      "name":"TWO"
     },
     "brightness":{
-      "name":"NORMAL",
-      "ordinal":1
+      "name":"NORMAL"
     },
     "chatEffects":true,
     "splitPrivateChat":true,
@@ -192,5 +189,11 @@
   },
   "ignored":{
     "@type":"java.util.HashMap"
+  },
+  "infractions":{
+    "banned":false,
+    "muted":false,
+    "banExpirationDate":null,
+    "muteExpirationDate":null
   }
 }
