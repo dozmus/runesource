@@ -1,6 +1,8 @@
 # IDEA project files
 out
+build
 .idea
+.gradle
 META-INF
 runesource.iml
 

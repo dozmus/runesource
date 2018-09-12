@@ -1,0 +1,20 @@
+plugins {
+    id 'java'
+    id 'application'
+}
+
+mainClassName = 'com.rs.Server'
+
+sourceCompatibility = 1.10
+targetCompatibility = 1.10
+
+dependencies {
+    // https://mvnrepository.com/artifact/com.cedarsoftware/json-io
+    implementation 'com.cedarsoftware:json-io:3.3.1'
+    // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy
+    implementation 'org.codehaus.groovy:groovy:2.4.3'
+}
+
+repositories {
+    mavenCentral()
+}
