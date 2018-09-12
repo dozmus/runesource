@@ -31,6 +31,7 @@ import com.rs.util.Misc;
 import com.rs.util.Tickable;
 
 import java.nio.channels.SelectionKey;
+import java.nio.file.NoSuchFileException;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -112,18 +113,29 @@ public final class Player extends Client implements Tickable {
         }
 
         // Load the player and send the login response.
-        PlayerFileHandler.LoadResponse status = Server.getInstance().getPlayerFileHandler().load(this);
+        PlayerAttributes attributes;
+        boolean validPassword = true;
+        boolean newPlayer = false;
+
+        try {
+            attributes = Server.getInstance().getPlayerFileHandler().load(this.attributes.getUsername());
+            validPassword = attributes.getPassword().equals(getAttributes().getPassword());
+            this.attributes = attributes;
+        } catch (NoSuchFileException e) {
+            newPlayer = true;
+        } catch (Exception e) {
+            response = Misc.LOGIN_RESPONSE_PLEASE_TRY_AGAIN;
+        }
         boolean validCredentials = Misc.validatePassword(password) && Misc.validateUsername(getAttributes().getUsername());
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
-        if ((status != PlayerFileHandler.LoadResponse.SUCCESS && !validCredentials)
-                || status == PlayerFileHandler.LoadResponse.INVALID_CREDENTIALS) {
+        if ((response != Misc.LOGIN_RESPONSE_OK && !validCredentials) || !validPassword) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
             ConnectionThrottle.enter(getHost());
         }
 
         // Check if banned
-        if (status == PlayerFileHandler.LoadResponse.BANNED) {
+        if (this.attributes.getInfractions().isBanned()) {
             response = Misc.LOGIN_RESPONSE_ACCOUNT_DISABLED;
         }
 
@@ -146,11 +158,15 @@ public final class Player extends Client implements Tickable {
 
         if (response != Misc.LOGIN_RESPONSE_OK) {
             disconnect();
-            return;
+        } else {
+            initSession(newPlayer);
         }
+    }
 
-        // Initialising player session
-        this.username = Misc.encodeBase37(attributes.getUsername());
+    private void initSession(boolean newPlayer) {
+        Settings settings = Server.getInstance().getSettings();
+
+        username = Misc.encodeBase37(attributes.getUsername());
         WorldHandler.getInstance().register(this);
         sendMapRegion();
         sendInventory();
@@ -167,7 +183,7 @@ public final class Player extends Client implements Tickable {
         sendResetAllButtonStates();
         sendMessage("Welcome to " + settings.getServerName() + "!");
         System.out.println(this + " has logged in.");
-        PluginHandler.dispatchLogin(this, status == PlayerFileHandler.LoadResponse.NOT_FOUND);
+        PluginHandler.dispatchLogin(this, newPlayer);
     }
 
     public void logout() throws Exception {

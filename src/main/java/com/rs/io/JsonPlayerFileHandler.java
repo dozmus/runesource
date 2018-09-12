@@ -17,16 +17,11 @@ package com.rs.io;
  */
 
 import com.cedarsoftware.util.io.JsonReader;
-import com.cedarsoftware.util.io.JsonWriter;
-import com.rs.entity.player.Player;
 import com.rs.entity.player.PlayerAttributes;
 
 import java.io.File;
 import java.io.FileInputStream;
-import java.io.FileWriter;
 import java.nio.file.NoSuchFileException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * An {@link PlayerFileHandler} implementation for JSON player attribute saving/loading.
@@ -39,30 +34,6 @@ public final class JsonPlayerFileHandler implements PlayerFileHandler {
     public void save(PlayerAttributes attributes) throws Exception {
         String fileName = getStorageDirectory() + attributes.getUsername() + ".json";
         JsonUtils.write(fileName, true, attributes);
-    }
-
-    @Override
-    public LoadResponse load(Player player) throws Exception {
-        // Reading file
-        PlayerAttributes attributes;
-
-        try {
-            attributes = load(player.getAttributes().getUsername());
-        } catch (NoSuchFileException e) {
-            return LoadResponse.NOT_FOUND;
-        }
-
-        // Checking password
-        if (!attributes.getPassword().equals(player.getAttributes().getPassword())) {
-            return LoadResponse.INVALID_CREDENTIALS;
-        }
-        player.setAttributes(attributes);
-
-        // Check ban status
-        if (attributes.getInfractions().isBanned()) {
-            return LoadResponse.BANNED;
-        }
-        return LoadResponse.SUCCESS;
     }
 
     @Override
