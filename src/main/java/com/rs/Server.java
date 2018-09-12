@@ -16,9 +16,9 @@ package com.rs;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+import com.google.inject.Guice;
 import com.rs.entity.player.Client;
 import com.rs.entity.player.Player;
-import com.rs.io.JsonPlayerFileHandler;
 import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
@@ -128,22 +128,25 @@ public final class Server implements Runnable, Tickable {
     @Override
     public void run() {
         try {
+            var injector = Guice.createInjector(new ServerModule());
+
             address = new InetSocketAddress(host, port);
+            System.out.println("Starting RuneSource on " + address + "...");
+
+            // Load settings
+            settings = Settings.load("./data/settings.json");
 
             // Set up out, err redirection
-            settings = Settings.load("./data/settings.json");
             new File("./data/logs").mkdir();
             System.setOut(new Misc.TimestampLogger(System.out, "./data/logs/out.log"));
             System.setErr(new Misc.TimestampLogger(System.err, "./data/logs/err.log"));
-
-            System.out.println("Starting RuneSource on " + address + "...");
 
             // Loading configuration
             Misc.Stopwatch timer = new Misc.Stopwatch();
             EquipmentHelper.loadWeaponDefinitions("./data/weapons.json");
             EquipmentHelper.sortEquipmentSlotDefinitions();
             EquipmentHelper.loadStackableItems("./data/stackable.dat");
-            playerFileHandler = new JsonPlayerFileHandler();
+            playerFileHandler = injector.getInstance(PlayerFileHandler.class);
             System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
 
             // Loading plugins
