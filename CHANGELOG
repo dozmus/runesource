@@ -1,6 +1,7 @@
 v1.0.2 (unreleased)
 * Gradle build system (#30)
 * Bump json-io v3.3.1 -> v4.9.12
+* Bump groovy v2.4.3 -> v2.5.2
 
 v1.0.1
 * Powerful Plugins using Groovy (#2)

@@ -12,7 +12,7 @@ dependencies {
     // https://mvnrepository.com/artifact/com.cedarsoftware/json-io
     implementation 'com.cedarsoftware:json-io:4.9.12'
     // https://mvnrepository.com/artifact/org.codehaus.groovy/groovy
-    implementation 'org.codehaus.groovy:groovy:2.4.3'
+    implementation 'org.codehaus.groovy:groovy:2.5.2'
     // https://mvnrepository.com/artifact/com.google.inject/guice
     implementation 'com.google.inject:guice:4.2.0'
 }
