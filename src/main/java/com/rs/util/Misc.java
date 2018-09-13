@@ -51,8 +51,6 @@ public final class Misc {
     public static final int GENDER_MALE = 0;
     public static final int GENDER_FEMALE = 1;
 
-    private static final char[] VALID_PASSWORD_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!\"\243$%^&*()-_=+[{]};:'@#~,<.>/?\\| ".toCharArray();
-    private static final char[] VALID_USERNAME_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789! ".toCharArray();
     private static final char[] VALID_CHARACTERS = {
             '_', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i',
             'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's',
@@ -60,37 +58,7 @@ public final class Misc {
             '3', '4', '5', '6', '7', '8', '9'
     };
 
-    public static boolean validatePassword(String password) {
-        // Length check
-        if (password.length() == 0 || password.length() > 20) {
-            return false;
-        }
-
-        // Checking each character
-        for (int i = 0; i < password.length(); i++) {
-            if (!contains(VALID_PASSWORD_CHARACTERS, password.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public static boolean validateUsername(String username) {
-        // Length check
-        if (username.length() == 0 || username.length() > 12) {
-            return false;
-        }
-
-        // Checking each character
-        for (int i = 0; i < username.length(); i++) {
-            if (!contains(VALID_USERNAME_CHARACTERS, username.charAt(i))) {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    private static boolean contains(char[] src, char key) {
+    public static boolean contains(char[] src, char key) {
         for (char c : src) {
             if (c == key) {
                 return true;

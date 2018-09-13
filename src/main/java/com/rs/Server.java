@@ -23,6 +23,7 @@ import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
+import com.rs.util.AbstractCredentialValidator;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 import com.rs.util.Tickable;
@@ -51,6 +52,7 @@ public final class Server implements Runnable, Tickable {
 
     private Settings settings;
     private PlayerFileHandler playerFileHandler;
+    private AbstractCredentialValidator credentialValidator;
     private Selector selector;
     private InetSocketAddress address;
     private ServerSocketChannel serverChannel;
@@ -147,6 +149,7 @@ public final class Server implements Runnable, Tickable {
             EquipmentHelper.sortEquipmentSlotDefinitions();
             EquipmentHelper.loadStackableItems("./data/stackable.dat");
             playerFileHandler = injector.getInstance(PlayerFileHandler.class);
+            credentialValidator = injector.getInstance(AbstractCredentialValidator.class);
             System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
 
             // Loading plugins
@@ -290,6 +293,10 @@ public final class Server implements Runnable, Tickable {
 
     public PlayerFileHandler getPlayerFileHandler() {
         return playerFileHandler;
+    }
+
+    public AbstractCredentialValidator getCredentialValidator() {
+        return credentialValidator;
     }
 
     public Settings getSettings() {

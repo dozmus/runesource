@@ -100,7 +100,8 @@ public final class Player extends Client implements Tickable {
     }
 
     public void login(String username, String password) throws Exception {
-        Settings settings = Server.getInstance().getSettings();
+        Server server = Server.getInstance();
+        Settings settings = server.getSettings();
         int response = Misc.LOGIN_RESPONSE_OK;
 
         // Updating credentials
@@ -118,7 +119,7 @@ public final class Player extends Client implements Tickable {
         boolean newPlayer = false;
 
         try {
-            attributes = Server.getInstance().getPlayerFileHandler().load(this.attributes.getUsername());
+            attributes = server.getPlayerFileHandler().load(this.attributes.getUsername());
             validPassword = attributes.getPassword().equals(getAttributes().getPassword());
             this.attributes = attributes;
         } catch (NoSuchFileException e) {
@@ -126,10 +127,10 @@ public final class Player extends Client implements Tickable {
         } catch (Exception e) {
             response = Misc.LOGIN_RESPONSE_PLEASE_TRY_AGAIN;
         }
-        boolean validCredentials = Misc.validatePassword(password) && Misc.validateUsername(getAttributes().getUsername());
+        boolean validCredentials = server.getCredentialValidator().validate(this.attributes.getUsername(), password);
 
         // Invalid username/password - we skip the check if the account is found because the validation may have changed since
-        if ((response != Misc.LOGIN_RESPONSE_OK && !validCredentials) || !validPassword) {
+        if ((newPlayer && !validCredentials) || !validPassword) {
             response = Misc.LOGIN_RESPONSE_INVALID_CREDENTIALS;
             ConnectionThrottle.enter(getHost());
         }
