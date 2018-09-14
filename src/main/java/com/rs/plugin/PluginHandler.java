@@ -64,7 +64,7 @@ public final class PluginHandler {
                 Class cls = classLoader.parseClass(f);
 
                 if (Arrays.asList(cls.getInterfaces()).contains(Bootstrap.class)) {
-                    Bootstrap b = (Bootstrap) cls.newInstance();
+                    Bootstrap b = (Bootstrap) cls.getDeclaredConstructor().newInstance();
                     b.load();
                     bootstraps.add(b);
                     foundBootstrap = true;

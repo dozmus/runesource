@@ -50,15 +50,8 @@ public final class PlayerUpdating {
     public static void update(Player player) {
         // TODO prioritise updating players based on distance to you
         // Remove disconnected players from local players list
-        Iterator<Player> others = player.getPlayers().iterator();
-
-        while (others.hasNext()) {
-            Player next = others.next();
-
-            if (next.getConnectionStage() == Client.ConnectionStage.LOGGED_OUT || next.isHidden()) {
-                others.remove();
-            }
-        }
+        player.getPlayers()
+                .removeIf(next -> next.getConnectionStage() == Client.ConnectionStage.LOGGED_OUT || next.isHidden());
 
         // Find other players in local region
         List<Player> regionalPlayers = PlayerUpdating.updateLocalPlayers(player);

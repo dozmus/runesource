@@ -23,9 +23,9 @@ import com.rs.entity.player.Player;
  */
 public final class ModifyChatModeEvent extends PlayerEvent {
 
-    private int publicChatMode;
-    private int privateChatMode;
-    private int tradeMode;
+    private final int publicChatMode;
+    private final int privateChatMode;
+    private final int tradeMode;
 
     public ModifyChatModeEvent(Player player, int publicChatMode, int privateChatMode, int tradeMode) {
         super(player);

@@ -34,8 +34,6 @@ public final class HostGateway {
      * Checks the host into the gateway.
      *
      * @param host the host
-     * @return true if the host can connect, false if it has reached the maximum
-     * amount of connections
      */
     public static void enter(String host) {
         if (map.containsKey(host)) {
@@ -70,6 +68,6 @@ public final class HostGateway {
      * @return The number of connections from the given host.
      */
     public static int count(String host) {
-        return map.containsKey(host) ? map.get(host) : 0;
+        return map.getOrDefault(host, 0);
     }
 }

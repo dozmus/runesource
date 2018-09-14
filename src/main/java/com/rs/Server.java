@@ -172,8 +172,6 @@ public final class Server implements Runnable, Tickable {
 
     /**
      * Initialises the server.
-     *
-     * @throws IOException
      */
     private void init() throws IOException {
         // Initialize the networking objects.
@@ -202,8 +200,6 @@ public final class Server implements Runnable, Tickable {
 
     /**
      * Accepts any incoming connections.
-     *
-     * @throws IOException
      */
     private void accept() throws IOException {
         SocketChannel socket;

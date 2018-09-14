@@ -19,6 +19,7 @@ package com.rs.util;
 import com.rs.Server;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.text.DateFormat;
@@ -61,15 +62,6 @@ public final class Misc {
     public static boolean contains(char[] src, char key) {
         for (char c : src) {
             if (c == key) {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public static <T> boolean contains(T[] source, T target) {
-        for (T t : source) {
-            if (t.equals(target)) {
                 return true;
             }
         }
@@ -125,7 +117,7 @@ public final class Misc {
         try {
             // Hashing input
             MessageDigest md = MessageDigest.getInstance("SHA-256");
-            md.update(input.getBytes("UTF-8"));
+            md.update(input.getBytes(StandardCharsets.UTF_8));
             byte[] digest = md.digest();
 
             // Constructing output
@@ -135,7 +127,7 @@ public final class Misc {
                 builder.append(Integer.toString((b & 0xff) + 0x100, 16).substring(1));
             }
             return builder.toString();
-        } catch (NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        } catch (NoSuchAlgorithmException e) {
         }
         return null;
     }

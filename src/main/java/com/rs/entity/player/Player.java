@@ -22,7 +22,6 @@ import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.entity.npc.Npc;
 import com.rs.entity.action.*;
-import com.rs.io.PlayerFileHandler;
 import com.rs.net.ConnectionThrottle;
 import com.rs.net.HostGateway;
 import com.rs.net.StreamBuffer;
