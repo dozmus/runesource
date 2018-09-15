@@ -23,6 +23,8 @@ import com.rs.entity.action.Animation
 import com.rs.entity.action.Graphics
 import com.rs.plugin.event.CommandEvent
 import com.rs.plugin.listener.CommandListener
+import com.rs.entity.player.skills.Skills
+import com.rs.entity.player.skills.SkillType
 
 class CommandHandler implements CommandListener {
 
@@ -89,19 +91,20 @@ class CommandHandler implements CommandListener {
         }
 
         if (commandName == "master") {
-            for (int i = 0; i < attributes.getSkills().length; i++) {
-                attributes.getSkills()[i] = 99
-                attributes.getExperience()[i] = 14000000
+            Skills skills = attributes.getSkills()
+
+            for (SkillType type : SkillType.values()) {
+                skills.setExperience(type, 13034431)
             }
             player.sendSkills()
+            player.getUpdateContext().setAppearanceUpdateRequired()
         }
 
         if (commandName == "noob") {
-            for (int i = 0; i < attributes.getSkills().length; i++) {
-                attributes.getSkills()[i] = 1
-                attributes.getExperience()[i] = 0
-            }
+            Skills skills = attributes.getSkills()
+            skills.reset()
             player.sendSkills()
+            player.getUpdateContext().setAppearanceUpdateRequired()
         }
 
         if (commandName == "empty") {

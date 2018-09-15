@@ -21,6 +21,8 @@ import com.rs.entity.Entity;
 import com.rs.entity.Position;
 import com.rs.entity.action.PublicChat;
 import com.rs.entity.player.infractions.ReportAbuse;
+import com.rs.entity.player.skills.SkillType;
+import com.rs.entity.player.skills.Skills;
 import com.rs.net.HostGateway;
 import com.rs.net.ISAACCipher;
 import com.rs.net.StreamBuffer;
@@ -117,8 +119,10 @@ public abstract class Client extends Entity {
      * Sends all skills to the client.
      */
     public void sendSkills() {
-        for (int i = 0; i < player.getAttributes().getSkills().length; i++) {
-            sendSkill(i, player.getAttributes().getSkills()[i], player.getAttributes().getExperience()[i]);
+        Skills skills = player.getAttributes().getSkills();
+
+        for (SkillType type : SkillType.values()) {
+            sendSkill(type.ordinal(), skills.level(type), skills.experience(type));
         }
     }
 

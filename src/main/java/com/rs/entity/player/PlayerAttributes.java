@@ -19,6 +19,7 @@ package com.rs.entity.player;
 import com.rs.Server;
 import com.rs.entity.Position;
 import com.rs.entity.player.infractions.PlayerInfractions;
+import com.rs.entity.player.skills.Skills;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
 import com.rs.util.OverflowException;
@@ -38,12 +39,11 @@ public final class PlayerAttributes {
     private Position position = new Position(0, 0);
     private Player.Privilege privilege = Player.Privilege.REGULAR;
     private PlayerSettings settings = new PlayerSettings();
+    private Skills skills;
     private int gender = Misc.GENDER_MALE;
     private float runEnergy = 100;
     private final int[] appearance = new int[7];
     private final int[] colors = new int[5];
-    private final int[] skills = new int[22];
-    private final int[] experience = new int[22];
     private final int[] inventory = new int[28];
     private final int[] inventoryN = new int[28];
     private final int[] equipment = new int[14];
@@ -66,14 +66,6 @@ public final class PlayerAttributes {
 
     public int[] getInventoryN() {
         return inventoryN;
-    }
-
-    public int[] getSkills() {
-        return skills;
-    }
-
-    public int[] getExperience() {
-        return experience;
     }
 
     public int[] getEquipment() {
@@ -114,14 +106,8 @@ public final class PlayerAttributes {
         }
 
         // Set all skills to 1.
-        for (int i = 0; i < skills.length; i++) {
-            if (i == 3) { // Hitpoints.
-                skills[i] = 10;
-                experience[i] = 1154;
-            } else {
-                skills[i] = 1;
-            }
-        }
+        skills = new Skills();
+
         // Set all equipment to empty.
         for (int i = 0; i < equipment.length; i++) {
             equipment[i] = -1;
@@ -168,40 +154,8 @@ public final class PlayerAttributes {
         this.password = password;
     }
 
-    /**
-     * Sets the skill level.
-     *
-     * @param skillId the skill ID
-     * @param level   the level
-     * @param player
-     */
-    public void setSkill(int skillId, int level, Player player) {
-        getSkills()[skillId] = level;
-        player.sendSkill(skillId, getSkills()[skillId], getExperience()[skillId]);
-    }
-
-    /**
-     * Adds skill experience.
-     *
-     * @param skillId the skill ID
-     * @param exp     the experience to add
-     * @param player
-     */
-    public void addSkillExp(int skillId, int exp, Player player) {
-        getExperience()[skillId] += exp;
-        player.sendSkill(skillId, getSkills()[skillId], getExperience()[skillId]);
-    }
-
-    /**
-     * Removes skill experience.
-     *
-     * @param skillId the skill ID
-     * @param exp     the experience to add
-     * @param player
-     */
-    public void removeSkillExp(int skillId, int exp, Player player) {
-        getExperience()[skillId] -= exp;
-        player.sendSkill(skillId, getSkills()[skillId], getExperience()[skillId]);
+    public Skills getSkills() {
+        return skills;
     }
 
     /**
@@ -494,13 +448,5 @@ public final class PlayerAttributes {
 
     public PlayerSettings getSettings() {
         return settings;
-    }
-
-    public int getCombatLevel() {
-        return 3;
-    }
-
-    public int getTotalLevel() {
-        return 0;
     }
 }

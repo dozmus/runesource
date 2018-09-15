@@ -166,6 +166,8 @@ public final class Player extends Client implements Tickable {
     private void initSession(boolean newPlayer) {
         Settings settings = Server.getInstance().getSettings();
 
+        attributes.getSkills().updateTotalLevel();
+        attributes.getSkills().updateCombatLevel();
         username = Misc.encodeBase37(attributes.getUsername());
         WorldHandler.getInstance().register(this);
         sendMapRegion();

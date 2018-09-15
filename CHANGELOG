@@ -3,6 +3,7 @@ v1.0.2 (unreleased)
 * Bump json-io v3.3.1 -> v4.9.12
 * Bump groovy v2.4.3 -> v2.5.2
 * Multi-threaded updating (courtesy @lare96)
+* Fix total level and combat level (#28) - NOTE: In the default RS #317 client, farming is disabled client-side.
 
 v1.0.1
 * Powerful Plugins using Groovy (#2)

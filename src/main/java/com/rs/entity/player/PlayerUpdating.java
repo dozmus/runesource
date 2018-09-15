@@ -20,6 +20,8 @@ import com.rs.WorldHandler;
 import com.rs.entity.Position;
 import com.rs.entity.action.AsyncMovement;
 import com.rs.entity.action.PublicChat;
+import com.rs.entity.player.skills.SkillType;
+import com.rs.entity.player.skills.Skills;
 import com.rs.net.StreamBuffer;
 import com.rs.util.EquipmentHelper;
 
@@ -290,8 +292,8 @@ public final class PlayerUpdating {
         block.writeShort(0x338); // run
 
         block.writeLong(player.getUsername());
-        block.writeByte(attributes.getCombatLevel());
-        block.writeShort(attributes.getTotalLevel());
+        block.writeByte(attributes.getSkills().getCombatLevel());
+        block.writeShort(attributes.getSkills().getTotalLevel());
 
         // Append the block length and the block to the packet.
         out.writeByte(block.getBuffer().position(), StreamBuffer.ValueType.C);
@@ -485,20 +487,22 @@ public final class PlayerUpdating {
      * Append primary hit to a buffer.
      */
     private static void appendPrimaryHit(Player player, StreamBuffer.WriteBuffer out) {
+        Skills skills = player.getAttributes().getSkills();
         out.writeByte(player.getPrimaryHit().getDamage());
         out.writeByte(player.getPrimaryHit().getType(), StreamBuffer.ValueType.A);
-        out.writeByte(player.getAttributes().getSkills()[3], StreamBuffer.ValueType.C);
-        out.writeByte(player.getAttributes().getSkills()[3]); // TODO send maximum health
+        out.writeByte(skills.level(SkillType.HITPOINTS), StreamBuffer.ValueType.C);
+        out.writeByte(skills.maxLevel(SkillType.HITPOINTS));
     }
 
     /**
      * Append secondary hit to a buffer.
      */
     private static void appendSecondaryHit(Player player, StreamBuffer.WriteBuffer out) {
+        Skills skills = player.getAttributes().getSkills();
         out.writeByte(player.getSecondaryHit().getDamage());
         out.writeByte(player.getSecondaryHit().getType(), StreamBuffer.ValueType.A);
-        out.writeByte(player.getAttributes().getSkills()[3], StreamBuffer.ValueType.C);
-        out.writeByte(player.getAttributes().getSkills()[3]); // TODO send maximum health
+        out.writeByte(skills.level(SkillType.HITPOINTS), StreamBuffer.ValueType.C);
+        out.writeByte(skills.maxLevel(SkillType.HITPOINTS));
     }
 
     /**
