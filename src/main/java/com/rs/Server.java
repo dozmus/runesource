@@ -17,33 +17,25 @@ package com.rs;
  */
 
 import com.google.inject.Guice;
-import com.rs.entity.player.Client;
-import com.rs.entity.player.Player;
+import com.google.inject.Inject;
+import com.google.inject.name.Named;
 import com.rs.io.PlayerFileHandler;
-import com.rs.net.ConnectionThrottle;
-import com.rs.net.HostGateway;
 import com.rs.plugin.PluginHandler;
+import com.rs.service.Service;
 import com.rs.util.AbstractCredentialValidator;
 import com.rs.util.EquipmentHelper;
 import com.rs.util.Misc;
-import com.rs.util.Tickable;
 
 import java.io.File;
-import java.io.IOException;
 import java.net.InetSocketAddress;
-import java.nio.channels.SelectionKey;
-import java.nio.channels.Selector;
-import java.nio.channels.ServerSocketChannel;
-import java.nio.channels.SocketChannel;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Set;
 
 /**
  * The main core of RuneSource.
  *
  * @author blakeman8192
  */
-public final class Server implements Runnable, Tickable {
+public final class Server implements Runnable, Service {
 
 
     /**
@@ -54,15 +46,13 @@ public final class Server implements Runnable, Tickable {
     private final String host;
     private final int port;
     private final int tickRate;
+    private final Set<Service> services;
+    private final PlayerFileHandler playerFileHandler;
+    private final AbstractCredentialValidator credentialValidator;
 
     private Settings settings;
-    private PlayerFileHandler playerFileHandler;
-    private AbstractCredentialValidator credentialValidator;
-    private Selector selector;
     private InetSocketAddress address;
-    private ServerSocketChannel serverChannel;
     private Misc.Stopwatch cycleTimer;
-    private Map<SelectionKey, Client> clientMap;
 
     /**
      * Creates a new Server.
@@ -71,10 +61,16 @@ public final class Server implements Runnable, Tickable {
      * @param port     the port
      * @param tickRate the tick rate
      */
-    private Server(String host, int port, int tickRate) {
+    @Inject
+    private Server(@Named("host") String host, @Named("port") int port, @Named("tickRate") int tickRate,
+                   Set<Service> services, PlayerFileHandler playerFileHandler,
+                   AbstractCredentialValidator credentialValidator) {
         this.host = host;
         this.port = port;
         this.tickRate = tickRate;
+        this.services = services;
+        this.playerFileHandler = playerFileHandler;
+        this.credentialValidator = credentialValidator;
     }
 
     /**
@@ -84,12 +80,12 @@ public final class Server implements Runnable, Tickable {
         // Parse command line arguments
         String host = "127.0.0.1";
         int port = 43594;
-        int cycleRate = 600;
+        int tickRate = 600;
 
         if (args.length == 3) {
             host = args[0];
             port = Integer.parseInt(args[1]);
-            cycleRate = Integer.parseInt(args[2]);
+            tickRate = Integer.parseInt(args[2]);
         } else if (args.length != 0) {
             System.err.println("Usage: Server <host> <port> <cycleRate>");
             return;
@@ -101,42 +97,23 @@ public final class Server implements Runnable, Tickable {
             return;
         }
 
-        if (cycleRate < 0) {
+        if (tickRate < 0) {
             System.err.println("Invalid cycle rate, must be a positive integer.");
             return;
         }
 
+        // Create server
+        var injector = Guice.createInjector(new ServerModule(host, port, tickRate));
+        Server server = injector.getInstance(Server.class);
+
         // Start server
-        setInstance(new Server(host, port, cycleRate));
+        setInstance(server);
         new Thread(getInstance()).start();
-    }
-
-    /**
-     * Gets the server instance object.
-     *
-     * @return the instance
-     */
-    public static Server getInstance() {
-        return instance;
-    }
-
-    /**
-     * Sets the server instance object.
-     *
-     * @param instance the instance
-     */
-    public static void setInstance(Server instance) {
-        if (Server.instance != null) {
-            throw new IllegalStateException("Singleton already set!");
-        }
-        Server.instance = instance;
     }
 
     @Override
     public void run() {
         try {
-            var injector = Guice.createInjector(new ServerModule());
-
             address = new InetSocketAddress(host, port);
             System.out.println("Starting RuneSource on " + address + "...");
 
@@ -153,8 +130,6 @@ public final class Server implements Runnable, Tickable {
             EquipmentHelper.loadWeaponDefinitions("./data/weapons.json");
             EquipmentHelper.sortEquipmentSlotDefinitions();
             EquipmentHelper.loadStackableItems("./data/stackable.dat");
-            playerFileHandler = injector.getInstance(PlayerFileHandler.class);
-            credentialValidator = injector.getInstance(AbstractCredentialValidator.class);
             System.out.println("Loaded all configuration in " + timer.elapsed() + "ms");
 
             // Loading plugins
@@ -178,96 +153,30 @@ public final class Server implements Runnable, Tickable {
     /**
      * Initialises the server.
      */
-    private void init() throws IOException {
-        // Initialize the networking objects.
-        selector = Selector.open();
-        serverChannel = ServerSocketChannel.open();
-
-        // ... and configure them!
-        serverChannel.configureBlocking(false);
-        serverChannel.socket().bind(address);
-        serverChannel.register(selector, SelectionKey.OP_ACCEPT);
-
-        // Finally, initialize whatever else we need.
-        cycleTimer = new Misc.Stopwatch();
-        clientMap = new HashMap<>();
-
-        // Set shutdown hook - to save players on shutdown
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-            Map<SelectionKey, Client> client = new HashMap<>(clientMap);
-            client.forEach((k, v) -> {
-                if (v.getConnectionStage() != Client.ConnectionStage.LOGGED_OUT) {
-                    v.disconnect();
-                }
-            });
-        }));
-    }
-
-    /**
-     * Accepts any incoming connections.
-     */
-    private void accept() throws IOException {
-        SocketChannel socket;
-
-		/*
-         * Here we use a for loop so that we can accept multiple clients per
-		 * tick for lower latency. We limit the amount of clients that we
-		 * accept per tick to better combat potential denial of service type
-		 * attacks.
-		 */
-        for (int i = 0; i < 10; i++) {
-            socket = serverChannel.accept();
-
-            if (socket == null) {
-                // No more connections to accept (as this one was invalid).
-                break;
-            }
-
-            // Register the connection
-            HostGateway.enter(socket.socket().getInetAddress().getHostAddress());
-
-            // Set up the new connection.
-            socket.configureBlocking(false);
-            SelectionKey key = socket.register(selector, SelectionKey.OP_READ);
-            Client client = new Player(key);
-            System.out.println("Accepted " + client + ".");
-            getClientMap().put(key, client);
+    public void init() throws Exception {
+        // Init
+        for (Service service : services) {
+            service.init();
         }
+
+        // Set shutdown hook
+        Runtime.getRuntime().addShutdownHook(new Thread(this::cleanup));
+
+        cycleTimer = new Misc.Stopwatch();
     }
 
     /**
      * Performs a server tick.
      */
     public void tick() {
-        // First, handle all network events.
-        try {
-            selector.selectNow();
+        services.forEach(Service::tick);
+    }
 
-            for (SelectionKey selectionKey : selector.selectedKeys()) {
-                if (selectionKey.isAcceptable()) {
-                    accept(); // Accept a new connection.
-                }
-
-                if (selectionKey.isReadable()) {
-                    // Tell the client to handle the packet.
-                    getClientMap().get(selectionKey).handleIncomingData();
-                }
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-        // Next, check if connection throttling needs a clear
-        if (System.currentTimeMillis() % ConnectionThrottle.COOLDOWN == 0) {
-            ConnectionThrottle.clear();
-        }
-
-        // Next, perform game processing.
-        try {
-            WorldHandler.getInstance().tick();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
+    /**
+     * Cleans up the server.
+     */
+    public void cleanup() {
+        services.forEach(Service::cleanup);
     }
 
     /**
@@ -285,11 +194,8 @@ public final class Server implements Runnable, Tickable {
         cycleTimer.reset();
     }
 
-    /**
-     * Returns the client map.
-     */
-    public Map<SelectionKey, Client> getClientMap() {
-        return clientMap;
+    public InetSocketAddress getAddress() {
+        return address;
     }
 
     public PlayerFileHandler getPlayerFileHandler() {
@@ -302,5 +208,22 @@ public final class Server implements Runnable, Tickable {
 
     public Settings getSettings() {
         return settings;
+    }
+
+    /**
+     * Gets the server instance.
+     */
+    public static Server getInstance() {
+        return instance;
+    }
+
+    /**
+     * Sets the server instance.
+     */
+    public static void setInstance(Server instance) {
+        if (Server.instance != null) {
+            throw new IllegalStateException("Singleton already set!");
+        }
+        Server.instance = instance;
     }
 }

@@ -430,7 +430,6 @@ public abstract class Client extends Entity {
             ex.printStackTrace();
         } finally {
             HostGateway.exit(getSocketChannel().socket().getInetAddress().getHostAddress());
-            Server.getInstance().getClientMap().remove(key);
             key.cancel();
         }
     }

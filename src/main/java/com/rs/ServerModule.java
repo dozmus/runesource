@@ -18,14 +18,36 @@ package com.rs;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
+import com.google.inject.multibindings.Multibinder;
+import com.google.inject.name.Names;
 import com.rs.io.JsonPlayerFileHandler;
 import com.rs.io.PlayerFileHandler;
+import com.rs.service.NetworkService;
+import com.rs.service.GameService;
+import com.rs.service.Service;
 import com.rs.util.AbstractCredentialValidator;
 import com.rs.util.LenientCredentialValidator;
 
 public class ServerModule extends AbstractModule {
 
+    private final String host;
+    private final int port;
+    private final int tickRate;
+
+    public ServerModule(String host, int port, int tickRate) {
+        this.host = host;
+        this.port = port;
+        this.tickRate = tickRate;
+    }
+
     protected void configure() {
+        Multibinder<Service> serviceBinder = Multibinder.newSetBinder(binder(), Service.class);
+        serviceBinder.addBinding().to(NetworkService.class).in(Singleton.class);
+        serviceBinder.addBinding().to(GameService.class).in(Singleton.class);
+        bind(String.class).annotatedWith(Names.named("host")).toInstance(host);
+        bind(Integer.class).annotatedWith(Names.named("port")).toInstance(port);
+        bind(Integer.class).annotatedWith(Names.named("tickRate")).toInstance(tickRate);
+
         bind(PlayerFileHandler.class).to(JsonPlayerFileHandler.class).in(Singleton.class);
         bind(AbstractCredentialValidator.class).to(LenientCredentialValidator.class).in(Singleton.class);
     }
