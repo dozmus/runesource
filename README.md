@@ -43,10 +43,6 @@ easy to use.
 ### Configuration
 You can configure your RuneSource by reading the [use guide](USEGUIDE.md).
 
-### Dependencies
-* Groovy (v2.4.3)
-* JSON-IO (v3.3.1)
-
 ### Copyright
 Copyright (c) 2010  [Blake Beaupain](https://github.com/blakeman8192)  
 Copyright (c) 2015-2018  [PureCS](https://github.com/purecs)
