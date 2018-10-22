@@ -28,7 +28,9 @@ import java.nio.channels.Selector;
 import java.nio.channels.ServerSocketChannel;
 import java.nio.channels.SocketChannel;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * A service which accepts connections, and handles data reading.
@@ -57,17 +59,27 @@ public class NetworkService implements Service {
         // Remove disconnected clients
         clientMap.entrySet().removeIf(e -> !e.getKey().isValid());
 
-        // Handle all network events.
+        // Remove clients which timed out during login
+        List<SelectionKey> timedOutKeys = clientMap.entrySet().stream()
+                .filter(e -> e.getValue().getTimeoutStopwatch().elapsed() > 5000)
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
+        timedOutKeys.forEach(e -> {
+            clientMap.get(e).disconnect();
+            clientMap.remove(e);
+            e.cancel();
+        });
+
+        // Handle all network events
         try {
             selector.selectNow();
 
             for (SelectionKey selectionKey : selector.selectedKeys()) {
-                if (selectionKey.isAcceptable()) {
-                    accept(10); // Accept a new connection.
+                if (selectionKey.isAcceptable()) { // Accept new connections.
+                    accept(10);
                 }
 
-                if (selectionKey.isReadable()) {
-                    // Tell the client to handle the packet.
+                if (selectionKey.isReadable()) { // Client handles the packet.
                     clientMap.get(selectionKey).handleIncomingData();
                 }
             }

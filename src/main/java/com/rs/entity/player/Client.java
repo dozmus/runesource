@@ -16,7 +16,6 @@ package com.rs.entity.player;
  * along with RuneSource.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-import com.rs.Server;
 import com.rs.entity.Entity;
 import com.rs.entity.Position;
 import com.rs.entity.action.PublicChat;
@@ -695,6 +694,8 @@ public abstract class Client extends Entity {
      * Handles the login process of the client.
      */
     private void handleLogin() throws Exception {
+        timeoutStopwatch.reset();
+
         switch (getConnectionStage()) {
             case CONNECTED:
                 if (inData.remaining() < 2) {
