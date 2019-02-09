@@ -4,6 +4,7 @@ v1.0.2 (unreleased)
 * Bump groovy v2.4.3 -> v2.5.2
 * Multi-threaded updating (courtesy @lare96)
 * Fix total level and combat level (#28) - NOTE: In the default RS #317 client, farming is disabled client-side.
+* Revert java target from 1.10 to 1.8 (bug introduced in #30)
 
 v1.0.1
 * Powerful Plugins using Groovy (#2)

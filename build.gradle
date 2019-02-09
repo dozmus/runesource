@@ -5,8 +5,8 @@ plugins {
 
 mainClassName = 'com.rs.Server'
 
-sourceCompatibility = 1.10
-targetCompatibility = 1.10
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
 
 dependencies {
     // https://mvnrepository.com/artifact/com.cedarsoftware/json-io

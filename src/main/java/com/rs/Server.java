@@ -18,6 +18,7 @@ package com.rs;
 
 import com.google.inject.Guice;
 import com.google.inject.Inject;
+import com.google.inject.Injector;
 import com.google.inject.name.Named;
 import com.rs.io.PlayerFileHandler;
 import com.rs.plugin.PluginHandler;
@@ -103,7 +104,7 @@ public final class Server implements Runnable, Service {
         }
 
         // Create server
-        var injector = Guice.createInjector(new ServerModule(host, port, tickRate));
+        Injector injector = Guice.createInjector(new ServerModule(host, port, tickRate));
         Server server = injector.getInstance(Server.class);
 
         // Start server
